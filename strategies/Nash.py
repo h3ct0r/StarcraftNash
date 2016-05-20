@@ -7,6 +7,7 @@ __author__ = 'Hector Azpurua'
 
 class Nash(StrategyBase):
     def __init__(self):
+        self.strategy_name = 'Nash'
         self.probabilities = {
             "Skynet": float(0.56),
             "Xelnaga": float(0.254),

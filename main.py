@@ -1,11 +1,13 @@
 import argparse
 import result_parser
 import sys
+import matplotlib.pyplot as plt
 from strategies.strategy_selector import StrategySelector
 
 __author__ = 'Hector Azpurua'
 
-DEBUG = False
+DEBUG = True
+
 
 class Main:
     def __init__(self):
@@ -35,6 +37,8 @@ class Main:
         print 'Result history of matches:', self.res_history
         print 'A:', (self.res_history.count('A') * 100) / float(len(self.res_history)), '%'
         print 'B:', (self.res_history.count('B') * 100) / float(len(self.res_history)), '%'
+
+        self.plot_results()
         pass
 
     def get_arg(self):
@@ -88,6 +92,32 @@ class Main:
                 self.match_index = i
                 return res
             pass
+        pass
+
+    def plot_results(self):
+        counter = {
+            'A': 0,
+            'B': 0
+        }
+        data_a = []
+        data_b = []
+        d_range = []
+        for i in xrange(len(self.res_history)):
+            elem = self.res_history[i]
+            counter[elem] += 1
+            data_a.append(counter['A'])
+            data_b.append(counter['B'])
+            d_range.append(i)
+
+        line_a,  = plt.plot(d_range, data_a, color='red', label=self.strategy_a.strategy_name)
+        line_b, = plt.plot(d_range, data_b, color='blue', label=self.strategy_b.strategy_name)
+        plt.legend(handles=[line_a, line_b])
+        plt.grid(True)
+
+        plt.xlabel('Match number')
+        plt.ylabel('Accumulated wins')
+
+        plt.show()
         pass
 
 if __name__ == '__main__':

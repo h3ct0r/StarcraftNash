@@ -6,6 +6,7 @@ __author__ = 'Hector Azpurua'
 
 class Nusbot(StrategyBase):
     def __init__(self):
+        self.strategy_name = 'NUSBot'
         self.bots = ["Skynet", "Xelnaga", "NUSBot"]
         self.result_list = []
         pass

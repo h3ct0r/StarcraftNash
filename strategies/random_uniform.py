@@ -6,6 +6,7 @@ __author__ = 'Hector Azpurua'
 
 class Random(StrategyBase):
     def __init__(self):
+        self.strategy_name = 'Random uniform'
         self.bots = ["Skynet", "Xelnaga", "NUSBot"]
         self.result_list = []
         pass
