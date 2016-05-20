@@ -5,7 +5,7 @@ from strategies.strategy_selector import StrategySelector
 
 __author__ = 'Hector Azpurua'
 
-DEBUG = True
+DEBUG = False
 
 class Main:
     def __init__(self):
