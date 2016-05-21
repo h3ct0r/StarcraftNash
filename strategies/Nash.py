@@ -19,7 +19,10 @@ class Nash(StrategyBase):
         self.s_id = None
         pass
 
-    def set_strategy_id(self, s_id):
+    def get_name(self):
+        return self.strategy_name
+
+    def set_id(self, s_id):
         self.s_id = s_id
         pass
 

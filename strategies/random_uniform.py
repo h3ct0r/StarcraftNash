@@ -4,7 +4,7 @@ import random
 __author__ = 'Hector Azpurua'
 
 
-class Random(StrategyBase):
+class RandomUniform(StrategyBase):
     def __init__(self):
         self.strategy_name = 'Random uniform'
         self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
@@ -13,7 +13,10 @@ class Random(StrategyBase):
         self.s_id = None
         pass
 
-    def set_strategy_id(self, s_id):
+    def get_name(self):
+        return self.strategy_name
+
+    def set_id(self, s_id):
         self.s_id = s_id
         pass
 
@@ -25,5 +28,5 @@ class Random(StrategyBase):
         self.result_list = result_list
 
     def get_next_bot(self):
-        bot = random.choice(self.bots_list)
+        bot = random.choice(self.bot_list)
         return bot

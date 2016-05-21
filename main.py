@@ -6,7 +6,7 @@ from strategies.strategy_selector import StrategySelector
 
 __author__ = 'Hector Azpurua'
 
-DEBUG = True
+DEBUG = False
 
 
 class Main:
@@ -16,18 +16,17 @@ class Main:
         if DEBUG:
             print "DEBUG ON"
             self.strategy_a = ss.get_strategy('nash')
-            self.strategy_a.set_strategy_id('A')
-            self.strategy_b = ss.get_strategy('max_win_prev')
-            self.strategy_b.set_strategy_id('B')
+            self.strategy_a.set_id('A')
+            self.strategy_b = ss.get_strategy('win_prev')
+            self.strategy_b.set_id('B')
             self.input_results = 'results_demo/results.txt'
             self.matches = 100
         else:
             usr_input = self.get_arg()
             self.strategy_a = ss.get_strategy(usr_input['strategy_a'])
-            self.strategy_a.set_strategy_id('A')
-
+            self.strategy_a.set_id('A')
             self.strategy_b = ss.get_strategy(usr_input['strategy_b'])
-            self.strategy_b.set_strategy_id('B')
+            self.strategy_b.set_id('B')
             self.input_results = usr_input['input']
             self.matches = usr_input['matches']
 
@@ -40,10 +39,14 @@ class Main:
         self.run()
 
         print 'Result history of matches:', self.res_history
-        print 'A:', (self.res_history.count('A') * 100) / float(len(self.res_history)), '%'
-        print 'B:', (self.res_history.count('B') * 100) / float(len(self.res_history)), '%'
+        print 'A) ', self.strategy_a.get_name().ljust(10), ':\t', \
+            (self.res_history.count('A') * 100) / float(len(self.res_history)), '%'
+        print 'B) ', self.strategy_b.get_name().ljust(10), ':\t', \
+            (self.res_history.count('B') * 100) / float(len(self.res_history)), '%'
 
-        #self.plot_results()
+        if usr_input['plot']:
+            self.plot_results()
+
         pass
 
     def get_arg(self):
@@ -55,6 +58,8 @@ class Main:
         parser.add_argument('-b', '--strategy_b', help='The strategy used on the opponent B', required=True,
                             choices=StrategySelector.strategies.keys())
         parser.add_argument('-m', '--matches', help='The number of matches to run', type=int, required=True)
+        parser.add_argument('-p', '--plot', help='If this param is set, the results are plotted', required=False,
+                            action='store_true')
         args = vars(parser.parse_args())
         return args
 
