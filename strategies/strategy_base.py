@@ -7,6 +7,14 @@ class StrategyBase(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
+    def set_strategy_id(self, s_id):
+        pass
+
+    @abstractmethod
+    def set_match_list(self, match_list):
+        pass
+
+    @abstractmethod
     def set_result_list(self, result_list):
         pass
 

@@ -16,13 +16,18 @@ class Main:
         if DEBUG:
             print "DEBUG ON"
             self.strategy_a = ss.get_strategy('nash')
-            self.strategy_b = ss.get_strategy('random_uniform')
+            self.strategy_a.set_strategy_id('A')
+            self.strategy_b = ss.get_strategy('max_win_prev')
+            self.strategy_b.set_strategy_id('B')
             self.input_results = 'results_demo/results.txt'
             self.matches = 100
         else:
             usr_input = self.get_arg()
             self.strategy_a = ss.get_strategy(usr_input['strategy_a'])
+            self.strategy_a.set_strategy_id('A')
+
             self.strategy_b = ss.get_strategy(usr_input['strategy_b'])
+            self.strategy_b.set_strategy_id('B')
             self.input_results = usr_input['input']
             self.matches = usr_input['matches']
 
@@ -38,7 +43,7 @@ class Main:
         print 'A:', (self.res_history.count('A') * 100) / float(len(self.res_history)), '%'
         print 'B:', (self.res_history.count('B') * 100) / float(len(self.res_history)), '%'
 
-        self.plot_results()
+        #self.plot_results()
         pass
 
     def get_arg(self):
@@ -57,8 +62,10 @@ class Main:
         repeat_counter = 0
 
         for i in xrange(self.matches):
-            self.strategy_a.set_result_list(self.match_history)
-            self.strategy_b.set_result_list(self.match_history)
+            self.strategy_a.set_result_list(self.res_history)
+            self.strategy_a.set_match_list(self.match_history)
+            self.strategy_b.set_result_list(self.res_history)
+            self.strategy_b.set_match_list(self.match_history)
 
             bot_a = bot_b = ''
 
@@ -66,7 +73,7 @@ class Main:
                 bot_a = self.strategy_a.get_next_bot()
                 bot_b = self.strategy_b.get_next_bot()
                 repeat_counter += 1
-                if repeat_counter > 10:
+                if repeat_counter > 100:
                     print >> sys.stderr, 'The bots are the same after several retries...'
                     raise StopIteration('The bots are the same after several retries...')
             repeat_counter = 0

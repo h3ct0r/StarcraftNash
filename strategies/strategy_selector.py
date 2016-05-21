@@ -4,6 +4,7 @@ import random_uniform
 import skynet
 import xelnaga
 import nusbot
+import max_win_prev
 
 __author__ = 'Hector Azpurua'
 
@@ -13,7 +14,7 @@ class StrategySelector:
     strategies = {
         'nash': nash.Nash,
         'random_uniform': random_uniform.Random,
-        'max_win_prev': None,
+        'max_win_prev': max_win_prev.MaxWinPrev,
         'win_prev': None,
         'skynet': skynet.Skynet,
         'xelnaga': xelnaga.Xelnaga,

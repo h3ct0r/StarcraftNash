@@ -7,12 +7,22 @@ __author__ = 'Hector Azpurua'
 class Xelnaga(StrategyBase):
     def __init__(self):
         self.strategy_name = 'Xelnaga'
-        self.bots = ["Skynet", "Xelnaga", "NUSBot"]
+        self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
         self.result_list = []
+        self.match_list = []
+        self.s_id = None
+        pass
+
+    def set_strategy_id(self, s_id):
+        self.s_id = s_id
+        pass
+
+    def set_match_list(self, match_list):
+        self.match_list = match_list
         pass
 
     def set_result_list(self, result_list):
         self.result_list = result_list
 
     def get_next_bot(self):
-        return self.bots[1]
+        return self.bot_list[1]
