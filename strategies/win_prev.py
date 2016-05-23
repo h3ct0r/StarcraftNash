@@ -86,10 +86,9 @@ class WinPrev(StrategyBase):
         if len(opponent_bots) > 0:
             last = opponent_bots[-1]
             if last in self.win_table:
-                b_key = None
                 b_val = 0
                 for key, value in self.win_table[last].items():
-                    if b_key is not None or value > b_val:
+                    if b_key is None or value > b_val:
                         b_key = key
                         b_val = value
 

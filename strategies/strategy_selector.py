@@ -6,6 +6,7 @@ import xelnaga
 import nusbot
 import max_win_prev
 import win_prev
+import e_greedy
 
 __author__ = 'Hector Azpurua'
 
@@ -19,7 +20,8 @@ class StrategySelector:
         'win_prev': win_prev.WinPrev,
         'skynet': skynet.Skynet,
         'xelnaga': xelnaga.Xelnaga,
-        'nusbot': nusbot.Nusbot
+        'nusbot': nusbot.Nusbot,
+        'egreedy': e_greedy.EGreedy
     }
 
     def __init__(self):

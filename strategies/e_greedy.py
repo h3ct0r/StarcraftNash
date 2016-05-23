@@ -1,17 +1,17 @@
 from strategy_base import StrategyBase
-from collections import Counter
 import random
 
 __author__ = 'Hector Azpurua'
 
 
-class MaxWinPrev(StrategyBase):
+class EGreedy(StrategyBase):
     def __init__(self):
-        self.strategy_name = 'MaxWinPrev'
+        self.strategy_name = 'E-greedy'
         self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
         self.result_list = []
         self.match_list = []
         self.s_id = None
+        self.e = 0.2
         pass
 
     def get_name(self):
@@ -30,7 +30,7 @@ class MaxWinPrev(StrategyBase):
 
     def get_next_bot(self):
         opponent_bots = []
-        opponent_counter = {}
+        bot_wins = {}
 
         for i in xrange(len(self.result_list)):
             res = self.result_list[i]
@@ -57,30 +57,21 @@ class MaxWinPrev(StrategyBase):
             opponent_bots.append(opponent)
 
             if is_winner:
-                if opponent not in opponent_counter:
-                    opponent_counter[opponent] = {}
-                if self_bot not in opponent_counter[opponent]:
-                    opponent_counter[opponent][self_bot] = 1
+                if self_bot not in bot_wins:
+                    bot_wins[self_bot] = 1
                 else:
-                    opponent_counter[opponent][self_bot] += 1
+                    bot_wins[self_bot] += 1
             pass
 
-        data = Counter(opponent_bots)
-        most_common_opponent = None
-
-        if len(data.most_common(1)) > 0:
-            most_common_opponent = data.most_common(1)[0][0]
-
-        b_key = None
-        b_val = 0
-        if most_common_opponent is not None and most_common_opponent in opponent_counter:
-            for key, value in opponent_counter[most_common_opponent].items():
-                if b_key is None or value > b_val:
-                    b_key = key
-                    b_val = value
-            return b_key
-        else:
-            print 'Return random...'
+        if random.random() < self.e or len(bot_wins.keys()) <= 0:
             b_key = random.choice(self.bot_list)
+        else:
+            b_key = None
+            b_value = 0
+            for key in bot_wins.keys():
+                value = bot_wins[key]
+                if b_key is None or b_value > value:
+                    b_key = key
+                    b_value = value
 
         return b_key
