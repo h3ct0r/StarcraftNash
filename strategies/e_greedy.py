@@ -11,7 +11,7 @@ class EGreedy(StrategyBase):
         self.result_list = []
         self.match_list = []
         self.s_id = None
-        self.e = 0.2
+        self.e = 0.1
         pass
 
     def get_name(self):

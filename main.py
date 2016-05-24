@@ -110,7 +110,7 @@ class Main:
             repeat_counter = 0
 
             if DEBUG:
-                print i+1, "Match", bot_a, 'vs', bot_b
+                print i+1, "Match", bot_a, 'vs', bot_b, '(match index:', self.match_index, ')'
 
             match = self.get_match(bot_a.lower(), bot_b.lower())
 
@@ -130,7 +130,7 @@ class Main:
             res = self.match_list[i]
             if (res[0].lower() == bot_a or res[0].lower() == bot_b) and \
                     (res[1].lower() == bot_a or res[1].lower() == bot_b):
-                self.match_index = i
+                self.match_index = i + 1
                 return res
             pass
         pass
