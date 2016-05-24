@@ -15,21 +15,10 @@ class Main:
         self.ss = StrategySelector()
         self.usr_input = self.get_arg()
         self.strategies_matches = []
-
-        # if DEBUG:
-        #     print "DEBUG ON"
-        #     self.is_tournament = True
-        #     if self.is_tournament is False:
-        #         strategy_a = self.ss.get_strategy('nash')
-        #         strategy_a.set_id('A')
-        #         strategy_b = self.ss.get_strategy('win_prev')
-        #         strategy_b.set_id('B')
-        #         self.strategies_matches.append((strategy_a, strategy_b))
-        #
-        #     self.input_results = 'results_demo/results.txt'
-        #     self.matches = 100
-        # else:
-        #     print "DEBUG OFF"
+        self.is_tournament = False
+        self.input_results = []
+        self.matches = []
+        self.fig_counter = 0
 
         self.validate_params()
 
@@ -58,7 +47,7 @@ class Main:
             a_win_percentage = (self.res_history.count('A') * 100) / float(len(self.res_history))
             b_win_percentage = (self.res_history.count('B') * 100) / float(len(self.res_history))
 
-            print 'Result history of matches:', self.res_history
+            #print 'Result history of matches:', self.res_history
             print 'A) ', strategy_a.get_name().ljust(10), ':\t', a_win_percentage, '%'
             print 'B) ', strategy_b.get_name().ljust(10), ':\t', b_win_percentage, '%'
 
@@ -75,6 +64,8 @@ class Main:
         pass
 
         print self.result_dict
+        if self.usr_input['plot']:
+            plt.show()
 
     def validate_params(self):
         self.is_tournament = self.usr_input['tournament']
@@ -86,29 +77,14 @@ class Main:
 
             strategy_a = self.ss.get_strategy(self.usr_input['strategy_a'])
             strategy_a.set_id('A')
+
             strategy_b = self.ss.get_strategy(self.usr_input['strategy_b'])
             strategy_b.set_id('B')
+
             self.strategies_matches.append((strategy_a, strategy_b))
 
         self.input_results = self.usr_input['input']
         self.matches = self.usr_input['matches']
-
-    def get_arg(self):
-        parser = argparse.ArgumentParser(description='Analisys of Starcraft Broodwar results file using several '
-                                                     'techniques')
-        parser.add_argument('-i', '--input', help='Input file of the results file', required=True)
-        parser.add_argument('-a', '--strategy_a', help='The strategy used on the opponent A, ignored if -t is set',
-                                 required=False, choices=StrategySelector.strategies.keys())
-        parser.add_argument('-b', '--strategy_b', help='The strategy used on the opponent B, ignored if -t is set',
-                                 required=False, choices=StrategySelector.strategies.keys())
-        parser.add_argument('-m', '--matches', help='The number of matches to run', type=int, required=True)
-        parser.add_argument('-p', '--plot', help='If this param is set, the results are plotted', required=False,
-                                 action='store_true')
-        parser.add_argument('-t', '--tournament', help='If this param is set, all the techniques are tested '\
-                                 'against each other. The params -a -b are ignored', required=False,
-                                 action='store_true')
-        args = vars(parser.parse_args())
-        return args
 
     def run(self, strategy_a, strategy_b):
         repeat_counter = 0
@@ -160,7 +136,29 @@ class Main:
         pass
 
     @staticmethod
-    def plot_results(res_history, strategy_a, strategy_b):
+    def get_arg():
+        parser = argparse.ArgumentParser(
+            description='Analisys of Starcraft Broodwar results file using several techniques')
+        parser.add_argument(
+            '-i', '--input', help='Input file of the results file', required=True)
+        parser.add_argument(
+            '-a', '--strategy_a', help='The strategy used on the opponent A, ignored if -t is set', required=False,
+            choices=StrategySelector.strategies.keys())
+        parser.add_argument(
+            '-b', '--strategy_b', help='The strategy used on the opponent B, ignored if -t is set', required=False,
+            choices=StrategySelector.strategies.keys())
+        parser.add_argument(
+            '-m', '--matches', help='The number of matches to run', type=int, required=True)
+        parser.add_argument(
+            '-p', '--plot', help='If this param is set, the results are plotted', required=False, action='store_true')
+        parser.add_argument(
+            '-t', '--tournament', help='If this param is set, all the techniques are tested against each other. '
+                                       'The params -a -b are ignored', required=False, action='store_true')
+        args = vars(parser.parse_args())
+        return args
+
+    def plot_results(self, res_history, strategy_a, strategy_b):
+        plt.figure(self.fig_counter)
         counter = {
             'A': 0,
             'B': 0
@@ -183,7 +181,8 @@ class Main:
         plt.xlabel('Match number')
         plt.ylabel('Accumulated wins')
 
-        plt.show()
+        plt.show(block=False)
+        self.fig_counter += 1
         pass
 
 if __name__ == '__main__':

@@ -8,3 +8,5 @@ Example:
     -a 'Strategy for the opponent a'
     -b 'Strategy for the opponent b'
     -m 'Quantity of matches between a and b'
+    -p 'Plot the results'
+    -t 'Create a tournament with all the strategies'
