@@ -113,6 +113,7 @@ class Main:
                 print i+1, "Match", bot_a, 'vs', bot_b, '(match index:', self.match_index, ')'
 
             match = self.get_match(bot_a.lower(), bot_b.lower())
+            print 'Match:', match
 
             winner = 'B'
             if match[0] == bot_a:
@@ -126,14 +127,28 @@ class Main:
             pass
 
     def get_match(self, bot_a, bot_b):
+        match = None
+        if self.match_index >= len(self.match_list)-1:
+            print >> sys.stderr, 'The match index (' + str(self.match_index) + \
+                                 ') is equal or superior to the number of matches (' + str(len(self.match_list)) + ')'
+            raise StopIteration('Match index have passed the match number, please select a small -m value')
+
         for i in xrange(self.match_index, len(self.match_list)):
             res = self.match_list[i]
             if (res[0].lower() == bot_a or res[0].lower() == bot_b) and \
                     (res[1].lower() == bot_a or res[1].lower() == bot_b):
                 self.match_index = i + 1
-                return res
+                match = res
+                break
             pass
         pass
+
+        if match is None:
+            print >> sys.stderr, 'Cannot find a match between "' + bot_a + '" and "' + bot_b + '" after the index (' + \
+                                 str(self.match_index) + ')'
+            raise StopIteration('Cannot find a match after the match index defined, please select a small -m value')
+
+        return match
 
     @staticmethod
     def get_arg():
