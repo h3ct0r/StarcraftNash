@@ -2,10 +2,10 @@ import matplotlib.pyplot as plt
 import result_parser
 import argparse
 
-__author__ = 'Anderson R. Tavares'
+__author__ = 'Anderson Tavares'
 
 
-def plot_sequence(results_file, bot1, bot2, first=0, last=None):
+def plot_sequence(results_file, bot1, bot2, first=0, last=None, num_parts=1):
     rparser = result_parser.ResultParser(results_file)
     rparser.parse_file()
 
@@ -35,10 +35,21 @@ def plot_sequence(results_file, bot1, bot2, first=0, last=None):
             else:
                 y_values.append(1)
 
-    plt.plot(x_values, y_values, 'ro')
-    plt.ylabel('0=%s / 1=%s' % (bot1, bot2))
-    plt.xlabel('Match number')
-    plt.axis([x_values[0], x_values[-1]+1 , -.5, 1.5])
+    # makes subplots with parts of data
+    plt.figure(1)
+
+    for part in range(0, num_parts):
+        datalen = len(y_values)
+
+        start = datalen * part / num_parts
+        end = start + (datalen / num_parts)
+
+        plt.subplot(int('%d1%d' % (num_parts, part + 1)))
+        plt.plot(x_values[start:end], y_values[start:end], 'ro')
+        plt.ylabel('0=%s / 1=%s' % (bot1, bot2))
+        plt.xlabel('Match number')
+        plt.axis([start, end + 1, -.5, 1.5])
+
     plt.show()
 
 
@@ -65,8 +76,15 @@ if __name__ == '__main__':
         default=None, required=False
     )
 
+    parser.add_argument(
+        '-d', '--divide', type=int, help='Divide plot in a number of parts',
+        default=1, required=False
+    )
+
     args = parser.parse_args()
 
-    plot_sequence(args.result, args.bots[0], args.bots[1], args.first, args.last)
+    plot_sequence(
+        args.result, args.bots[0], args.bots[1], args.first, args.last, args.divide
+    )
 
 
