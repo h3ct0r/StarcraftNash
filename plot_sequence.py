@@ -9,32 +9,7 @@ def plot_sequence(results_file, bot1, bot2, first=0, last=None, num_parts=1, out
 
     rparser = result_parser.ResultParser(results_file)
     rparser.parse_file()
-
-    if last is None:
-        last = len(rparser.get_match_list())
-
-    valid_matches = -1
-    x_values = []
-    y_values = []
-    for winner, loser in rparser.get_match_list():
-
-        if winner in [bot1, bot2] and loser in [bot1, bot2]:
-
-            valid_matches += 1
-
-            if valid_matches < first:
-                continue
-
-            if valid_matches > last:
-                break
-
-            x_values.append(valid_matches)
-
-            # y=0 is bot1 and y=1 is bot2
-            if winner == bot1:
-                y_values.append(0)
-            else:
-                y_values.append(1)
+    x_values, y_values = rparser.analyse(bot1, bot2, first, last)
 
     # makes subplots with parts of data
     plt.figure(1, [13, 8])  #dimension in inches
