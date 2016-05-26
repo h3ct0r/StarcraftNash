@@ -8,7 +8,6 @@ __author__ = 'Anderson Tavares'
 def calculate(results_file, bot1, bot2, first=0, last=None, num_parts=4, output=None):
 
     rparser = result_parser.ResultParser(results_file)
-    rparser.parse_file()
     x_values, y_values = rparser.analyse(bot1, bot2, first, last)
 
     out_stream = sys.stdout if output is None else open(output, 'w')

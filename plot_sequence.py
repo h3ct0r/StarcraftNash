@@ -8,7 +8,6 @@ __author__ = 'Anderson Tavares'
 def plot_sequence(results_file, bot1, bot2, first=0, last=None, num_parts=1, output=None):
 
     rparser = result_parser.ResultParser(results_file)
-    rparser.parse_file()
     x_values, y_values = rparser.analyse(bot1, bot2, first, last)
 
     # makes subplots with parts of data
