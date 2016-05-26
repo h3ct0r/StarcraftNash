@@ -5,7 +5,8 @@ import argparse
 __author__ = 'Anderson Tavares'
 
 
-def plot_sequence(results_file, bot1, bot2, first=0, last=None, num_parts=1):
+def plot_sequence(results_file, bot1, bot2, first=0, last=None, num_parts=1, output=None):
+
     rparser = result_parser.ResultParser(results_file)
     rparser.parse_file()
 
@@ -36,7 +37,7 @@ def plot_sequence(results_file, bot1, bot2, first=0, last=None, num_parts=1):
                 y_values.append(1)
 
     # makes subplots with parts of data
-    plt.figure(1)
+    plt.figure(1, [13, 8])  #dimension in inches
 
     for part in range(0, num_parts):
         datalen = len(y_values)
@@ -50,7 +51,10 @@ def plot_sequence(results_file, bot1, bot2, first=0, last=None, num_parts=1):
         plt.xlabel('Match number')
         plt.axis([start, end + 1, -.5, 1.5])
 
-    plt.show()
+    if output is None:
+        plt.show()
+    else:
+        plt.savefig(output)
 
 
 if __name__ == '__main__':
@@ -81,10 +85,16 @@ if __name__ == '__main__':
         default=1, required=False
     )
 
+    parser.add_argument(
+        '-o', '--output', type=str, help='Filename to save the plot',
+        default=None, required=False
+    )
+
     args = parser.parse_args()
 
     plot_sequence(
-        args.result, args.bots[0], args.bots[1], args.first, args.last, args.divide
+        args.result, args.bots[0], args.bots[1], args.first, args.last,
+        args.divide, args.output
     )
 
 
