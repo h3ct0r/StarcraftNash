@@ -32,6 +32,5 @@ class Config(object):
 
         for element in cfgtree.getroot():
             if element.tag == 'bots':
-                self.bots = {x['name']: x['nashprob'] for x in element}
-                #for bot in element:
+                self.bots = {x['name']: float(x['nashprob']) for x in element}
 
