@@ -7,7 +7,7 @@ __author__ = 'Hector Azpurua'
 class Skynet(StrategyBase):
     def __init__(self):
         self.strategy_name = 'Skynet'
-        self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
+        #self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
         self.result_list = []
         self.match_list = []
         self.s_id = None

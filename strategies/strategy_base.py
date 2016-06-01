@@ -6,6 +6,17 @@ __author__ = 'Hector Azpurua'
 class StrategyBase(object):
     __metaclass__ = ABCMeta
 
+    # static list so that every strategy can use the same bots
+    bot_list = ["Skynet", "Xelnaga", "NUSBot"]
+
+    def load_bots(self, bots_file):
+        '''
+        Load bots given in a file. File format is one bot name per line
+        :param bots_file:
+        :return:
+        '''
+        self.bot_list = [x.strip() for x in open(bots_file).readlines()]
+
     @abstractmethod
     def set_id(self, s_id):
         pass

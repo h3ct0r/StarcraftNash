@@ -25,7 +25,7 @@ class WinPrev(StrategyBase):
                 "NUSBot": 0
             }
         }
-        self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
+        #self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
         self.result_list = []
         self.match_list = []
         self.s_id = None

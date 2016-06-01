@@ -13,7 +13,7 @@ class Nash(StrategyBase):
             "Xelnaga": float(0.254),
             "NUSBot": float(0.186)
         }
-        self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
+        #self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
         self.result_list = []
         self.match_list = []
         self.s_id = None

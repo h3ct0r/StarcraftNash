@@ -1,0 +1,10 @@
+<config>
+    <bots>
+        <bot name="Xelnaga" nashprob = ".41975" />
+        <bot name="CruzBot" nashprob = ".28395" />
+        <bot name="NUSBot" nashprob = "0" />
+        <bot name="Aiur" nashprob = "0" />
+        <bot name="Skynet" nashprob = ".2936" />
+    </bots>
+
+</config>

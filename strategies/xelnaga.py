@@ -7,7 +7,7 @@ __author__ = 'Hector Azpurua'
 class Xelnaga(StrategyBase):
     def __init__(self):
         self.strategy_name = 'Xelnaga'
-        self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
+        #self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
         self.result_list = []
         self.match_list = []
         self.s_id = None

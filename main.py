@@ -1,5 +1,6 @@
 import argparse
 import result_parser
+import config
 import sys
 import matplotlib.pyplot as plt
 from strategies.strategy_selector import StrategySelector
@@ -22,6 +23,11 @@ class Main:
 
         self.validate_params()
 
+        # parses config file if present
+        configs = config.Config()
+        if 'config-file' in self.usr_input:
+            configs.parse(self.usr_input['config-file'])
+
         if self.is_tournament:
             matches = list(itertools.combinations(StrategySelector.strategies.keys(), 2))
             for match in matches:
@@ -32,7 +38,7 @@ class Main:
                 self.strategies_matches.append((aa, bb))
 
         rp = result_parser.ResultParser(self.input_results)
-        self.match_list = rp.get_match_list()
+        self.bot_match_list = rp.get_match_list()
 
         self.result_dict = {}
 
@@ -128,13 +134,13 @@ class Main:
 
     def get_match(self, bot_a, bot_b):
         match = None
-        if self.match_index >= len(self.match_list)-1:
+        if self.match_index >= len(self.bot_match_list)-1:
             print >> sys.stderr, 'The match index (' + str(self.match_index) + \
-                                 ') is equal or superior to the number of matches (' + str(len(self.match_list)) + ')'
+                                 ') is equal or superior to the number of matches (' + str(len(self.bot_match_list)) + ')'
             raise StopIteration('Match index have passed the match number, please select a small -m value')
 
-        for i in xrange(self.match_index, len(self.match_list)):
-            res = self.match_list[i]
+        for i in xrange(self.match_index, len(self.bot_match_list)):
+            res = self.bot_match_list[i]
             if (res[0].lower() == bot_a or res[0].lower() == bot_b) and \
                     (res[1].lower() == bot_a or res[1].lower() == bot_b):
                 self.match_index = i + 1
@@ -153,22 +159,41 @@ class Main:
     @staticmethod
     def get_arg():
         parser = argparse.ArgumentParser(
-            description='Analisys of Starcraft Broodwar results file using several techniques')
+            description='Strategy selection in StarCraft'
+        )
+
         parser.add_argument(
-            '-i', '--input', help='Input file of the results file', required=True)
+            '-i', '--input', help='Input file of the results file', required=True
+        )
+
         parser.add_argument(
             '-a', '--strategy_a', help='The strategy used on the opponent A, ignored if -t is set', required=False,
-            choices=StrategySelector.strategies.keys())
+            choices=StrategySelector.strategies.keys()
+        )
+
         parser.add_argument(
             '-b', '--strategy_b', help='The strategy used on the opponent B, ignored if -t is set', required=False,
-            choices=StrategySelector.strategies.keys())
+            choices=StrategySelector.strategies.keys()
+        )
+
         parser.add_argument(
-            '-m', '--matches', help='The number of matches to run', type=int, required=True)
+            '-c', '--config-file', help='File with experiment configurations',
+            required=False, type=str,
+        )
+
         parser.add_argument(
-            '-p', '--plot', help='If this param is set, the results are plotted', required=False, action='store_true')
+            '-m', '--matches', help='The number of matches to run', type=int, required=True
+        )
+
+        parser.add_argument(
+            '-p', '--plot', help='If this param is set, the results are plotted',
+            required=False, action='store_true'
+        )
+
         parser.add_argument(
             '-t', '--tournament', help='If this param is set, all the techniques are tested against each other. '
-                                       'The params -a -b are ignored', required=False, action='store_true')
+                                       'The params -a -b are ignored', required=False, action='store_true'
+        )
         args = vars(parser.parse_args())
         return args
 
