@@ -15,6 +15,15 @@ class ResultParser:
 
         pass
 
+    def get_unique_opponents(self):
+        if len(self.match_list) <= 0:
+            return None
+
+        elem_list = list(sum(self.match_list, ()))
+        uniq_list = list(set(elem_list))
+
+        return uniq_list
+
     def get_match_list(self):
         return self.match_list
 

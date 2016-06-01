@@ -5,6 +5,7 @@ import sys
 import matplotlib.pyplot as plt
 from strategies.strategy_selector import StrategySelector
 import itertools
+import strategies.strategy_base
 
 __author__ = 'Hector Azpurua'
 
@@ -13,6 +14,7 @@ DEBUG = True
 
 class Main:
     def __init__(self):
+        self.rp = None
         self.ss = StrategySelector()
         self.usr_input = self.get_arg()
         self.strategies_matches = []
@@ -28,6 +30,10 @@ class Main:
         if 'config-file' in self.usr_input:
             configs.parse(self.usr_input['config-file'])
 
+        self.bot_match_list = self.rp.get_match_list()
+
+        strategies.strategy_base.StrategyBase.bot_list = configs.bots.keys()
+
         if self.is_tournament:
             matches = list(itertools.combinations(StrategySelector.strategies.keys(), 2))
             for match in matches:
@@ -36,9 +42,6 @@ class Main:
                 bb = self.ss.get_strategy(match[1])
                 bb.set_id('B')
                 self.strategies_matches.append((aa, bb))
-
-        rp = result_parser.ResultParser(self.input_results)
-        self.bot_match_list = rp.get_match_list()
 
         self.result_dict = {}
 
@@ -53,7 +56,6 @@ class Main:
             a_win_percentage = (self.res_history.count('A') * 100) / float(len(self.res_history))
             b_win_percentage = (self.res_history.count('B') * 100) / float(len(self.res_history))
 
-            #print 'Result history of matches:', self.res_history
             print 'A) ', strategy_a.get_name().ljust(10), ':\t', a_win_percentage, '%'
             print 'B) ', strategy_b.get_name().ljust(10), ':\t', b_win_percentage, '%'
 
@@ -74,11 +76,29 @@ class Main:
             plt.show()
 
     def validate_params(self):
+        """
+        Validate user input of parameters
+
+        :return:
+        """
         self.is_tournament = self.usr_input['tournament']
+
+        self.input_results = self.usr_input['input']
+        self.matches = self.usr_input['matches']
+
+        self.rp = result_parser.ResultParser(self.input_results)
+        self.ss.set_unique_opponents(self.rp.get_unique_opponents())
+
         if self.is_tournament is False:
             if self.usr_input['strategy_a'] is None or self.usr_input['strategy_b'] is None:
                 print >> sys.stderr, 'Strategy for opponent A or B is missing, use -h to use Help to see the list' \
                                      'of possible parameters and combinations'
+                sys.exit(1)
+
+            all_strategies = StrategySelector.strategies.keys() + self.rp.get_unique_opponents()
+            if self.usr_input['strategy_a'] not in all_strategies or self.usr_input['strategy_b'] not in all_strategies:
+                print >> sys.stderr, \
+                    'Strategy for opponent A or B are invalid, the valid strategies are', all_strategies
                 sys.exit(1)
 
             strategy_a = self.ss.get_strategy(self.usr_input['strategy_a'])
@@ -89,10 +109,14 @@ class Main:
 
             self.strategies_matches.append((strategy_a, strategy_b))
 
-        self.input_results = self.usr_input['input']
-        self.matches = self.usr_input['matches']
-
     def run(self, strategy_a, strategy_b):
+        """
+        Run the tournament between 2 strategies and a number of matches
+
+        :param strategy_a:
+        :param strategy_b:
+        :return:
+        """
         repeat_counter = 0
 
         print '\n', strategy_a.get_name(), 'vs', strategy_b.get_name()
@@ -133,6 +157,13 @@ class Main:
             pass
 
     def get_match(self, bot_a, bot_b):
+        """
+        Given a list of matches, select a new match between the strategies of BotA and BotB using an index
+
+        :param bot_a:
+        :param bot_b:
+        :return:
+        """
         match = None
         if self.match_index >= len(self.bot_match_list)-1:
             print >> sys.stderr, 'The match index (' + str(self.match_index) + \
@@ -158,6 +189,11 @@ class Main:
 
     @staticmethod
     def get_arg():
+        """
+        Get the arguments of this program
+
+        :return:
+        """
         parser = argparse.ArgumentParser(
             description='Strategy selection in StarCraft'
         )
@@ -167,13 +203,11 @@ class Main:
         )
 
         parser.add_argument(
-            '-a', '--strategy_a', help='The strategy used on the opponent A, ignored if -t is set', required=False,
-            choices=StrategySelector.strategies.keys()
+            '-a', '--strategy_a', help='The strategy used on the opponent A, ignored if -t is set', required=False
         )
 
         parser.add_argument(
-            '-b', '--strategy_b', help='The strategy used on the opponent B, ignored if -t is set', required=False,
-            choices=StrategySelector.strategies.keys()
+            '-b', '--strategy_b', help='The strategy used on the opponent B, ignored if -t is set', required=False
         )
 
         parser.add_argument(
@@ -198,6 +232,14 @@ class Main:
         return args
 
     def plot_results(self, res_history, strategy_a, strategy_b):
+        """
+        Plot the results of the matches given a list of wins and losses
+
+        :param res_history:
+        :param strategy_a:
+        :param strategy_b:
+        :return:
+        """
         plt.figure(self.fig_counter)
         counter = {
             'A': 0,

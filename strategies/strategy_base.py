@@ -9,6 +9,9 @@ class StrategyBase(object):
     # static list so that every strategy can use the same bots
     bot_list = ["Skynet", "Xelnaga", "NUSBot"]
 
+    def set_bot_list(self, b_list):
+        self.bot_list = b_list
+
     def load_bots(self, bots_file):
         '''
         Load bots given in a file. File format is one bot name per line
