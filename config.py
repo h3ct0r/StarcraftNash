@@ -10,6 +10,18 @@ def str_to_bool(value):
 
 
 class Config(object):
+
+    instance = None
+
+    @staticmethod
+    def get_instance():
+        """
+        Returns the (singleton) instance of Config object
+        """
+        if Config.instance is None:
+            Config.instance = Config()
+        return Config.instance
+
     """
     Class that handles configurations of an experiment
     """

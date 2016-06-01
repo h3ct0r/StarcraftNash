@@ -26,7 +26,7 @@ class Main:
         self.validate_params()
 
         # parses config file if present
-        configs = config.Config()
+        configs = config.Config.get_instance()
         if 'config-file' in self.usr_input:
             configs.parse(self.usr_input['config-file'])
 
