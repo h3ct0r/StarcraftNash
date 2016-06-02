@@ -36,17 +36,16 @@ class Nash(StrategyBase):
         if self.probabilities is None:
             self.probabilities = config.Config.get_instance().get_bots()
 
-        prob = 0
-        for key in self.probabilities.keys():
-            prob += self.probabilities[key]
+        prob = sum(self.probabilities.values())
+        # for key in self.probabilities.keys():
+        #     prob += self.probabilities[key]
 
         if not(0.99 <= prob <= 1.0):
             print >> sys.stderr, "Sum of probabilities is not 1", prob
             print >> sys.stderr, self.probabilities
+            #return None
 
-            return None
-
-        rand_n = random.uniform(0, 1)
+        rand_n = random.uniform(0, prob)
 
         prob = 0
         bot_keys = self.probabilities.keys()
@@ -57,7 +56,7 @@ class Nash(StrategyBase):
             if rand_n < prob or (i >= len(bot_keys)-1):
                 return key
 
-        print >> sys.stderr, 'Something estrange happened, a bot wasn\'t selected by Nash eq', prob, rand_n
+        print >> sys.stderr, "Something strange happened, a bot wasn't selected by Nash eq", prob, rand_n
         print >> sys.stderr, self.probabilities
 
         return None
