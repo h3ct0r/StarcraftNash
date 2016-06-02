@@ -15,6 +15,7 @@ DEBUG = True
 class Main:
     def __init__(self):
         self.rp = None
+        self.configs = config.Config.get_instance()
         self.ss = StrategySelector()
         self.usr_input = self.get_arg()
         self.strategies_matches = []
@@ -25,26 +26,13 @@ class Main:
 
         self.validate_params()
 
-        # parses config file if present
-        configs = config.Config.get_instance()
-        if 'config-file' in self.usr_input:
-            configs.parse(self.usr_input['config-file'])
-
         self.bot_match_list = self.rp.get_match_list()
 
-        strategies.strategy_base.StrategyBase.bot_list = configs.bots.keys()
+        print "Matches:", len(self.strategies_matches)
 
-        if self.is_tournament:
-            matches = list(itertools.combinations(StrategySelector.strategies.keys(), 2))
-            for match in matches:
-                aa = self.ss.get_strategy(match[0])
-                aa.set_id('A')
-                bb = self.ss.get_strategy(match[1])
-                bb.set_id('B')
-                self.strategies_matches.append((aa, bb))
+        strategies.strategy_base.StrategyBase.bot_list = self.configs.bots.keys()
 
         self.result_dict = {}
-
         for i in xrange(len(self.strategies_matches)):
             strategy_a, strategy_b = self.strategies_matches[i]
 
@@ -81,6 +69,11 @@ class Main:
 
         :return:
         """
+
+        if 'config_file' in self.usr_input:
+            self.configs.parse(self.usr_input['config_file'])
+            self.ss.update_strategies(self.configs.get_bots())
+
         self.is_tournament = self.usr_input['tournament']
 
         self.input_results = self.usr_input['input']
@@ -89,7 +82,20 @@ class Main:
         self.rp = result_parser.ResultParser(self.input_results)
         self.ss.set_unique_opponents(self.rp.get_unique_opponents())
 
-        if self.is_tournament is False:
+        if self.is_tournament:
+            opponents = StrategySelector.strategies.keys()
+            if self.configs.get_is_config_updated():
+                opponents += self.ss.get_unique_opponents()
+                opponents = list(set(opponents))
+
+            matches = list(itertools.combinations(opponents, 2))
+            for match in matches:
+                aa = self.ss.get_strategy(match[0])
+                aa.set_id('A')
+                bb = self.ss.get_strategy(match[1])
+                bb.set_id('B')
+                self.strategies_matches.append((aa, bb))
+        else:
             if self.usr_input['strategy_a'] is None or self.usr_input['strategy_b'] is None:
                 print >> sys.stderr, 'Strategy for opponent A or B is missing, use -h to use Help to see the list' \
                                      'of possible parameters and combinations'
@@ -211,7 +217,7 @@ class Main:
         )
 
         parser.add_argument(
-            '-c', '--config-file', help='File with experiment configurations',
+            '-c', '--config_file', help='File with experiment configurations',
             required=False, type=str,
         )
 
