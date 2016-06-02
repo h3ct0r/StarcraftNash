@@ -8,23 +8,50 @@ __author__ = 'Hector Azpurua'
 class WinPrev(StrategyBase):
     def __init__(self):
         self.strategy_name = 'WinPrev'
+
+        # Bot	Xeln	Cruz	NUSB	Aiur	Skyn
+        # Xelnaga	50,00%	26,00%	86,00%	73,00%	73,00%
+        # CruzBot	74,00%	50,00%	80,00%	67,00%	16,00%
+        # NUSBot	14,00%	20,00%	50,00%	74,00%	97,00%
+        # Aiur	27,00%	33,00%	26,00%	50,00%	79,00%
+        # Skynet	27,00%	84,00%	3,00%	21,00%	50,00%
+
         self.win_table = {
             "Skynet": {
                 "Skynet": 0,
-                "Xelnaga": 0.31,
-                "NUSBot": 0.9
+                "Xelnaga": 0.27,
+                "CruzBot": 0.84
             },
             "Xelnaga": {
-                "Skynet": 0.69,
+                "Skynet": 0.73,
                 "Xelnaga": 0,
-                "NUSBot": 0.3
+                "CruzBot": 0.26
             },
-            "NUSBot": {
-                "Skynet": 0.1,
-                "Xelnaga": 0.7,
-                "NUSBot": 0
+            "CruzBot": {
+                "Skynet": 0.16,
+                "Xelnaga": 0.74,
+                "CruzBot": 0
             }
         }
+
+        # self.win_table = {
+        #     "Skynet": {
+        #         "Skynet": 0,
+        #         "Xelnaga": 0.31,
+        #         "NUSBot": 0.9
+        #     },
+        #     "Xelnaga": {
+        #         "Skynet": 0.69,
+        #         "Xelnaga": 0,
+        #         "NUSBot": 0.3
+        #     },
+        #     "NUSBot": {
+        #         "Skynet": 0.1,
+        #         "Xelnaga": 0.7,
+        #         "NUSBot": 0
+        #     }
+        # }
+
         #self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
         self.result_list = []
         self.match_list = []

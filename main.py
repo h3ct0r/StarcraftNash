@@ -1,6 +1,7 @@
 import argparse
 import result_parser
 import config
+import xlsxwriter
 import sys
 import matplotlib.pyplot as plt
 from strategies.strategy_selector import StrategySelector
@@ -60,8 +61,12 @@ class Main:
         pass
 
         print self.result_dict
+
         if self.usr_input['plot']:
             plt.show()
+
+        if self.usr_input['excel']:
+            self.generate_excel_results()
 
     def validate_params(self):
         """
@@ -85,8 +90,11 @@ class Main:
         if self.is_tournament:
             opponents = StrategySelector.strategies.keys()
             if self.configs.get_is_config_updated():
+                opponents += self.configs.get_bots()
+            else:
                 opponents += self.ss.get_unique_opponents()
-                opponents = list(set(opponents))
+
+            opponents = list(set(opponents))
 
             matches = list(itertools.combinations(opponents, 2))
             for match in matches:
@@ -231,9 +239,15 @@ class Main:
         )
 
         parser.add_argument(
+            '-e', '--excel', help='If this param is set, the results are saved to a excel',
+            required=False, action='store_true'
+        )
+
+        parser.add_argument(
             '-t', '--tournament', help='If this param is set, all the techniques are tested against each other. '
                                        'The params -a -b are ignored', required=False, action='store_true'
         )
+
         args = vars(parser.parse_args())
         return args
 
@@ -272,6 +286,48 @@ class Main:
         plt.show(block=False)
         self.fig_counter += 1
         pass
+
+    def generate_excel_results(self):
+        excel_filename = 'tournament_results.xlsx'
+
+        print 'Generating excel results...', excel_filename
+
+        strategy_list_srt = sorted(self.result_dict.keys())
+        workbook = xlsxwriter.Workbook(excel_filename)
+
+        worksheet = workbook.add_worksheet()
+
+        element_count = len(strategy_list_srt)
+
+        format1 = workbook.add_format()
+        format1.set_pattern(1)
+        format1.set_bg_color('green')
+
+        i = 0
+        for id1 in strategy_list_srt:
+            j = 0
+            for id2 in strategy_list_srt:
+
+                worksheet.write(0, 1+i, id1)
+                worksheet.write(1+i, 0, id1)
+
+                if id1 == id2:
+                    worksheet.write(1 + i, 1+j, '', format1)
+
+                elif id2 in self.result_dict[id1]:
+                    total = str(self.result_dict[id1][id2]) + '%'
+
+                    print id1, ":", id2, total
+
+                    worksheet.write(1 + i, 1+j, total)
+                j += 1
+                pass
+
+            i += 1
+            print i, "/", element_count
+            pass
+
+        workbook.close()
 
 if __name__ == '__main__':
     Main()
