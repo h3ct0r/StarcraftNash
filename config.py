@@ -12,7 +12,6 @@ def str_to_bool(value):
 class Config(object):
 
     instance = None
-    is_config_updated = False
     default_bots = {"Skynet": .33, "Xelnaga": .33, "NUSBot": .33}
 
     @staticmethod
@@ -42,7 +41,7 @@ class Config(object):
         )
 
     def get_is_config_updated(self):
-        return self.is_config_updated
+        return self.bots != self.default_bots  #is_config_updated
 
     def parse(self, cfgpath=None):
         print 'Parsing file:', cfgpath
@@ -52,8 +51,8 @@ class Config(object):
             if element.tag == 'bots':
                 self.bots = {x.get('name'): float(x.get('nashprob')) for x in element}
 
-        if self.bots != self.default_bots:
-            self.is_config_updated = True
+        #if self.bots != self.default_bots:
+        #    self.is_config_updated = True
 
-        print 'Bot definition updated by config file:', self.bots
+        #print 'Bot definition updated by config file:', self.bots
 
