@@ -8,6 +8,7 @@ class Unique(StrategyBase):
     """
     Selects the same strategy every time
     """
+
     def __init__(self, strategy_name):
         self.strategy_name = strategy_name
         self.result_list = []

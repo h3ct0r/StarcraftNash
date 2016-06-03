@@ -16,7 +16,7 @@ class StrategySelector:
         'nash': nash.Nash,
         'random_uniform': random_uniform.RandomUniform,
         'frequentist': frequentist.Frequentist,
-        'win_prev': win_prev.WinPrev,
+        'winprev': win_prev.WinPrev,
         'replylast': reply_last.ReplyLast,
         'egreedy': e_greedy.EGreedy
     }

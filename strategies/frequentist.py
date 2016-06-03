@@ -10,6 +10,7 @@ class Frequentist(StrategyBase):
     Tries to beat opponent by selecting the strategy that
     counters its most frequent choice
     """
+
     def __init__(self):
         self.strategy_name = 'Frequentist'
         self.result_list = []

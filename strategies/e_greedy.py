@@ -5,9 +5,14 @@ __author__ = 'Hector Azpurua'
 
 
 class EGreedy(StrategyBase):
+    """
+    Use the e greedy function to search a good strategy
+    based on a epsilon  probability of exploration and a e-1 probability of
+    selecting the best know strategy
+    """
+
     def __init__(self):
         self.strategy_name = 'E-greedy'
-        #self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
         self.result_list = []
         self.match_list = []
         self.s_id = None
@@ -70,7 +75,7 @@ class EGreedy(StrategyBase):
             b_value = 0
             for key in bot_wins.keys():
                 value = bot_wins[key]
-                if b_key is None or b_value > value:
+                if b_key is None or value > b_value:
                     b_key = key
                     b_value = value
 

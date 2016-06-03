@@ -5,6 +5,10 @@ __author__ = 'Hector Azpurua'
 
 
 class RandomUniform(StrategyBase):
+    """
+    Select a random strategy
+    """
+
     def __init__(self):
         self.strategy_name = 'Random uniform'
         #self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
