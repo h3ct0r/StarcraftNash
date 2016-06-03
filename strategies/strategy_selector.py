@@ -14,7 +14,7 @@ class StrategySelector:
     strategies = {
         'nash': nash.Nash,
         'random_uniform': random_uniform.RandomUniform,
-        'max_win_prev': frequentist.Frequentist,
+        'frequentist': frequentist.Frequentist,
         'win_prev': win_prev.WinPrev,
         'egreedy': e_greedy.EGreedy
     }

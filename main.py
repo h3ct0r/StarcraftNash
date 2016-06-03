@@ -15,49 +15,50 @@ DEBUG = True
 
 class Main:
     def __init__(self):
-        self.rp = None
-        self.configs = config.Config.get_instance()
-        self.ss = StrategySelector()
+        self.result_parser = None
+        self.config = config.Config.get_instance()
+        self.strategy_selector = StrategySelector()
         self.usr_input = self.get_arg()
-        self.strategies_matches = []
-        self.is_tournament = False
-        self.input_results = []
-        self.matches = []
-        self.fig_counter = 0
+        self.game_matches = []              # matches between strategy selectors (list of tuples)
+        self.is_tournament = False          # defines matches between all strategy selectors
+        self.input_results = None           # file with pool of matches between strategies (not strategy selectors!)
+        self.matches = 0                    # number of matches between strategy selectors
+        self.fig_counter = 0                # number of figures for plotting
 
-        self.validate_params()
+        self.validate_params()              # validates params and configures internal variables
 
-        self.bot_match_list = self.rp.get_match_list()
+        self.bot_match_list = self.result_parser.get_match_list()
 
-        print "Matches:", len(self.strategies_matches)
+        print "# matches:", len(self.game_matches)
 
-        strategies.strategy_base.StrategyBase.bot_list = self.configs.bots.keys()
+        # sets possible players' selections from config object
+        strategies.strategy_base.StrategyBase.bot_list = self.config.bots.keys()
 
-        self.result_dict = {}
-        for i in xrange(len(self.strategies_matches)):
-            strategy_a, strategy_b = self.strategies_matches[i]
+        self.result_dict = {}   # stores players' percent of victories
+        for i in xrange(len(self.game_matches)):
+            player_a, player_b = self.game_matches[i]
 
             self.match_index = 0
             self.match_history = []
             self.res_history = []
-            self.run(strategy_a, strategy_b)
+            self.run(player_a, player_b)
 
             a_win_percentage = (self.res_history.count('A') * 100) / float(len(self.res_history))
             b_win_percentage = (self.res_history.count('B') * 100) / float(len(self.res_history))
 
-            print 'A) ', strategy_a.get_name().ljust(10), ':\t', a_win_percentage, '%'
-            print 'B) ', strategy_b.get_name().ljust(10), ':\t', b_win_percentage, '%'
+            print 'A) ', player_a.get_name().ljust(10), ':\t', a_win_percentage, '%'
+            print 'B) ', player_b.get_name().ljust(10), ':\t', b_win_percentage, '%'
 
             if self.usr_input['plot']:
-                self.plot_results(self.res_history, strategy_a, strategy_b)
+                self.plot_results(self.res_history, player_a, player_b)
 
-            if strategy_a.get_name() not in self.result_dict:
-                self.result_dict[strategy_a.get_name()] = {}
-            if strategy_b.get_name() not in self.result_dict:
-                self.result_dict[strategy_b.get_name()] = {}
+            if player_a.get_name() not in self.result_dict:
+                self.result_dict[player_a.get_name()] = {}
+            if player_b.get_name() not in self.result_dict:
+                self.result_dict[player_b.get_name()] = {}
 
-            self.result_dict[strategy_a.get_name()][strategy_b.get_name()] = a_win_percentage
-            self.result_dict[strategy_b.get_name()][strategy_a.get_name()] = b_win_percentage
+            self.result_dict[player_a.get_name()][player_b.get_name()] = a_win_percentage
+            self.result_dict[player_b.get_name()][player_a.get_name()] = b_win_percentage
         pass
 
         print self.result_dict
@@ -70,83 +71,84 @@ class Main:
 
     def validate_params(self):
         """
-        Validate user input of parameters
+        Validates user input of parameters and
+        configures several internal variables
 
         :return:
         """
 
         if 'config_file' in self.usr_input:
-            self.configs.parse(self.usr_input['config_file'])
-            self.ss.update_strategies(self.configs.get_bots())
+            self.config.parse(self.usr_input['config_file'])
+            self.strategy_selector.update_strategies(self.config.get_bots())
 
         self.is_tournament = self.usr_input['tournament']
 
         self.input_results = self.usr_input['input']
         self.matches = self.usr_input['matches']
 
-        self.rp = result_parser.ResultParser(self.input_results)
-        self.ss.set_unique_opponents(self.rp.get_unique_opponents())
+        self.result_parser = result_parser.ResultParser(self.input_results)
+        self.strategy_selector.set_unique_opponents(self.result_parser.get_unique_opponents())
 
         if self.is_tournament:
-            opponents = StrategySelector.strategies.keys()
-            if self.configs.get_is_config_updated():
-                opponents += self.configs.get_bots()
+            players = StrategySelector.strategies.keys()    # players are the strategy (bot) selectors
+            if self.config.get_is_config_updated():
+                players += self.config.get_bots()
             else:
-                opponents += self.ss.get_unique_opponents()
+                players += self.strategy_selector.get_unique_opponents()
 
-            opponents = list(set(opponents))
+            players = list(set(players))
 
-            matches = list(itertools.combinations(opponents, 2))
+            matches = list(itertools.combinations(players, 2))  # generates match list given the list of players
             for match in matches:
-                aa = self.ss.get_strategy(match[0])
+                aa = self.strategy_selector.get_strategy(match[0])
                 aa.set_id('A')
-                bb = self.ss.get_strategy(match[1])
+                bb = self.strategy_selector.get_strategy(match[1])
                 bb.set_id('B')
-                self.strategies_matches.append((aa, bb))
+                self.game_matches.append((aa, bb))
         else:
-            if self.usr_input['strategy_a'] is None or self.usr_input['strategy_b'] is None:
+            if self.usr_input['player_a'] is None or self.usr_input['player_b'] is None:
                 print >> sys.stderr, 'Strategy for opponent A or B is missing, use -h to use Help to see the list' \
                                      'of possible parameters and combinations'
                 sys.exit(1)
 
-            all_strategies = StrategySelector.strategies.keys() + self.rp.get_unique_opponents()
-            if self.usr_input['strategy_a'] not in all_strategies or self.usr_input['strategy_b'] not in all_strategies:
+            all_players = StrategySelector.strategies.keys() + self.result_parser.get_unique_opponents()
+            if self.usr_input['player_a'] not in all_players or self.usr_input['player_b'] not in all_players:
                 print >> sys.stderr, \
-                    'Strategy for opponent A or B are invalid, the valid strategies are', all_strategies
+                    'Strategy for opponent A or B are invalid, the valid strategies are', all_players
                 sys.exit(1)
 
-            strategy_a = self.ss.get_strategy(self.usr_input['strategy_a'])
-            strategy_a.set_id('A')
+            player_a = self.strategy_selector.get_strategy(self.usr_input['player_a'])
+            player_a.set_id('A')
 
-            strategy_b = self.ss.get_strategy(self.usr_input['strategy_b'])
-            strategy_b.set_id('B')
+            player_b = self.strategy_selector.get_strategy(self.usr_input['player_b'])
+            player_b.set_id('B')
 
-            self.strategies_matches.append((strategy_a, strategy_b))
+            self.game_matches.append((player_a, player_b))
 
-    def run(self, strategy_a, strategy_b):
+    def run(self, player_a, player_b):
         """
         Run the tournament between 2 strategies and a number of matches
 
-        :param strategy_a:
-        :param strategy_b:
+        :param player_a:
+        :param player_b:
         :return:
         """
         repeat_counter = 0
 
-        print '\n', strategy_a.get_name(), 'vs', strategy_b.get_name()
+        print '\n', player_a.get_name(), 'vs', player_b.get_name()
 
         for i in xrange(self.matches):
-            strategy_a.set_result_list(self.res_history)
-            strategy_a.set_match_list(self.match_history)
-            strategy_b.set_result_list(self.res_history)
-            strategy_b.set_match_list(self.match_history)
+            player_a.set_result_list(self.res_history)
+            player_a.set_match_list(self.match_history)
+            player_b.set_result_list(self.res_history)
+            player_b.set_match_list(self.match_history)
 
             bot_a = ''
             bot_b = ''
 
             while bot_a == bot_b:
-                bot_a = strategy_a.get_next_bot()
-                bot_b = strategy_b.get_next_bot()
+                bot_a = player_a.get_next_bot()
+                bot_b = player_b.get_next_bot()
                 repeat_counter += 1
                 if repeat_counter > 100:
                     print >> sys.stderr, 'The bots are the same after several retries...'
@@ -217,11 +219,11 @@ class Main:
         )
 
         parser.add_argument(
-            '-a', '--strategy_a', help='The strategy used on the opponent A, ignored if -t is set', required=False
+            '-a', '--player_a', help='The strategy used on the opponent A, ignored if -t is set', required=False
         )
 
         parser.add_argument(
-            '-b', '--strategy_b', help='The strategy used on the opponent B, ignored if -t is set', required=False
+            '-b', '--player_b', help='The strategy used on the opponent B, ignored if -t is set', required=False
         )
 
         parser.add_argument(
@@ -251,13 +253,13 @@ class Main:
         args = vars(parser.parse_args())
         return args
 
-    def plot_results(self, res_history, strategy_a, strategy_b):
+    def plot_results(self, res_history, player_a, player_b):
         """
         Plot the results of the matches given a list of wins and losses
 
         :param res_history:
-        :param strategy_a:
-        :param strategy_b:
+        :param player_a:
+        :param player_b:
         :return:
         """
         plt.figure(self.fig_counter)
@@ -275,8 +277,8 @@ class Main:
             data_b.append(counter['B'])
             d_range.append(i)
 
-        line_a,  = plt.plot(d_range, data_a, color='red', label=strategy_a.strategy_name)
-        line_b, = plt.plot(d_range, data_b, color='blue', label=strategy_b.strategy_name)
+        line_a,  = plt.plot(d_range, data_a, color='red', label=player_a.strategy_name)
+        line_b, = plt.plot(d_range, data_b, color='blue', label=player_b.strategy_name)
         plt.legend(handles=[line_a, line_b], loc=2)
         plt.grid(True)
 
