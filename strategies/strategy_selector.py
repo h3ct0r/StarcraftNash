@@ -22,7 +22,7 @@ class StrategySelector:
     }
 
     def __init__(self):
-        self.opponent_list = []
+        self.choices = []
         pass
 
     def update_strategies(self, new_strat):
@@ -30,21 +30,21 @@ class StrategySelector:
             if elem not in self.strategies:
                 self.strategies[elem] = None
 
-        print 'Updated strategies:', self.strategies
+        #print 'Updated strategies:', self.strategies
 
-    def set_unique_opponents(self, opponent_list):
-        self.opponent_list = opponent_list
+    def set_unique_choices(self, choices):
+        self.choices = choices
 
-    def get_unique_opponents(self):
-        return self.opponent_list
+    def get_unique_choices(self):
+        return self.choices
 
     def get_strategy(self, strategy):
         if strategy not in self.strategies.keys() or self.strategies[strategy] is None:
             # If the strategy is an opponent from the match list
-            if strategy in self.opponent_list or (strategy in self.strategies and self.strategies[strategy] is None):
+            if strategy in self.choices or (strategy in self.strategies and self.strategies[strategy] is None):
                 return unique.Unique(strategy)
 
-            print >> sys.stderr, 'Strategy not in strategy list or in bot list:', strategy
+            print >> sys.stderr, 'Strategy not in player list or in bot list:', strategy
             return None
 
         return self.strategies[strategy]()

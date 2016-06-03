@@ -87,14 +87,14 @@ class Main:
         self.matches = self.usr_input['matches']
 
         self.result_parser = result_parser.ResultParser(self.input_results)
-        self.strategy_selector.set_unique_opponents(self.result_parser.get_unique_opponents())
+        self.strategy_selector.set_unique_choices(self.result_parser.get_unique_opponents())
 
         if self.is_tournament:
             players = StrategySelector.strategies.keys()    # players are the strategy (bot) selectors
             if self.config.get_is_config_updated():
                 players += self.config.get_bots()
             else:
-                players += self.strategy_selector.get_unique_opponents()
+                players += self.strategy_selector.get_unique_choices()
 
             players = list(set(players))
 
