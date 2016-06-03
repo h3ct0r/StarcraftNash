@@ -11,7 +11,7 @@ class EGreedy(StrategyBase):
     selecting the best know strategy
     """
 
-    def __init__(self, epsilon=.1):
+    def __init__(self, epsilon=0.1):
         """
 
         :param epsilon: probability of EXPLORATION
@@ -40,7 +40,7 @@ class EGreedy(StrategyBase):
 
     def get_next_bot(self):
         opponent_bots = []
-        bot_wins = {}
+        bot_wins = {choice: 0 for choice in self.bot_list}
 
         for i in xrange(len(self.result_list)):
             res = self.result_list[i]
@@ -66,12 +66,16 @@ class EGreedy(StrategyBase):
 
             opponent_bots.append(opponent)
 
+            # adjusts score for the given bot
             if is_winner:
-                if self_bot not in bot_wins:
-                    bot_wins[self_bot] = 1
-                else:
-                    bot_wins[self_bot] += 1
-            pass
+                bot_wins[self_bot] += 1 #bot_wins.get(self_bot, 0) + 1
+            else:
+                bot_wins[self_bot] -= 1 #bot_wins.get(self_bot, 0) - 1
+                #if self_bot not in bot_wins:
+                #    bot_wins[self_bot] = 1
+                #else:
+                #    bot_wins[self_bot] += 1
+            print bot_wins
 
         if random.random() < self.e or len(bot_wins.keys()) <= 0:
             b_key = random.choice(self.bot_list)

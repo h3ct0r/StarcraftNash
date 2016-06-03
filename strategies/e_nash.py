@@ -50,8 +50,6 @@ class EpsilonNash(StrategyBase):
         """
 
         if random.random() < self.epsilon:
-            print 'exploitation'
             return self.exploitation.get_next_bot()
 
-        print 'safe'
         return self.nash.get_next_bot()
