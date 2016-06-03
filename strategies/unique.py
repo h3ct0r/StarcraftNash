@@ -4,9 +4,12 @@ import random_uniform
 __author__ = 'Hector Azpurua'
 
 
-class UniqueOpponent(StrategyBase):
-    def __init__(self, opponent_name):
-        self.strategy_name = opponent_name
+class Unique(StrategyBase):
+    """
+    Selects the same strategy every time
+    """
+    def __init__(self, strategy_name):
+        self.strategy_name = strategy_name
         self.result_list = []
         self.match_list = []
         self.s_id = None
@@ -27,4 +30,8 @@ class UniqueOpponent(StrategyBase):
         self.result_list = result_list
 
     def get_next_bot(self):
+        """
+        Always returns the same bot (configured in __init__)
+        :return:
+        """
         return self.strategy_name

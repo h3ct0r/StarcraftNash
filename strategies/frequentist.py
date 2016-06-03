@@ -5,10 +5,13 @@ import random
 __author__ = 'Hector Azpurua'
 
 
-class MaxWinPrev(StrategyBase):
+class Frequentist(StrategyBase):
+    """
+    Tries to beat opponent by selecting the strategy that
+    counters its most frequent choice
+    """
     def __init__(self):
-        self.strategy_name = 'MaxWinPrev'
-        #self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
+        self.strategy_name = 'Frequentist'
         self.result_list = []
         self.match_list = []
         self.s_id = None
@@ -29,6 +32,11 @@ class MaxWinPrev(StrategyBase):
         self.result_list = result_list
 
     def get_next_bot(self):
+        """
+        Returns the strategy that counters opponent's most
+        frequent choice
+        :return:
+        """
         opponent_bots = []
         opponent_counter = {}
 

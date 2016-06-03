@@ -1,10 +1,10 @@
 import sys
 import nash
 import random_uniform
-import max_win_prev
+import frequentist
 import win_prev
 import e_greedy
-import unique_opponent
+import unique
 
 __author__ = 'Hector Azpurua'
 
@@ -14,7 +14,7 @@ class StrategySelector:
     strategies = {
         'nash': nash.Nash,
         'random_uniform': random_uniform.RandomUniform,
-        'max_win_prev': max_win_prev.MaxWinPrev,
+        'max_win_prev': frequentist.Frequentist,
         'win_prev': win_prev.WinPrev,
         'egreedy': e_greedy.EGreedy
     }
@@ -40,9 +40,9 @@ class StrategySelector:
         if strategy not in self.strategies.keys() or self.strategies[strategy] is None:
             # If the strategy is an opponent from the match list
             if strategy in self.opponent_list or (strategy in self.strategies and self.strategies[strategy] is None):
-                return unique_opponent.UniqueOpponent(strategy)
+                return unique.Unique(strategy)
 
-            print >> sys.stderr, 'Strategy not in strategy list or in opponent list:', strategy
+            print >> sys.stderr, 'Strategy not in strategy list or in bot list:', strategy
             return None
 
         return self.strategies[strategy]()
