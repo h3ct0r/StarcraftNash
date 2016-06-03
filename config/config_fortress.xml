@@ -7,4 +7,18 @@
         <bot name="Skynet" nashprob = ".2936" />
     </bots>
 
+
+    <players>
+        <player name="nash" />
+        <player name="frequentist" />
+        <player name="winprev" />
+        <player name="egreedy" />
+
+        <player name="Xelnaga" />
+        <player name="CruzBot" />
+        <!--<player name="Aiur" /> -->
+        <player name="Skynet" />
+       <!-- <player name="NUSBot" /> -->
+
+    </players>
 </config>
