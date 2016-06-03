@@ -20,20 +20,19 @@ class ReplyLast(StrategyBase):
         pass
 
     def get_next_bot(self):
-        # TODO: implement incremental average, instead of recalculating every time
-
         # initializes chance of each bot winning each other as zero
-        win_count = {}
-        for bot in self.bot_list:
-            win_count[bot] = {opp: 0 for opp in self.bot_list}
+        # usage: win_count[me][adversary]
+        win_count = {mine: {opponent: 0 for opponent in self.bot_list} for mine in self.bot_list}
 
+        # updates win_count according to previous matches
         for winner_bot, loser_bot in self.match_list:
             # res = self.result_list[i]
             # winner_bot, loser_bot = self.match_list[i]
 
-            # works with win_count instead of probabilities (temporarily)
             win_count[winner_bot][loser_bot] += 1
             win_count[loser_bot][winner_bot] -= 1
+
+        #print win_count
 
         # replies to opponent's last choice
         opponent_choice = self.find_opponent_choice(-1)
@@ -42,6 +41,6 @@ class ReplyLast(StrategyBase):
         if opponent_choice is None:
             return random.choice(self.bot_list)
 
-        # responds with opponent's nemesis, i.e the one which it performs worst
+        # responds with opponent's nemesis, i.e the one that makes it perform worst
         return min(win_count[opponent_choice], key=win_count[opponent_choice].get)
 

@@ -1,8 +1,9 @@
-import argparse
-import result_parser
-import config
-import xlsxwriter
 import sys
+import config
+import random
+import argparse
+import xlsxwriter
+import result_parser
 import matplotlib.pyplot as plt
 from strategies.strategy_selector import StrategySelector
 import itertools
@@ -12,6 +13,8 @@ __author__ = 'Hector Azpurua'
 
 DEBUG = True
 
+# TODO: allow shuffling of match list
+# TODO: allow setting the random seed
 
 class Main:
     def __init__(self):
@@ -143,27 +146,34 @@ class Main:
             player_b.set_result_list(self.res_history)
             player_b.set_match_list(self.match_history)
 
-            bot_a = ''
-            bot_b = ''
+            bot_a = player_a.get_next_bot()
+            bot_b = player_b.get_next_bot()
 
             while bot_a == bot_b:
                 bot_a = player_a.get_next_bot()
                 bot_b = player_b.get_next_bot()
                 repeat_counter += 1
                 if repeat_counter > 100:
-                    print >> sys.stderr, 'The bots are the same after several retries...'
-                    raise StopIteration('The bots are the same after several retries...')
+                    print 'The bots are the same after several retries...'
+                    break
+                     #raise StopIteration('The bots are the same after several retries...')
             repeat_counter = 0
 
             if DEBUG:
                 print i+1, "Match", bot_a, 'vs', bot_b, '(match index:', self.match_index, ')'
 
-            match = self.get_match(bot_a.lower(), bot_b.lower())
+            match = None
+            if bot_a == bot_b:
+                print "Same bots competing, winner will be chosen randomly"
+                match = (bot_a, bot_b)
+            else:
+                match = self.get_match(bot_a.lower(), bot_b.lower())
+
             print 'Match:', match
 
-            winner = 'B'
-            if match[0] == bot_a:
-                winner = 'A'
+            winner = 'A' if match[0] == bot_a else 'B'
+            if bot_a == bot_b:  # necessary check if bots are the same
+                winner = 'A' if random.random() < .5 else 'B'
 
             if DEBUG:
                 print "Winner:", winner, match, '\n'

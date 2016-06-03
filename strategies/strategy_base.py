@@ -48,25 +48,21 @@ class StrategyBase(object):
         Returns the name of opponent choice in the required match
         :param match_index: index (zero-based) of match,
         can be negative: -1 for previous match, -2 for second-last and so on
-        :return:
+        :return:str
         """
         if len(self.match_list) == 0:
             return None
 
-        opponent_choice = None
         res = self.result_list[match_index]
 
         winner_choice, loser_choice = self.match_list[match_index]
+
         if res.upper() == 'A':
-            a_bot = winner_choice
-            b_bot = loser_choice
+            bot_a = winner_choice
+            bot_b = loser_choice
         else:
-            a_bot = loser_choice
-            b_bot = winner_choice
+            bot_a = loser_choice
+            bot_b = winner_choice
 
-        if self.s_id == 'A':
-            opponent_choice = b_bot
-        else:
-            opponent_choice = a_bot
-
-        return opponent_choice
+        # opponent choice is B if I am A and vice-versa
+        return bot_b if self.s_id == 'A' else bot_a
