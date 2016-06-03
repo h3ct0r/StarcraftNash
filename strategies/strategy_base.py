@@ -43,6 +43,27 @@ class StrategyBase(object):
     def set_result_list(self, result_list):
         self.result_list = result_list
 
+    def calculate_score_table(self):
+        """
+        Returns a table with scores of each choice against each other
+        Each victory is +1; loss is -1.
+        A match with same participants does not change score
+        :return: dict(dict) - usage: table[me][adversary]
+        """
+        # initializes scores of each bot against each other as zero
+        # usage: table[me][adversary]
+        table = {mine: {opponent: 0 for opponent in self.bot_list} for mine in self.bot_list}
+
+        # updates win_count according to previous matches
+        for winner_bot, loser_bot in self.match_list:
+            # res = self.result_list[i]
+            # winner_bot, loser_bot = self.match_list[i]
+
+            table[winner_bot][loser_bot] += 1
+            table[loser_bot][winner_bot] -= 1
+
+        return table
+
     def find_opponent_choice(self, match_index):
         """
         Returns the name of opponent choice in the required match

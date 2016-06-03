@@ -11,12 +11,17 @@ class EGreedy(StrategyBase):
     selecting the best know strategy
     """
 
-    def __init__(self):
+    def __init__(self, epsilon=.1):
+        """
+
+        :param epsilon: probability of EXPLORATION
+        :return:
+        """
         self.strategy_name = 'E-greedy'
         self.result_list = []
         self.match_list = []
         self.s_id = None
-        self.e = 0.05
+        self.e = epsilon
         pass
 
     def get_name(self):

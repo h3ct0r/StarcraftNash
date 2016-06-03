@@ -12,10 +12,12 @@ class Frequentist(StrategyBase):
     """
 
     def __init__(self):
+        StrategyBase.__init__(self)
+
         self.strategy_name = 'Frequentist'
-        self.result_list = []
-        self.match_list = []
-        self.s_id = None
+        #self.result_list = []
+        #self.match_list = []
+        #self.s_id = None
         pass
 
     def get_name(self):
@@ -82,6 +84,7 @@ class Frequentist(StrategyBase):
 
         b_key = None
         b_val = 0
+        print self.s_id, opponent_bots, most_common_opponent, opponent_counter
         if most_common_opponent is not None and most_common_opponent in opponent_counter:
             for key, value in opponent_counter[most_common_opponent].items():
                 if b_key is None or value > b_val:

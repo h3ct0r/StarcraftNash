@@ -20,21 +20,10 @@ class ReplyLast(StrategyBase):
         pass
 
     def get_next_bot(self):
-        # initializes chance of each bot winning each other as zero
         # usage: win_count[me][adversary]
-        win_count = {mine: {opponent: 0 for opponent in self.bot_list} for mine in self.bot_list}
+        win_count = self.calculate_score_table()
 
-        # updates win_count according to previous matches
-        for winner_bot, loser_bot in self.match_list:
-            # res = self.result_list[i]
-            # winner_bot, loser_bot = self.match_list[i]
-
-            win_count[winner_bot][loser_bot] += 1
-            win_count[loser_bot][winner_bot] -= 1
-
-        #print win_count
-
-        # replies to opponent's last choice
+        # finds opponent's last choice
         opponent_choice = self.find_opponent_choice(-1)
 
         # no history present or could not count victories, chooses randomly

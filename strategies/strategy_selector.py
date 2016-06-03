@@ -5,6 +5,7 @@ import frequentist
 import reply_last
 import win_prev
 import e_greedy
+import e_nash
 import rotate
 import unique
 
@@ -20,6 +21,7 @@ class StrategySelector:
         'winprev': win_prev.WinPrev,
         'replylast': reply_last.ReplyLast,
         'egreedy': e_greedy.EGreedy,
+        'enash': e_nash.EpsilonNash,
         'rotate': rotate.Rotate
     }
 
