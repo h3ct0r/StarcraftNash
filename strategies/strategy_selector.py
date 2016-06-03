@@ -5,6 +5,7 @@ import frequentist
 import reply_last
 import win_prev
 import e_greedy
+import rotate
 import unique
 
 __author__ = 'Hector Azpurua'
@@ -18,7 +19,8 @@ class StrategySelector:
         'frequentist': frequentist.Frequentist,
         'winprev': win_prev.WinPrev,
         'replylast': reply_last.ReplyLast,
-        'egreedy': e_greedy.EGreedy
+        'egreedy': e_greedy.EGreedy,
+        'rotate': rotate.Rotate
     }
 
     def __init__(self):

@@ -45,7 +45,7 @@ class StrategyBase(object):
 
     def find_opponent_choice(self, match_index):
         """
-        Returns the name of the opponent choice in the required match
+        Returns the name of opponent choice in the required match
         :param match_index: index (zero-based) of match,
         can be negative: -1 for previous match, -2 for second-last and so on
         :return:
