@@ -2,6 +2,7 @@ import sys
 import nash
 import random_uniform
 import frequentist
+import reply_last
 import win_prev
 import e_greedy
 import unique
@@ -16,6 +17,7 @@ class StrategySelector:
         'random_uniform': random_uniform.RandomUniform,
         'frequentist': frequentist.Frequentist,
         'win_prev': win_prev.WinPrev,
+        'replylast': reply_last.ReplyLast,
         'egreedy': e_greedy.EGreedy
     }
 

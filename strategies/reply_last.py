@@ -7,7 +7,8 @@ __author__ = 'Anderson Tavares'
 
 class ReplyLast(StrategyBase):
     """
-    Similar to WinPrev, but has no prior table; i.e. builds statistics
+    Similar to WinPrev (selects the bot that would beat last opponent choice)
+    but has no prior table; i.e. builds statistics
     based on history
     """
 
