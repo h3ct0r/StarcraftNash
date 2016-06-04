@@ -1,7 +1,8 @@
 <config>
 
     <!--
-     From a pre-tournament with 100 round-robin rounds, we have the following
+     From a pre-tournament with 100 round-robin rounds (each bot
+     plays against each other 100 times), we have the following
      table of victories:
 
     Bot	    Xeln	Cruz	NUSB	Aiur	Skyn
@@ -17,8 +18,8 @@
     <choices>
         <choice name="Xelnaga" nashprob = ".41975" />
         <choice name="CruzBot" nashprob = ".28395" />
-        <!--<bot name="NUSBot" nashprob = "0" />
-        <bot name="Aiur" nashprob = "0" />-->
+        <bot name="NUSBot" nashprob = "0" />
+        <bot name="Aiur" nashprob = "0" />
         <choice name="Skynet" nashprob = ".2936" />
     </choices>
 
@@ -40,5 +41,7 @@
     <parameters>
         <enash-exploitation value="0.3" />
         <egreedy-exploration value="0.1" />
+        <shuffle-match-list value="true" />
+        <random-seed value="1" />
     </parameters>
 </config>

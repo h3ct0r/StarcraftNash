@@ -1,5 +1,6 @@
 import os
 import re
+import random
 
 __author__ = 'Hector Azpurua'
 
@@ -35,6 +36,13 @@ class ResultParser:
                     continue
                 self.match_list.append((segments[3], segments[4]))
         pass
+
+    def shuffle_match_list(self):
+        """
+        Shuffles match list
+        :return:
+        """
+        random.shuffle(self.match_list)
 
     def analyse(self, bot1, bot2, first=0, last=None):
         """

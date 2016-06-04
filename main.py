@@ -86,6 +86,10 @@ class Main:
             self.config.parse(self.usr_input['config_file'])
             self.strategy_selector.update_strategies(self.config.get_bots())
 
+        if self.config.random_seed is not None:
+            random.seed(self.config.random_seed)
+            print 'Random seed set to %d' % self.config.random_seed
+
         self.is_tournament = self.usr_input['tournament']
 
         self.input_results = self.usr_input['input']
@@ -93,6 +97,11 @@ class Main:
 
         self.result_parser = result_parser.ResultParser(self.input_results)
         self.strategy_selector.set_unique_choices(self.result_parser.get_unique_opponents())
+
+        # shuffles match list if required
+        if self.config.shuffle_match_list:
+            print 'Shuffling match list...'
+            self.result_parser.shuffle_match_list()
 
         if self.is_tournament:
             players = StrategySelector.strategies.keys()    # players are the strategy (bot) selectors
@@ -139,7 +148,7 @@ class Main:
 
     def run(self, player_a, player_b):
         """
-        Run the tournament between 2 strategies and a number of matches
+        Run the tournament between 2 strategies for a number of matches
 
         :param player_a:
         :param player_b:

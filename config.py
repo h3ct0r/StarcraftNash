@@ -17,14 +17,15 @@ class Config(object):
     instance = None
     default_bots = {"Skynet": .33, "Xelnaga": .33, "NUSBot": .33}
 
-    # names of attributes
+    # parameter names (also tag names in .xml)
     BOTS = 'bots'
     PLAYERS = 'players'
     # IS_TOURNAMENT = 'tournament'
 
-    # parameter names (also tag names in .xml)
     E_GREEDY_EXPLORATION = 'egreedy-exploration'
     E_NASH_EXPLOITATION = 'enash-exploitation'
+    SHUFFLE_MATCH_LIST = 'shuffle-match-list'
+    RANDOM_SEED = 'random-seed'
     VERBOSE = 'verbose'
 
     # xml tag names
@@ -54,6 +55,8 @@ class Config(object):
             self.E_GREEDY_EXPLORATION: .1,
             self.E_NASH_EXPLOITATION: .1,
             self.VERBOSE: False,
+            self.SHUFFLE_MATCH_LIST: False,
+            self.RANDOM_SEED: None
         }
 
         # stores type conversions for parameters
@@ -61,6 +64,8 @@ class Config(object):
             self.E_GREEDY_EXPLORATION: float,
             self.E_NASH_EXPLOITATION: float,
             self.VERBOSE: str_to_bool,
+            self.SHUFFLE_MATCH_LIST: str_to_bool,
+            self.RANDOM_SEED: int
         }
 
     def get_bots(self):
@@ -104,12 +109,6 @@ class Config(object):
             elif element.tag == self.PARAMETERS_FIELD:
                 for param in element:
                     self.data[param.tag] = self.parser[param.tag](param.get('value'))
-
-                    # if param.tag == self.E_GREEDY_EXPLORATION:
-                    #     self.data[self.E_GREEDY_EXPLORATION] = float(param.get('value'))
-                    #
-                    # if param.tag == self.E_NASH_EXPLOITATION:
-                    #     self.data[self.E_NASH_EXPLOITATION] = float(param.get('value'))
 
         #if self.bots != self.default_bots:
         #    self.is_config_updated = True
