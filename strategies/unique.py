@@ -10,11 +10,12 @@ class Unique(StrategyBase):
     """
 
     def __init__(self, strategy_name):
+        StrategyBase.__init__(self)
         self.strategy_name = strategy_name
-        self.result_list = []
-        self.match_list = []
-        self.s_id = None
-        pass
+        # self.result_list = []
+        # self.match_list = []
+        # self.s_id = None
+        # pass
 
     def get_next_bot(self):
         """

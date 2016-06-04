@@ -56,7 +56,7 @@ class Nash(StrategyBase):
             if rand_n < prob or (i >= len(bot_keys)-1):
                 return key
 
-        print >> sys.stderr, "Something strange happened, a bot wasn't selected by Nash eq", prob, rand_n
+        print >> sys.stderr, "Something strange happened, a bot wasn't selected by Nash Eq", prob, rand_n
         print >> sys.stderr, self.probabilities
 
         return None
