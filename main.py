@@ -2,19 +2,17 @@ import sys
 import config
 import random
 import argparse
+import itertools
 import xlsxwriter
 import result_parser
+import strategies.strategy_base
 import matplotlib.pyplot as plt
 from strategies.strategy_selector import StrategySelector
-import itertools
-import strategies.strategy_base
+
 
 __author__ = 'Hector Azpurua'
 
 DEBUG = True
-
-# TODO: allow shuffling of match list
-# TODO: allow setting the random seed
 
 
 class Main:
@@ -181,7 +179,7 @@ class Main:
             if self.config.verbose:
                 print i+1, "Match", bot_a, 'vs', bot_b, '(match index:', self.match_index, ')'
 
-            match = None
+            # if bots are equal, do not search for a match in the pool 'coz it does not exist
             if bot_a == bot_b:
                 print "Same bots competing, winner will be chosen randomly"
                 match = (bot_a, bot_b)
