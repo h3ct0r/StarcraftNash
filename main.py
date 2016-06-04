@@ -84,9 +84,19 @@ class Main:
             self.config.parse(self.usr_input['config_file'])
             self.strategy_selector.update_strategies(self.config.get_bots())
 
+        # sets random seed
+        random_seed = None
         if self.config.random_seed is not None:
-            random.seed(self.config.random_seed)
-            print 'Random seed set to %d' % self.config.random_seed
+            random_seed = self.config.random_seed
+
+        # overrides file seed if there is one via command line
+        if self.usr_input['random_seed'] is not None:
+            random_seed = self.usr_input['random_seed']
+
+        # finally sets random seed
+        if random_seed is not None:
+            random.seed(random_seed)
+            print 'Random seed set to %d' % random_seed
 
         self.is_tournament = self.usr_input['tournament']
 
@@ -266,6 +276,11 @@ class Main:
         parser.add_argument(
             '-p', '--plot', help='If this param is set, the results are plotted',
             required=False, action='store_true'
+        )
+
+        parser.add_argument(
+            '-s', '--random-seed', help='Random seed for experiments',
+            required=False, type=int
         )
 
         parser.add_argument(
