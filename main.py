@@ -16,6 +16,7 @@ DEBUG = True
 # TODO: allow shuffling of match list
 # TODO: allow setting the random seed
 
+
 class Main:
     def __init__(self):
         self.result_parser = None
@@ -28,11 +29,12 @@ class Main:
         self.matches = 0                    # number of matches between strategy selectors
         self.fig_counter = 0                # number of figures for plotting
 
-        self.validate_params()              # validates params and configures internal variables
+        # validates params and configures internal variables (including game_matches)
+        self.validate_params()
 
         self.bot_match_list = self.result_parser.get_match_list()
 
-        print "# matches:", len(self.game_matches)
+        # print "# matches:", len(self.game_matches)
 
         # sets possible players' selections from config object
         strategies.strategy_base.StrategyBase.bot_list = self.config.bots.keys()
@@ -69,13 +71,13 @@ class Main:
         if self.usr_input['plot']:
             plt.show()
 
-        if self.usr_input['excel']:
+        if 'excel' in self.usr_input and self.usr_input['excel'] is not None:
             self.generate_excel_results()
 
     def validate_params(self):
         """
         Validates user input of parameters and
-        configures several internal variables
+        configures several internal variables, such as the match list!
 
         :return:
         """
@@ -94,12 +96,19 @@ class Main:
 
         if self.is_tournament:
             players = StrategySelector.strategies.keys()    # players are the strategy (bot) selectors
+
             if self.config.get_is_config_updated():
                 players += self.config.get_bots()
             else:
                 players += self.strategy_selector.get_unique_choices()
 
+            # override players' list with config if existent
+            if len(self.config[self.config.PLAYERS]) > 0:
+                players = self.config[self.config.PLAYERS]
+
             players = list(set(players))
+
+            print 'Tournament participants: %s' % ', '.join(players)
 
             matches = list(itertools.combinations(players, 2))  # generates match list given the list of players
             for match in matches:
@@ -138,7 +147,8 @@ class Main:
         """
         repeat_counter = 0
 
-        print '\n', player_a.get_name(), 'vs', player_b.get_name()
+        if self.config.verbose:
+            print '\n', player_a.get_name(), 'vs', player_b.get_name()
 
         for i in xrange(self.matches):
             player_a.set_result_list(self.res_history)
@@ -159,7 +169,7 @@ class Main:
                      #raise StopIteration('The bots are the same after several retries...')
             repeat_counter = 0
 
-            if DEBUG:
+            if self.config.verbose:
                 print i+1, "Match", bot_a, 'vs', bot_b, '(match index:', self.match_index, ')'
 
             match = None
@@ -169,13 +179,14 @@ class Main:
             else:
                 match = self.get_match(bot_a.lower(), bot_b.lower())
 
-            print 'Match:', match
+            if self.config.verbose:
+                print 'Match:', match
 
             winner = 'A' if match[0] == bot_a else 'B'
             if bot_a == bot_b:  # necessary check if bots are the same
                 winner = 'A' if random.random() < .5 else 'B'
 
-            if DEBUG:
+            if self.config.verbose:
                 print "Winner:", winner, match, '\n'
 
             self.res_history.append(winner)
@@ -251,8 +262,8 @@ class Main:
         )
 
         parser.add_argument(
-            '-e', '--excel', help='If this param is set, the results are saved to a excel',
-            required=False, action='store_true'
+            '-e', '--excel', help='Outputs results to a .xls file given by this parameter',
+            required=False
         )
 
         parser.add_argument(
@@ -300,7 +311,7 @@ class Main:
         pass
 
     def generate_excel_results(self):
-        excel_filename = 'tournament_results.xlsx'
+        excel_filename = self.usr_input['excel'] # tournament_results.xlsx'
 
         print 'Generating excel results...', excel_filename
 

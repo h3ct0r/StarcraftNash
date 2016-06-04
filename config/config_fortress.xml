@@ -28,12 +28,13 @@
         <player name="frequentist" />
         <player name="winprev" />
         <player name="egreedy" />
-
+        <player name="Skynet" />
+        <!--
         <player name="Xelnaga" />
         <player name="CruzBot" />
-        <!--<player name="Aiur" /> -->
-        <player name="Skynet" />
-       <!-- <player name="NUSBot" /> -->
+        <player name="Aiur" />
+        <player name="NUSBot" />
+        -->
     </players>
 
     <parameters>

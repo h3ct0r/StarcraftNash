@@ -17,9 +17,17 @@ class Config(object):
     instance = None
     default_bots = {"Skynet": .33, "Xelnaga": .33, "NUSBot": .33}
 
-    E_GREEDY_EXPLORATION_FIELD = 'egreedy-exploration'
-    E_NASH_EXPLOITATION_FIELD = 'enash-exploitation'
+    # names of attributes
+    BOTS = 'bots'
+    PLAYERS = 'players'
+    # IS_TOURNAMENT = 'tournament'
 
+    # parameter names (also tag names in .xml)
+    E_GREEDY_EXPLORATION = 'egreedy-exploration'
+    E_NASH_EXPLOITATION = 'enash-exploitation'
+    VERBOSE = 'verbose'
+
+    # xml tag names
     CHOICES_FIELD = 'choices'
     PARAMETERS_FIELD = 'parameters'
 
@@ -37,21 +45,50 @@ class Config(object):
         # dir of config file needed coz' path to server is relative
         # self.cfgdir = os.path.dirname(os.path.realpath(cfgpath))
 
-        self.bots = self.default_bots
         self.verbose = False
-        self.enash_exploitation = 0.1
-        self.egreedy_exploration = 0.1
+
+        # stores values of parameters (initialized with defaults)
+        self.data = {
+            self.BOTS: self.default_bots,       # dict of choices (and their nash probabilities)
+            self.PLAYERS: [],                   # list of players
+            self.E_GREEDY_EXPLORATION: .1,
+            self.E_NASH_EXPLOITATION: .1,
+            self.VERBOSE: False,
+        }
+
+        # stores type conversions for parameters
+        self.parser = {
+            self.E_GREEDY_EXPLORATION: float,
+            self.E_NASH_EXPLOITATION: float,
+            self.VERBOSE: str_to_bool,
+        }
 
     def get_bots(self):
-        return self.bots
+        return self.data[self.BOTS]
 
-    def _parse_path(self, value):
-        return os.path.join(
-            self.cfgdir, os.path.expanduser(value)
-        )
+    def __getitem__(self, item):
+        return self.get(item)
+
+    def __getattr__(self, item):
+        return self.get(item.replace('_', '-'))
+
+    def get(self, item):
+        """
+        Retuns a configuration parameter
+        :param item: str
+        :return:
+        """
+        if item not in self.data:
+            raise KeyError("Item '%s' not found in config object." % item)
+        return self.data[item]
+
+    # def _parse_path(self, value):
+    #     return os.path.join(
+    #         self.cfgdir, os.path.expanduser(value)
+    #     )
 
     def get_is_config_updated(self):
-        return self.bots != self.default_bots  #is_config_updated
+        return self.get(self.BOTS) != self.default_bots  #is_config_updated
 
     def parse(self, cfgpath=None):
         print 'Parsing file:', cfgpath
@@ -59,15 +96,20 @@ class Config(object):
 
         for element in cfgtree.getroot():
             if element.tag == self.CHOICES_FIELD:
-                self.bots = {x.get('name'): float(x.get('nashprob')) for x in element}
+                self.data[self.BOTS] = {x.get('name'): float(x.get('nashprob')) for x in element}
+
+            elif element.tag == self.PLAYERS:
+                self.data[self.PLAYERS] = [x.get('name') for x in element]
 
             elif element.tag == self.PARAMETERS_FIELD:
                 for param in element:
-                    if param.tag == self.E_GREEDY_EXPLORATION_FIELD:
-                        self.egreedy_exploration = float(param.get('value'))
+                    self.data[param.tag] = self.parser[param.tag](param.get('value'))
 
-                    if param.tag == self.E_NASH_EXPLOITATION_FIELD:
-                        self.enash_exploitation = float(param.get('value'))
+                    # if param.tag == self.E_GREEDY_EXPLORATION:
+                    #     self.data[self.E_GREEDY_EXPLORATION] = float(param.get('value'))
+                    #
+                    # if param.tag == self.E_NASH_EXPLOITATION:
+                    #     self.data[self.E_NASH_EXPLOITATION] = float(param.get('value'))
 
         #if self.bots != self.default_bots:
         #    self.is_config_updated = True

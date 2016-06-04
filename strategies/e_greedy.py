@@ -18,11 +18,12 @@ class EGreedy(StrategyBase):
         :param epsilon: probability of EXPLORATION
         :return:
         """
+        StrategyBase.__init__(self)
         self.strategy_name = 'E-greedy'
         self.result_list = []
         self.match_list = []
         self.s_id = None
-        self.epsilon = Config.get_instance().egreedy_exploration
+        self.epsilon = Config.get_instance().get(Config.E_GREEDY_EXPLORATION)
 
     def get_name(self):
         return self.strategy_name
