@@ -5,21 +5,22 @@
      table of victories:
 
     Bot	    Xeln	Cruz	NUSB	Aiur	Skyn
-    Xelnaga	50,00%	26,00%	86,00%	73,00%	73,00%
-    CruzBot	74,00%	50,00%	80,00%	67,00%	16,00%
-    NUSBot	14,00%	20,00%	50,00%	74,00%	97,00%
-    Aiur	27,00%	33,00%	26,00%	50,00%	79,00%
-    Skynet	27,00%	84,00%	3,00%	21,00%	50,00%
+    Xelnaga	50%	    26%	    86%	    73%	    73%
+    CruzBot	74%	    50%	    80%	    67%	    16%
+    NUSBot	14%	    20%	    50%	    74%	    97%
+    Aiur	27%	    33%	    26%	    50%	    79%
+    Skynet	27%	    84%	    3%	    21%	    50%
 
+    Nash probabilities were calculated from these numbers
     -->
 
-    <bots>
-        <bot name="Xelnaga" nashprob = ".41975" />
-        <bot name="CruzBot" nashprob = ".28395" />
+    <choices>
+        <choice name="Xelnaga" nashprob = ".41975" />
+        <choice name="CruzBot" nashprob = ".28395" />
         <!--<bot name="NUSBot" nashprob = "0" />
         <bot name="Aiur" nashprob = "0" />-->
-        <bot name="Skynet" nashprob = ".2936" />
-    </bots>
+        <choice name="Skynet" nashprob = ".2936" />
+    </choices>
 
 
     <players>
@@ -33,6 +34,10 @@
         <!--<player name="Aiur" /> -->
         <player name="Skynet" />
        <!-- <player name="NUSBot" /> -->
-
     </players>
+
+    <parameters>
+        <enash-exploitation value="0.3" />
+        <egreedy-exploration value="0.1" />
+    </parameters>
 </config>

@@ -1,9 +1,8 @@
 from strategy_base import StrategyBase
-import sys
 import nash
 import frequentist
 import random
-import config
+from config import Config
 
 __author__ = 'Anderson Tavares'
 
@@ -16,7 +15,7 @@ class EpsilonNash(StrategyBase):
     This is an epsilon-safe strategy
     """
 
-    def __init__(self, epsilon=0.1):
+    def __init__(self):
         """
         Initializes Epsilon-Nash strategy
         :param epsilon: probability of EXPLOITATION
@@ -24,28 +23,33 @@ class EpsilonNash(StrategyBase):
         """
         StrategyBase.__init__(self)
         self.strategy_name = 'E-Nash'
-        self.epsilon = epsilon      # probability of exploitation (different of e-greedy which is exploration)
+        # probability of exploitation (different of e-greedy which is exploration)
+        self.epsilon = Config.get_instance().enash_exploitation
+
+        # Nash equilibrium strategy
         self.nash = nash.Nash()
+
+        # exploitation strategy
         self.exploitation = frequentist.Frequentist()
 
     def set_match_list(self, match_list):
         self.match_list = match_list
-        self.nash.match_list = match_list
-        self.exploitation.match_list = match_list
+        self.nash.set_match_list(match_list)
+        self.exploitation.set_match_list(match_list)
 
     def set_result_list(self, result_list):
         self.result_list = result_list
-        self.nash.result_list = result_list
-        self.exploitation.result_list = result_list
+        self.nash.set_result_list(result_list)
+        self.exploitation.set_result_list(result_list)
 
     def set_id(self, s_id):
         self.s_id = s_id
-        self.nash.s_id = s_id
-        self.exploitation.s_id = s_id
+        self.nash.set_id(s_id)
+        self.exploitation.set_id(s_id)
 
     def get_next_bot(self):
         """
-        Uses Nash with probability (1-epsilon); or Exploitation with prob. epsilon
+        Uses Nash with prob. (1-epsilon); or Exploitation with prob. epsilon
         :return:
         """
 

@@ -85,7 +85,7 @@ class Frequentist(StrategyBase):
                     b_val = value
             return b_key
         else:
-            print 'Return random...'
+            print 'Frequentist returning random...'
             b_key = random.choice(self.bot_list)
 
         return b_key

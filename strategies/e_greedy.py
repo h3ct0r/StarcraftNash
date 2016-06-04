@@ -1,5 +1,6 @@
 from strategy_base import StrategyBase
 import random
+from config import Config
 
 __author__ = 'Hector Azpurua'
 
@@ -11,7 +12,7 @@ class EGreedy(StrategyBase):
     selecting the best know strategy
     """
 
-    def __init__(self, epsilon=0.1):
+    def __init__(self):
         """
 
         :param epsilon: probability of EXPLORATION
@@ -21,8 +22,7 @@ class EGreedy(StrategyBase):
         self.result_list = []
         self.match_list = []
         self.s_id = None
-        self.e = epsilon
-        pass
+        self.epsilon = Config.get_instance().egreedy_exploration
 
     def get_name(self):
         return self.strategy_name
@@ -75,9 +75,9 @@ class EGreedy(StrategyBase):
                 #    bot_wins[self_bot] = 1
                 #else:
                 #    bot_wins[self_bot] += 1
-            print bot_wins
+            # print bot_wins
 
-        if random.random() < self.e or len(bot_wins.keys()) <= 0:
+        if random.random() < self.epsilon or len(bot_wins.keys()) <= 0:
             b_key = random.choice(self.bot_list)
         else:
             b_key = None
