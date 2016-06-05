@@ -388,7 +388,7 @@ class Main:
 
         excel_filename = self.usr_input['excel']
 
-        print 'Generating excel results...', excel_filename
+        print 'Generating excel results to file:', excel_filename
 
         strategy_list_srt = sorted(self.result_dict.keys())
         workbook = xlsxwriter.Workbook(excel_filename)
@@ -399,7 +399,7 @@ class Main:
 
         format1 = workbook.add_format()
         format1.set_pattern(1)
-        format1.set_bg_color('green')
+        format1.set_bg_color('yellow')
 
         i = 0
         for id1 in strategy_list_srt:
@@ -413,7 +413,7 @@ class Main:
                     worksheet.write(1 + i, 1+j, '', format1)
 
                 elif id2 in self.result_dict[id1]:
-                    total = str(self.result_dict[id1][id2]) + '%'
+                    total = self.result_dict[id1][id2]  # str(self.result_dict[id1][id2]) + '%'
 
                     if self.config.verbose:
                         print id1, ":", id2, total
@@ -429,6 +429,7 @@ class Main:
             pass
 
         workbook.close()
+        print 'DONE.'
 
 if __name__ == '__main__':
     Main()
