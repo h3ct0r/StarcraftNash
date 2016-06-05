@@ -20,6 +20,7 @@ class Config(object):
     # parameter names (also tag names in .xml)
     BOTS = 'bots'
     PLAYERS = 'players'
+    SCORECHART_FILE = 'scorechart-file'
     # IS_TOURNAMENT = 'tournament'
 
     E_GREEDY_EXPLORATION = 'egreedy-exploration'
@@ -56,7 +57,8 @@ class Config(object):
             self.E_NASH_EXPLOITATION: .1,
             self.VERBOSE: False,
             self.SHUFFLE_MATCH_LIST: False,
-            self.RANDOM_SEED: None
+            self.RANDOM_SEED: None,
+            self.SCORECHART_FILE: 'config/scorechart_fortress.csv',
         }
 
         # stores type conversions for parameters
@@ -65,7 +67,8 @@ class Config(object):
             self.E_NASH_EXPLOITATION: float,
             self.VERBOSE: str_to_bool,
             self.SHUFFLE_MATCH_LIST: str_to_bool,
-            self.RANDOM_SEED: int
+            self.RANDOM_SEED: int,
+            self.SCORECHART_FILE: str,
         }
 
     def get_bots(self):
@@ -109,6 +112,10 @@ class Config(object):
             elif element.tag == self.PARAMETERS_FIELD:
                 for param in element:
                     self.data[param.tag] = self.parser[param.tag](param.get('value'))
+
+            # default is to assign 'value' attribute to data indexed by tag
+            else:
+                self.data[element.tag] = self.parser[element.tag](element.get('value'))
 
         #if self.bots != self.default_bots:
         #    self.is_config_updated = True
