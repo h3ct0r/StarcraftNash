@@ -41,13 +41,11 @@ class Main:
 
         self.result_list = []
 
-        for h in xrange(self.repetitions):
+        for rep in xrange(self.repetitions):
 
             # shuffles match list if required
             if self.config.shuffle_match_list:
-                curr_time = time.time()
-                print 'Shuffling match list... with random.seed:', curr_time
-                random.seed(curr_time)
+                print 'Shuffling match list...'
                 random.shuffle(self.bot_match_list)
 
             single_result_dict = {}   # stores players' percent of victories
@@ -62,7 +60,7 @@ class Main:
                 a_win_percentage = (self.res_history.count('A') * 100) / float(len(self.res_history))
                 b_win_percentage = (self.res_history.count('B') * 100) / float(len(self.res_history))
 
-                print 'Repetition', h+1, 'of', self.repetitions, '...'
+                print 'Repetition', rep+1, 'of', self.repetitions, '...'
                 print 'A) ', player_a.get_name().ljust(10), ':\t', a_win_percentage, '%'
                 print 'B) ', player_b.get_name().ljust(10), ':\t', b_win_percentage, '%'
 
@@ -80,10 +78,11 @@ class Main:
             self.result_list.append(single_result_dict)
         pass
 
-        print 'Getting the mean win percentages of', self.repetitions, '...'
+        print 'Getting the mean win percentages of %d repetitions...' % self.repetitions
         self.result_dict = Main.get_mean_percentages(self.result_list)
-        print 'Original results:', self.result_list, '\n'
-        print 'Mean results:', self.result_dict
+        if self.config.verbose:
+            print 'Original results:', self.result_list, '\n'
+            print 'Mean results:', self.result_dict
 
         if self.usr_input['plot']:
             plt.show()
@@ -415,14 +414,17 @@ class Main:
                 elif id2 in self.result_dict[id1]:
                     total = str(self.result_dict[id1][id2]) + '%'
 
-                    print id1, ":", id2, total
+                    if self.config.verbose:
+                        print id1, ":", id2, total
 
                     worksheet.write(1 + i, 1+j, total)
                 j += 1
                 pass
 
             i += 1
-            print i, "/", element_count
+            if self.config.verbose:
+                print i, "/", element_count
+
             pass
 
         workbook.close()

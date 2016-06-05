@@ -1,5 +1,6 @@
 from strategy_base import StrategyBase
 from collections import Counter
+from config import Config
 import random
 
 __author__ = 'Hector Azpurua'
@@ -85,7 +86,8 @@ class Frequentist(StrategyBase):
                     b_val = value
             return b_key
         else:
-            print 'Frequentist returning random...'
             b_key = random.choice(self.bot_list)
+            if Config.get_instance().verbose:
+                print 'Frequentist returning random...'
 
         return b_key
