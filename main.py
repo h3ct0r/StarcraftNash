@@ -1,4 +1,5 @@
 import sys
+import time
 import config
 import random
 import argparse
@@ -26,51 +27,96 @@ class Main:
         self.input_results = None           # file with pool of matches between strategies (not strategy selectors!)
         self.matches = 0                    # number of matches between strategy selectors
         self.fig_counter = 0                # number of figures for plotting
+        self.repetitions = 1                # number of repetitions of matches
 
         # validates params and configures internal variables (including game_matches)
         self.validate_params()
 
         self.bot_match_list = self.result_parser.get_match_list()
 
-        # print "# matches:", len(self.game_matches)
-
         # sets possible players' selections from config object
         strategies.strategy_base.StrategyBase.bot_list = self.config.bots.keys()
 
-        self.result_dict = {}   # stores players' percent of victories
-        for i in xrange(len(self.game_matches)):
-            player_a, player_b = self.game_matches[i]
+        self.result_list = []
 
-            self.match_index = 0
-            self.match_history = []
-            self.res_history = []
-            self.run(player_a, player_b)
+        for h in xrange(self.repetitions):
 
-            a_win_percentage = (self.res_history.count('A') * 100) / float(len(self.res_history))
-            b_win_percentage = (self.res_history.count('B') * 100) / float(len(self.res_history))
+            # shuffles match list if required
+            if self.config.shuffle_match_list:
+                curr_time = time.time()
+                print 'Shuffling match list... with random.seed:', curr_time
+                random.seed(curr_time)
+                random.shuffle(self.bot_match_list)
 
-            print 'A) ', player_a.get_name().ljust(10), ':\t', a_win_percentage, '%'
-            print 'B) ', player_b.get_name().ljust(10), ':\t', b_win_percentage, '%'
+            single_result_dict = {}   # stores players' percent of victories
+            for i in xrange(len(self.game_matches)):
+                player_a, player_b = self.game_matches[i]
 
-            if self.usr_input['plot']:
-                self.plot_results(self.res_history, player_a, player_b)
+                self.match_index = 0
+                self.match_history = []
+                self.res_history = []
+                self.run(player_a, player_b)
 
-            if player_a.get_name() not in self.result_dict:
-                self.result_dict[player_a.get_name()] = {}
-            if player_b.get_name() not in self.result_dict:
-                self.result_dict[player_b.get_name()] = {}
+                a_win_percentage = (self.res_history.count('A') * 100) / float(len(self.res_history))
+                b_win_percentage = (self.res_history.count('B') * 100) / float(len(self.res_history))
 
-            self.result_dict[player_a.get_name()][player_b.get_name()] = a_win_percentage
-            self.result_dict[player_b.get_name()][player_a.get_name()] = b_win_percentage
+                print 'Repetition', h+1, 'of', self.repetitions, '...'
+                print 'A) ', player_a.get_name().ljust(10), ':\t', a_win_percentage, '%'
+                print 'B) ', player_b.get_name().ljust(10), ':\t', b_win_percentage, '%'
+
+                if self.usr_input['plot']:
+                    self.plot_results(self.res_history, player_a, player_b)
+
+                if player_a.get_name() not in single_result_dict:
+                    single_result_dict[player_a.get_name()] = {}
+                if player_b.get_name() not in single_result_dict:
+                    single_result_dict[player_b.get_name()] = {}
+
+                single_result_dict[player_a.get_name()][player_b.get_name()] = a_win_percentage
+                single_result_dict[player_b.get_name()][player_a.get_name()] = b_win_percentage
+            pass
+            self.result_list.append(single_result_dict)
         pass
 
-        print self.result_dict
+        print 'Getting the mean win percentages of', self.repetitions, '...'
+        self.result_dict = Main.get_mean_percentages(self.result_list)
+        print 'Original results:', self.result_list, '\n'
+        print 'Mean results:', self.result_dict
 
         if self.usr_input['plot']:
             plt.show()
 
         if 'excel' in self.usr_input and self.usr_input['excel'] is not None:
             self.generate_excel_results()
+
+    @staticmethod
+    def get_mean_percentages(win_list):
+        """
+        Get the mean values of a list of dicts with the percentage of wins
+        :param win_list:
+        :return:
+        """
+        if win_list is None or len(win_list) <= 0:
+            return None
+
+        repetitions = len(win_list)
+        mean_values = {}
+
+        for win_dict in win_list:
+            for key, value in win_dict.items():
+                if key not in mean_values:
+                    mean_values[key] = {}
+
+                for key2, value2 in value.items():
+                    if key2 not in mean_values[key]:
+                        mean_values[key][key2] = 0
+                    mean_values[key][key2] += value2
+
+        for key, value in mean_values.items():
+            for key2, value2 in value.items():
+                mean_values[key][key2] /= repetitions
+
+        return mean_values
 
     def validate_params(self):
         """
@@ -80,7 +126,7 @@ class Main:
         :return:
         """
 
-        if 'config_file' in self.usr_input:
+        if 'config_file' in self.usr_input and self.usr_input['config_file'] is not None:
             self.config.parse(self.usr_input['config_file'])
             self.strategy_selector.update_strategies(self.config.get_bots())
 
@@ -98,6 +144,9 @@ class Main:
             random.seed(random_seed)
             print 'Random seed set to %d' % random_seed
 
+        if self.usr_input['repetitions'] is not None:
+            self.repetitions = self.usr_input['repetitions']
+
         self.is_tournament = self.usr_input['tournament']
 
         self.input_results = self.usr_input['input']
@@ -105,11 +154,6 @@ class Main:
 
         self.result_parser = result_parser.ResultParser(self.input_results)
         self.strategy_selector.set_unique_choices(self.result_parser.get_unique_opponents())
-
-        # shuffles match list if required
-        if self.config.shuffle_match_list:
-            print 'Shuffling match list...'
-            self.result_parser.shuffle_match_list()
 
         if self.is_tournament:
             players = StrategySelector.strategies.keys()    # players are the strategy (bot) selectors
@@ -280,6 +324,11 @@ class Main:
 
         parser.add_argument(
             '-s', '--random-seed', help='Random seed for experiments',
+            required=False, type=int
+        )
+
+        parser.add_argument(
+            '-r', '--repetitions', help='Number of repetitions for the tournament/matches',
             required=False, type=int
         )
 
