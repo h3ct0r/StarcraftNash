@@ -1,0 +1,50 @@
+<config>
+
+    <!--
+     From a pre-tournament with 100 round-robin rounds (each bot
+     plays against each other 100 times), we have the following
+     table of victories:
+
+    Bot	    Xeln	Cruz	NUSB	Aiur	Skyn
+    Xelnaga	50%	    26%	    86%	    73%	    73%
+    CruzBot	74%	    50%	    80%	    67%	    16%
+    NUSBot	14%	    20%	    50%	    74%	    97%
+    Aiur	27%	    33%	    26%	    50%	    79%
+    Skynet	27%	    84%	    3%	    21%	    50%
+
+    Nash probabilities were calculated from these numbers
+    -->
+
+    <choices>
+        <choice name="Xelnaga" nashprob = ".41975" />
+        <choice name="CruzBot" nashprob = ".28395" />
+        <bot name="NUSBot" nashprob = "0" />
+        <bot name="Aiur" nashprob = "0" />
+        <choice name="Skynet" nashprob = ".2936" />
+    </choices>
+
+
+    <players>
+        <player name="nash" />
+        <player name="enash" />
+        <player name="frequentist" />
+        <player name="winprev" />
+        <player name="egreedy" />
+        <player name="rotate" />
+        <player name="Xelnaga" />
+        <!--
+        <player name="Skynet" />
+        <player name="CruzBot" />
+        <player name="Aiur" />
+        <player name="NUSBot" />
+        -->
+    </players>
+
+    <parameters>
+        <enash-exploitation value="0.6" />
+        <egreedy-exploration value="0.1" />
+        <shuffle-match-list value="true" />
+        <scorechart-file value="config/scorechart_fortress.csv" />
+        <random-seed value="1" />
+    </parameters>
+</config>
