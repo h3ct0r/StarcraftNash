@@ -4,7 +4,6 @@ import config
 import random
 import argparse
 import itertools
-import xlsxwriter
 import result_parser
 import strategies.strategy_base
 import matplotlib.pyplot as plt
@@ -14,6 +13,9 @@ from strategies.strategy_selector import StrategySelector
 __author__ = 'Hector Azpurua'
 
 DEBUG = True
+
+# TODO: verbose via command line
+# TODO: read cross table
 
 
 class Main:
@@ -382,7 +384,9 @@ class Main:
         pass
 
     def generate_excel_results(self):
-        excel_filename = self.usr_input['excel'] # tournament_results.xlsx'
+        import xlsxwriter
+
+        excel_filename = self.usr_input['excel']
 
         print 'Generating excel results...', excel_filename
 
