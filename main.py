@@ -372,7 +372,8 @@ class Main:
 
         line_a,  = plt.plot(d_range, data_a, color='red', label=player_a.strategy_name)
         line_b, = plt.plot(d_range, data_b, color='blue', label=player_b.strategy_name)
-        plt.legend(handles=[line_a, line_b], loc=2)
+        #plt.legend(handles=[line_a, line_b], loc=2)
+        plt.legend(loc=2)
         plt.grid(True)
 
         plt.xlabel('Match number')
