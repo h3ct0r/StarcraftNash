@@ -61,8 +61,8 @@ class Main:
                 b_win_percentage = (self.res_history.count('B') * 100) / float(len(self.res_history))
 
                 print 'Repetition', rep+1, 'of', self.repetitions, '...'
-                print 'A) ', player_a.get_name().ljust(10), ':\t', a_win_percentage, '%'
-                print 'B) ', player_b.get_name().ljust(10), ':\t', b_win_percentage, '%'
+                print 'A) ', player_a.get_name().ljust(13), ':\t', a_win_percentage, '%'
+                print 'B) ', player_b.get_name().ljust(13), ':\t', b_win_percentage, '%'
 
                 if self.usr_input['plot']:
                     self.plot_results(self.res_history, player_a, player_b)

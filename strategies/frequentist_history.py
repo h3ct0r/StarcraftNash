@@ -11,20 +11,24 @@ class Frequentist(StrategyBase):
     """
     Tries to beat opponent by selecting the strategy that
     counters its most frequent choice.
-    Queries a score chart to determine best response to opponent
+    Queries previous match history to determine best response.
     """
 
     def __init__(self):
         StrategyBase.__init__(self)
-        self.strategy_name = 'Frequentist'
-
-        # uses score chart to determine best response
-        self.score_chart = scorechart.from_file(
-            Config.get_instance().get(Config.SCORECHART_FILE)
-        )
+        self.strategy_name = 'Freq-hist'
 
     def get_name(self):
         return self.strategy_name
+
+    # def set_id(self, s_id):
+    #     self.s_id = s_id
+    #
+    # def set_match_list(self, match_list):
+    #     self.match_list = match_list
+    #
+    # def set_result_list(self, result_list):
+    #     self.result_list = result_list
 
     def get_next_bot(self):
         """
@@ -77,17 +81,14 @@ class Frequentist(StrategyBase):
         b_key = None
         b_val = 0
         if most_common_opponent is not None and most_common_opponent in opponent_counter:
-            # returns opponent's nemesis (i.e. the one that makes it perform worst)
-            return min(self.score_chart[most_common_opponent], key=self.score_chart[most_common_opponent].get)
-
-            # for key, value in opponent_counter[most_common_opponent].items():
-            #     if b_key is None or value > b_val:
-            #         b_key = key
-            #         b_val = value
-            # return b_key
+            for key, value in opponent_counter[most_common_opponent].items():
+                if b_key is None or value > b_val:
+                    b_key = key
+                    b_val = value
+            return b_key
         else:
             b_key = random.choice(self.bot_list)
             if Config.get_instance().verbose:
-                print 'Frequentist returning random...'
+                print 'Freq-blind returning random...'
 
         return b_key

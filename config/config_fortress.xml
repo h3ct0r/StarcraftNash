@@ -38,12 +38,11 @@
         -->
     </players>
 
-    <scorechart-file value="config/scorechart_fortress.csv" />
-
     <parameters>
         <enash-exploitation value="0.3" />
         <egreedy-exploration value="0.1" />
         <shuffle-match-list value="true" />
+        <scorechart-file value="config/scorechart_fortress.csv" />
         <random-seed value="1" />
     </parameters>
 </config>

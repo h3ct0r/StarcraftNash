@@ -1,6 +1,7 @@
 import sys
 import nash
 import random_uniform
+import frequentist_history
 import frequentist
 import reply_last
 import win_prev
@@ -15,14 +16,15 @@ __author__ = 'Hector Azpurua'
 class StrategySelector:
 
     strategies = {
-        'nash': nash.Nash,
-        'random_uniform': random_uniform.RandomUniform,
-        'frequentist': frequentist.Frequentist,
-        'winprev': win_prev.WinPrev,
-        'replylast': reply_last.ReplyLast,
-        'egreedy': e_greedy.EGreedy,
-        'enash': e_nash.EpsilonNash,
-        'rotate': rotate.Rotate
+        'nash': nash.Nash,                                  # plays nash equilibrium
+        'random_uniform': random_uniform.RandomUniform,     # plays uniformly random
+        'frequentist': frequentist.Frequentist,             # responds to most frequent choice (uses score chart)
+        'freqhist': frequentist_history.Frequentist,        # responds to most frequent choice (uses history)
+        'winprev': win_prev.WinPrev,                        # responds to last opponent choice (uses score chart)
+        'replylast': reply_last.ReplyLast,                  # responds to last opponent choice (uses history)
+        'egreedy': e_greedy.EGreedy,                        # greedy w/ prob 1-e; explores w/ prob e
+        'enash': e_nash.EpsilonNash,                        # nash w/ prob 1-e; frequentist w/ prob e
+        'rotate': rotate.Rotate                             # selects sequentially
     }
 
     def __init__(self):
@@ -33,8 +35,6 @@ class StrategySelector:
         for elem in new_strat.keys():
             if elem not in self.strategies:
                 self.strategies[elem] = None
-
-        #print 'Updated strategies:', self.strategies
 
     def set_unique_choices(self, choices):
         self.choices = choices

@@ -21,23 +21,11 @@ class WinPrev(StrategyBase):
             Config.get_instance().get(Config.SCORECHART_FILE)
         )
 
-        # self.win_table = {
-        #     "Skynet": {
-        #         "Skynet": 0,
-        #         "Xelnaga": 0.27,
-        #         "CruzBot": 0.84
-        #     },
-        #     "Xelnaga": {
-        #         "Skynet": 0.73,
-        #         "Xelnaga": 0,
-        #         "CruzBot": 0.26
-        #     },
-        #     "CruzBot": {
-        #         "Skynet": 0.16,
-        #         "Xelnaga": 0.74,
-        #         "CruzBot": 0
-        #     }
-        # }
+        # forces zeros on diagonal to avoid responding with same bot
+        # for choice in self.win_table.keys():
+        #     self.win_table[choice][choice] = 0
+
+        # print self.win_table
 
     def get_next_bot(self):
         opponent_bots = []
