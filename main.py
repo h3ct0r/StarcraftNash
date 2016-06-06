@@ -1,3 +1,5 @@
+import os
+import csv
 import sys
 import time
 import config
@@ -81,6 +83,11 @@ class Main:
         print 'Getting the mean win percentages of %d repetitions...' % self.repetitions
         self.result_dict = Main.get_mean_percentages(self.result_list)
 
+        if self.usr_input['output_results']:
+            output_folder = self.usr_input['output_results']
+            print 'Outputting CSV files to:', output_folder
+            Main.output_csv_results(output_folder, self.result_list)
+
         if self.config.verbose:
             print 'Original results:', self.result_list, '\n'
             print 'Mean results:', self.result_dict
@@ -90,6 +97,60 @@ class Main:
 
         if 'excel' in self.usr_input and self.usr_input['excel'] is not None:
             self.generate_excel_results()
+
+    @staticmethod
+    def output_csv_results(output, win_list):
+        """
+        Outout results in CSV of a list of dicts with the percentage of wins
+        :param output:
+        :param win_list:
+        :return:
+        """
+        if output is None or win_list is None or len(win_list) <= 0:
+            return None
+
+        if not os.path.exists(output):
+            os.makedirs(output)
+
+        s_keys = win_list[0].keys()
+
+        overwrites_experiment = False
+        overwrites_suffix = str(int(round(time.time() * 1000)))
+
+        for i in xrange(len(win_list)):
+            f = None
+            rep_index = str(i+1)
+            try:
+                filename = 'rep_' + rep_index + '.csv'
+                if os.path.isfile(os.path.join(output, filename)):
+                    overwrites_experiment = True
+
+                if overwrites_experiment:
+                    print >> sys.stderr, 'Previous file found with name:', filename, 'using suffix:', overwrites_suffix
+                    filename = 'rep_' + rep_index + '_' + overwrites_suffix + '.csv'
+
+                f = open(os.path.join(output, filename), 'wt')
+                writer = csv.writer(f)
+                writer.writerow(s_keys)
+
+                elem = win_list[i]
+
+                print elem
+                print s_keys
+
+                for k1 in s_keys:
+                    column_data = []
+                    for k2 in s_keys:
+                        if k1 == k2:
+                            column_data.append(-1)
+                        else:
+                            column_data.append(elem[k1][k2])
+                        pass
+                    writer.writerow(column_data)
+            finally:
+                if f is not None:
+                    f.close()
+        pass
 
     @staticmethod
     def get_mean_percentages(win_list):
@@ -355,6 +416,11 @@ class Main:
         parser.add_argument(
             '-t', '--tournament', help='If this param is set, all the techniques are tested against each other. '
                                        'The params -a -b are ignored', required=False, action='store_true'
+        )
+
+        parser.add_argument(
+            '-or', '--output_results',
+            help='Output folder with the results in CSV format of every repetition of matches', required=True
         )
 
         parser.add_argument(
