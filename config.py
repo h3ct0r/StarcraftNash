@@ -27,6 +27,10 @@ class Config(object):
     E_NASH_EXPLOITATION = 'enash-exploitation'
     SHUFFLE_MATCH_LIST = 'shuffle-match-list'
     RANDOM_SEED = 'random-seed'
+    REPETITIONS = 'repetitions'
+    NUM_MATCHES = 'num-matches'
+    MATCH_POOL_FILE = 'match-pool-file'
+    ROUND_ROBIN = 'round-robin'
     VERBOSE = 'verbose'
 
     # xml tag names
@@ -58,7 +62,11 @@ class Config(object):
             self.VERBOSE: False,
             self.SHUFFLE_MATCH_LIST: False,
             self.RANDOM_SEED: None,
+            self.REPETITIONS: 1,
+            self.NUM_MATCHES: 100,
+            self.ROUND_ROBIN: True,
             self.SCORECHART_FILE: 'config/scorechart_fortress.csv',
+            self.MATCH_POOL_FILE: 'results_demo/fortress1000.txt',
         }
 
         # stores type conversions for parameters
@@ -68,7 +76,11 @@ class Config(object):
             self.VERBOSE: str_to_bool,
             self.SHUFFLE_MATCH_LIST: str_to_bool,
             self.RANDOM_SEED: int,
+            self.REPETITIONS: int,
+            self.NUM_MATCHES: int,
+            self.ROUND_ROBIN: str_to_bool,
             self.SCORECHART_FILE: str,
+            self.MATCH_POOL_FILE: str,
         }
 
     def get_bots(self):
@@ -107,6 +119,7 @@ class Config(object):
                 self.data[self.BOTS] = {x.get('name'): float(x.get('nashprob')) for x in element}
 
             elif element.tag == self.PLAYERS:
+                self.data[self.ROUND_ROBIN] = True
                 self.data[self.PLAYERS] = [x.get('name') for x in element]
 
             elif element.tag == self.PARAMETERS_FIELD:
