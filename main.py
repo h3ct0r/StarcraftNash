@@ -80,6 +80,7 @@ class Main:
 
         print 'Getting the mean win percentages of %d repetitions...' % self.repetitions
         self.result_dict = Main.get_mean_percentages(self.result_list)
+
         if self.config.verbose:
             print 'Original results:', self.result_list, '\n'
             print 'Mean results:', self.result_dict
@@ -207,7 +208,7 @@ class Main:
         :param player_b:
         :return:
         """
-        repeat_counter = 0
+
 
         #if self.config.verbose:
         #print player_a.get_name(), '-vs-', player_b.get_name()
@@ -221,6 +222,7 @@ class Main:
             bot_a = player_a.get_next_bot()
             bot_b = player_b.get_next_bot()
 
+            repeat_counter = 0
             while bot_a == bot_b:
                 bot_a = player_a.get_next_bot()
                 bot_b = player_b.get_next_bot()
@@ -228,8 +230,8 @@ class Main:
                 if repeat_counter > 100:
                     if self.config.verbose:
                         print 'The bots are the same after several retries @ match', i
+                        break
                      #raise StopIteration('The bots are the same after several retries...')
-            repeat_counter = 0
 
             if self.config.verbose:
                 print i+1, "Match", bot_a, 'vs', bot_b, '(match index:', self.match_index, ')'
