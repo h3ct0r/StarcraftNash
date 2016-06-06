@@ -15,7 +15,7 @@ __author__ = 'Hector Azpurua'
 DEBUG = True
 
 # TODO: verbose via command line
-# TODO: read cross table
+# TODO: set seed only for shuffling (because other random calls may disrupt repeatability)
 
 
 class Main:
