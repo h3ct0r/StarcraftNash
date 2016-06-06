@@ -42,7 +42,7 @@ class Main:
         self.result_list = []
 
         for rep in xrange(self.repetitions):
-
+            print 'Repetition', rep+1, 'of', self.repetitions, '...'
             # shuffles match list if required
             if self.config.shuffle_match_list:
                 print 'Shuffling match list...'
@@ -60,9 +60,9 @@ class Main:
                 a_win_percentage = (self.res_history.count('A') * 100) / float(len(self.res_history))
                 b_win_percentage = (self.res_history.count('B') * 100) / float(len(self.res_history))
 
-                print 'Repetition', rep+1, 'of', self.repetitions, '...'
-                print 'A) ', player_a.get_name().ljust(13), ':\t', a_win_percentage, '%'
-                print 'B) ', player_b.get_name().ljust(13), ':\t', b_win_percentage, '%'
+                if self.config.verbose:
+                    print 'A) ', player_a.get_name().ljust(13), ':\t', a_win_percentage, '%'
+                    print 'B) ', player_b.get_name().ljust(13), ':\t', b_win_percentage, '%'
 
                 if self.usr_input['plot']:
                     self.plot_results(self.res_history, player_a, player_b)
@@ -74,7 +74,7 @@ class Main:
 
                 single_result_dict[player_a.get_name()][player_b.get_name()] = a_win_percentage
                 single_result_dict[player_b.get_name()][player_a.get_name()] = b_win_percentage
-            pass
+            print  # adds newline
             self.result_list.append(single_result_dict)
         pass
 
@@ -209,8 +209,8 @@ class Main:
         """
         repeat_counter = 0
 
-        if self.config.verbose:
-            print '\n', player_a.get_name(), 'vs', player_b.get_name()
+        #if self.config.verbose:
+        print player_a.get_name(), '-vs-', player_b.get_name()
 
         for i in xrange(self.matches):
             player_a.set_result_list(self.res_history)
@@ -226,8 +226,8 @@ class Main:
                 bot_b = player_b.get_next_bot()
                 repeat_counter += 1
                 if repeat_counter > 100:
-                    print 'The bots are the same after several retries...'
-                    break
+                    if self.config.verbose:
+                        print 'The bots are the same after several retries @ match', i
                      #raise StopIteration('The bots are the same after several retries...')
             repeat_counter = 0
 
@@ -280,9 +280,13 @@ class Main:
         pass
 
         if match is None:
-            print >> sys.stderr, 'Cannot find a match between "' + bot_a + '" and "' + bot_b + '" after the index (' + \
-                                 str(self.match_index) + ')'
-            raise StopIteration('Cannot find a match after the match index defined, please select a small -m value')
+            self.match_index = 0
+            if self.config.verbose:
+                print >> sys.stderr, 'Cannot find a match between "' + bot_a + '" and "' + bot_b + '" after the index (' + \
+                                     str(self.match_index) + ').\nWill resume from beginning'
+
+            return self.get_match(bot_a, bot_b)
+            #raise StopIteration('Cannot find a match after the match index defined, please select a small -m value')
 
         return match
 

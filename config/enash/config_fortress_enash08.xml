@@ -18,8 +18,8 @@
     <choices>
         <choice name="Xelnaga" nashprob = ".41975" />
         <choice name="CruzBot" nashprob = ".28395" />
-        <bot name="NUSBot" nashprob = "0" />
-        <bot name="Aiur" nashprob = "0" />
+        <choice name="NUSBot" nashprob = "0" />
+        <choice name="Aiur" nashprob = "0" />
         <choice name="Skynet" nashprob = ".2936" />
     </choices>
 
@@ -28,9 +28,8 @@
         <player name="nash" />
         <player name="enash" />
         <player name="frequentist" />
-        <player name="winprev" />
+        <player name="replyscore" />
         <player name="egreedy" />
-        <player name="rotate" />
         <player name="Xelnaga" />
         <!--
         <player name="Skynet" />
