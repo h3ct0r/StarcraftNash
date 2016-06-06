@@ -13,6 +13,7 @@ class ReplyLast(StrategyBase):
     """
 
     def __init__(self):
+        StrategyBase.__init__(self)
         self.strategy_name = 'Reply-hist'
         self.result_list = []
         self.match_list = []

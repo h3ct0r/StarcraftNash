@@ -132,6 +132,10 @@ class Main:
             self.config.parse(self.usr_input['config_file'])
             self.strategy_selector.update_strategies(self.config.get_bots())
 
+        # forces verbose if user requested via command line
+        if self.usr_input['verbose']:
+            self.config.verbose = True
+
         # sets random seed
         random_seed = None
         if self.config.random_seed is not None:
@@ -209,10 +213,6 @@ class Main:
         :return:
         """
 
-
-        #if self.config.verbose:
-        #print player_a.get_name(), '-vs-', player_b.get_name()
-
         for i in xrange(self.matches):
             player_a.set_result_list(self.res_history)
             player_a.set_match_list(self.match_history)
@@ -227,10 +227,10 @@ class Main:
                 bot_a = player_a.get_next_bot()
                 bot_b = player_b.get_next_bot()
                 repeat_counter += 1
-                if repeat_counter > 100:
+                if repeat_counter > 10:
                     if self.config.verbose:
                         print 'The bots are the same after several retries @ match', i
-                        break
+                    break
                      #raise StopIteration('The bots are the same after several retries...')
 
             if self.config.verbose:
@@ -238,7 +238,8 @@ class Main:
 
             # if bots are equal, do not search for a match in the pool 'coz it does not exist
             if bot_a == bot_b:
-                print "Same bots competing, winner will be chosen randomly"
+                if self.config.verbose:
+                    print "Same bots competing, winner will be chosen randomly"
                 match = (bot_a, bot_b)
             else:
                 match = self.get_match(bot_a.lower(), bot_b.lower())
@@ -354,6 +355,11 @@ class Main:
         parser.add_argument(
             '-t', '--tournament', help='If this param is set, all the techniques are tested against each other. '
                                        'The params -a -b are ignored', required=False, action='store_true'
+        )
+
+        parser.add_argument(
+            '-v', '--verbose', help='Prints lots of information.',
+            required=False, action='store_true'
         )
 
         args = vars(parser.parse_args())

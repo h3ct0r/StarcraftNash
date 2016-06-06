@@ -32,7 +32,6 @@ class Frequentist(StrategyBase):
         frequent choice
         :return:
         """
-        # opponent_bots = []
         opponent_counter = {choice: 0 for choice in self.bot_list}
 
         for i in xrange(len(self.result_list)):
@@ -59,40 +58,8 @@ class Frequentist(StrategyBase):
 
             opponent_counter[opponent] += 1
 
-        #     opponent_bots.append(opponent)
-        #
-        #     if is_winner:
-        #         if opponent not in opponent_counter:
-        #             opponent_counter[opponent] = {}
-        #         if self_bot not in opponent_counter[opponent]:
-        #             opponent_counter[opponent][self_bot] = 1
-        #         else:
-        #             opponent_counter[opponent][self_bot] += 1
-        #     pass
-        #
-        # data = Counter(opponent_bots)
-        # most_common_opponent = None
-        #
-        # if len(data.most_common(1)) > 0:
-        #     most_common_opponent = data.most_common(1)[0][0]
-
-        b_key = None
-        b_val = 0
-        # key=self.score_chart[opponent_choice].get
         most_common_opponent = max(opponent_counter, key=opponent_counter.get)
 
-        #if most_common_opponent is not None and most_common_opponent in opponent_counter:
         # returns opponent's nemesis (i.e. the one that makes it perform worst)
         return min(self.score_chart[most_common_opponent], key=self.score_chart[most_common_opponent].get)
 
-            # for key, value in opponent_counter[most_common_opponent].items():
-            #     if b_key is None or value > b_val:
-            #         b_key = key
-            #         b_val = value
-            # return b_key
-        # else:
-        #     b_key = random.choice(self.bot_list)
-        #     if Config.get_instance().verbose:
-        #         print 'Frequentist returning random...'
-        #
-        # return b_key
