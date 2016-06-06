@@ -27,11 +27,9 @@ class Main:
         self.strategy_selector = StrategySelector()
         self.usr_input = self.get_arg()
         self.game_matches = []              # matches between strategy selectors (list of tuples)
-        self.is_tournament = False          # defines matches between all strategy selectors
-        self.input_results = None           # file with pool of matches between strategies (not strategy selectors!)
-        self.matches = 0                    # number of matches between strategy selectors
+        #self.config.round_robin = False          # defines matches between all strategy selectors
+        #self.config.num_matches = 0                    # number of matches between strategy selectors
         self.fig_counter = 0                # number of figures for plotting
-        self.repetitions = 1                # number of repetitions of matches
 
         # validates params and configures internal variables (including game_matches)
         self.validate_params()
@@ -43,8 +41,8 @@ class Main:
 
         self.result_list = []
 
-        for rep in xrange(self.repetitions):
-            print 'Repetition', rep+1, 'of', self.repetitions, '...'
+        for rep in xrange(self.config.repetitions):
+            print 'Repetition', rep+1, 'of', self.config.repetitions, '...'
             # shuffles match list if required
             if self.config.shuffle_match_list:
                 print 'Shuffling match list...'
@@ -80,7 +78,7 @@ class Main:
             self.result_list.append(single_result_dict)
         pass
 
-        print 'Getting the mean win percentages of %d repetitions...' % self.repetitions
+        print 'Getting the mean win percentages of %d repetitions...' % self.config.repetitions
         self.result_dict = Main.get_mean_percentages(self.result_list)
 
         if self.usr_input['output_results']:
@@ -197,6 +195,22 @@ class Main:
         if self.usr_input['verbose']:
             self.config.verbose = True
 
+        # overrides number of repetitions if user supplied it
+        if self.usr_input['repetitions'] is not None:
+            self.config.repetitions = self.usr_input['repetitions']
+
+        # overrides match pool if there is one via command line
+        if self.usr_input['input'] is not None:
+            self.config.match_pool_file = self.usr_input['input']
+
+        # overrides number of matches if there is one via command line
+        if self.usr_input['matches'] is not None:
+            self.config.num_matches = self.usr_input['matches']
+
+        # overrides round-robin if there is one via command line
+        if self.usr_input['tournament']:
+            self.config.round_robin = self.usr_input['tournament']
+
         # sets random seed
         random_seed = None
         if self.config.random_seed is not None:
@@ -211,18 +225,10 @@ class Main:
             random.seed(random_seed)
             print 'Random seed set to %d' % random_seed
 
-        if self.usr_input['repetitions'] is not None:
-            self.repetitions = self.usr_input['repetitions']
-
-        self.is_tournament = self.usr_input['tournament']
-
-        self.input_results = self.usr_input['input']
-        self.matches = self.usr_input['matches']
-
-        self.result_parser = result_parser.ResultParser(self.input_results)
+        self.result_parser = result_parser.ResultParser(self.config.match_pool_file)
         self.strategy_selector.set_unique_choices(self.result_parser.get_unique_opponents())
 
-        if self.is_tournament:
+        if self.config.round_robin:
             players = StrategySelector.strategies.keys()    # players are the strategy (bot) selectors
 
             if self.config.get_is_config_updated():
@@ -274,7 +280,7 @@ class Main:
         :return:
         """
 
-        for i in xrange(self.matches):
+        for i in xrange(self.config.num_matches):
             player_a.set_result_list(self.res_history)
             player_a.set_match_list(self.match_history)
             player_b.set_result_list(self.res_history)
@@ -373,7 +379,7 @@ class Main:
         )
 
         parser.add_argument(
-            '-i', '--input', help='Input file of the results file', required=True
+            '-i', '--input', help='Input file of the results file', required=False
         )
 
         parser.add_argument(
@@ -390,7 +396,7 @@ class Main:
         )
 
         parser.add_argument(
-            '-m', '--matches', help='The number of matches to run', type=int, required=True
+            '-m', '--matches', help='The number of matches to run', type=int, required=False
         )
 
         parser.add_argument(
