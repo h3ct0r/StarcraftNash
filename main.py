@@ -210,7 +210,7 @@ class Main:
         repeat_counter = 0
 
         #if self.config.verbose:
-        print player_a.get_name(), '-vs-', player_b.get_name()
+        #print player_a.get_name(), '-vs-', player_b.get_name()
 
         for i in xrange(self.matches):
             player_a.set_result_list(self.res_history)
@@ -251,9 +251,15 @@ class Main:
             if self.config.verbose:
                 print "Winner:", winner, match, '\n'
 
+            # writes some nice information about progress
+            sys.stdout.write(
+                "\r%s -vs- %s -- Match #%d: %s - Winner: %s".ljust(60) %
+                 (player_a.get_name(), player_b.get_name(), i+1, match, winner)
+            )
             self.res_history.append(winner)
             self.match_history.append(match)
             pass
+        print # adds newline because of previous sys.stdout
 
     def get_match(self, bot_a, bot_b):
         """
@@ -265,9 +271,10 @@ class Main:
         """
         match = None
         if self.match_index >= len(self.bot_match_list)-1:
-            print >> sys.stderr, 'The match index (' + str(self.match_index) + \
-                                 ') is equal or superior to the number of matches (' + str(len(self.bot_match_list)) + ')'
-            raise StopIteration('Match index have passed the match number, please select a small -m value')
+            print >> sys.stderr, 'Match index (%d) >= number of matches (%d). Moving to pool beginning' % \
+                                 (self.match_index, len(self.bot_match_list))
+            self.match_index = 0
+            #raise StopIteration('Match index have passed the match number, please select a small -m value')
 
         for i in xrange(self.match_index, len(self.bot_match_list)):
             res = self.bot_match_list[i]
