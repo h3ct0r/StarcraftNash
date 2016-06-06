@@ -9,10 +9,11 @@ class Rotate(StrategyBase):
     """
 
     def __init__(self):
+        StrategyBase.__init__(self)
         self.strategy_name = 'Rotate'
-        self.result_list = []
-        self.match_list = []
-        self.s_id = None
+        # self.result_list = []
+        # self.match_list = []
+        # self.s_id = None
         pass
 
     def get_next_bot(self):

@@ -3,7 +3,8 @@ import nash
 import random_uniform
 import frequentist_history
 import frequentist
-import reply_last
+import reply_history
+import reply_score
 import win_prev
 import e_greedy
 import e_nash
@@ -21,7 +22,8 @@ class StrategySelector:
         'frequentist': frequentist.Frequentist,             # responds to most frequent choice (uses score chart)
         'freqhist': frequentist_history.Frequentist,        # responds to most frequent choice (uses history)
         'winprev': win_prev.WinPrev,                        # responds to last opponent choice (uses score chart)
-        'replylast': reply_last.ReplyLast,                  # responds to last opponent choice (uses history)
+        'replyscore': reply_score.ReplyLast,                # same as winprev, but faster
+        'replyhist': reply_history.ReplyLast,               # responds to last opponent choice (uses history)
         'egreedy': e_greedy.EGreedy,                        # greedy w/ prob 1-e; explores w/ prob e
         'enash': e_nash.EpsilonNash,                        # nash w/ prob 1-e; frequentist w/ prob e
         'rotate': rotate.Rotate                             # selects sequentially
