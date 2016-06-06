@@ -31,6 +31,8 @@ class Config(object):
     NUM_MATCHES = 'num-matches'
     MATCH_POOL_FILE = 'match-pool-file'
     ROUND_ROBIN = 'round-robin'
+    OUTPUT_SPREADSHEET = 'output-spreadsheet'
+    OUTPUT_INTERMEDIATE = 'output-intermediate'
     VERBOSE = 'verbose'
 
     # xml tag names
@@ -67,6 +69,8 @@ class Config(object):
             self.ROUND_ROBIN: True,
             self.SCORECHART_FILE: 'config/scorechart_fortress.csv',
             self.MATCH_POOL_FILE: 'results_demo/fortress1000.txt',
+            self.OUTPUT_SPREADSHEET: None,
+            self.OUTPUT_INTERMEDIATE: 'intermediate',
         }
 
         # stores type conversions for parameters
@@ -81,6 +85,8 @@ class Config(object):
             self.ROUND_ROBIN: str_to_bool,
             self.SCORECHART_FILE: str,
             self.MATCH_POOL_FILE: str,
+            self.OUTPUT_SPREADSHEET: str,
+            self.OUTPUT_INTERMEDIATE: str,
         }
 
     def get_bots(self):

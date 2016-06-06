@@ -81,8 +81,8 @@ class Main:
         print 'Getting the mean win percentages of %d repetitions...' % self.config.repetitions
         self.result_dict = Main.get_mean_percentages(self.result_list)
 
-        if self.usr_input['output_results']:
-            output_folder = self.usr_input['output_results']
+        if self.config.output_intermediate:
+            output_folder = self.config.output_intermediate
             print 'Outputting CSV files to:', output_folder
             Main.output_csv_results(output_folder, self.result_list)
 
@@ -93,7 +93,7 @@ class Main:
         if self.usr_input['plot']:
             plt.show()
 
-        if 'excel' in self.usr_input and self.usr_input['excel'] is not None:
+        if self.config.output_spreadsheet is not None:
             self.generate_excel_results()
 
     @staticmethod
@@ -210,6 +210,14 @@ class Main:
         # overrides round-robin if there is one via command line
         if self.usr_input['tournament']:
             self.config.round_robin = self.usr_input['tournament']
+
+        # overrides output-spreadsheet
+        if self.usr_input['excel'] is not None:
+            self.config.output_spreadsheet = self.usr_input['excel']
+
+        # overrides intermediates:
+        if self.usr_input['output_results'] is not None:
+            self.config.output_intermediate = self.usr_input['output_results']
 
         # sets random seed
         random_seed = None
@@ -426,7 +434,7 @@ class Main:
 
         parser.add_argument(
             '-or', '--output_results',
-            help='Output folder with the results in CSV format of every repetition of matches', required=True
+            help='Output folder with the results in CSV format of every repetition of matches', required=False
         )
 
         parser.add_argument(
@@ -477,7 +485,7 @@ class Main:
     def generate_excel_results(self):
         import xlsxwriter
 
-        excel_filename = self.usr_input['excel']
+        excel_filename = self.config.output_spreadsheet # usr_input['excel']
 
         print 'Generating excel results to file:', excel_filename
 

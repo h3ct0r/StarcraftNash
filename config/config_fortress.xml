@@ -48,6 +48,8 @@
         <egreedy-exploration value="0.2" />
         <shuffle-match-list value="true" />
         <scorechart-file value="config/scorechart_fortress.csv" />
+        <output-spreadsheet value="score-chart.xls" />
+        <output-intermediate value="intermediate" />
         <random-seed value="1" />
         <repetitions value="30" />
         <match-pool-file value="results_demo/fortress1000.txt" />
