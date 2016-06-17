@@ -23,7 +23,8 @@ class EGreedy(StrategyBase):
         self.result_list = []
         self.match_list = []
         self.s_id = None
-        self.epsilon = Config.get_instance().get(Config.E_GREEDY_EXPLORATION)
+        self.epsilon = Config.get_instance().egreedy_exploration
+
 
     def get_name(self):
         return self.strategy_name

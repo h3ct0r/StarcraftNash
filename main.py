@@ -11,10 +11,10 @@ import strategies.strategy_base
 import matplotlib.pyplot as plt
 from strategies.strategy_selector import StrategySelector
 
-
 __author__ = 'Hector Azpurua'
 
 DEBUG = True
+
 
 # TODO: verbose via command line
 # TODO: set seed only for shuffling (because other random calls may disrupt repeatability)
@@ -26,10 +26,10 @@ class Main:
         self.config = config.Config.get_instance()
         self.strategy_selector = StrategySelector()
         self.usr_input = self.get_arg()
-        self.game_matches = []              # matches between strategy selectors (list of tuples)
-        #self.config.round_robin = False          # defines matches between all strategy selectors
-        #self.config.num_matches = 0                    # number of matches between strategy selectors
-        self.fig_counter = 0                # number of figures for plotting
+        self.game_matches = []  # matches between strategy selectors (list of tuples)
+        # self.config.round_robin = False          # defines matches between all strategy selectors
+        # self.config.num_matches = 0                    # number of matches between strategy selectors
+        self.fig_counter = 0  # number of figures for plotting
 
         # validates params and configures internal variables (including game_matches)
         self.validate_params()
@@ -42,13 +42,13 @@ class Main:
         self.result_list = []
 
         for rep in xrange(self.config.repetitions):
-            print 'Repetition', rep+1, 'of', self.config.repetitions, '...'
+            print 'Repetition', rep + 1, 'of', self.config.repetitions, '...'
             # shuffles match list if required
-            if self.config.shuffle_match_list:
+            if self.config.shuffle_match_list == True:
                 print 'Shuffling match list...'
                 random.shuffle(self.bot_match_list)
 
-            single_result_dict = {}   # stores players' percent of victories
+            single_result_dict = {}  # stores players' percent of victories
             for i in xrange(len(self.game_matches)):
                 player_a, player_b = self.game_matches[i]
 
@@ -64,7 +64,7 @@ class Main:
                     print 'A) ', player_a.get_name().ljust(13), ':\t', a_win_percentage, '%'
                     print 'B) ', player_b.get_name().ljust(13), ':\t', b_win_percentage, '%'
 
-                if self.usr_input['plot']:
+                if self.config.plot:
                     self.plot_results(self.res_history, player_a, player_b)
 
                 if player_a.get_name() not in single_result_dict:
@@ -117,7 +117,7 @@ class Main:
 
         for i in xrange(len(win_list)):
             f = None
-            rep_index = str(i+1)
+            rep_index = str(i + 1)
             try:
                 filename = 'rep_' + rep_index + '.csv'
                 if os.path.isfile(os.path.join(output, filename)):
@@ -186,47 +186,61 @@ class Main:
 
         :return:
         """
+        # overrides match pool if there is one via command line
+        if self.usr_input['input'] is not None:
+            self.config.match_pool_file = self.usr_input['input']
 
         if 'config_file' in self.usr_input and self.usr_input['config_file'] is not None:
             self.config.parse(self.usr_input['config_file'])
             self.strategy_selector.update_strategies(self.config.get_bots())
 
-        # forces verbose if user requested via command line
-        if self.usr_input['verbose']:
-            self.config.verbose = True
+        # overrides number of matches if there is one via command line
+        if self.usr_input['matches'] is not None:
+            self.config.num_matches = self.usr_input['matches']
+
+        # overrides file seed if there is one via command line
+        if self.usr_input['random_seed'] is not None:
+            random_seed = self.usr_input['random_seed']
 
         # overrides number of repetitions if user supplied it
         if self.usr_input['repetitions'] is not None:
             self.config.repetitions = self.usr_input['repetitions']
 
-        # overrides match pool if there is one via command line
-        if self.usr_input['input'] is not None:
-            self.config.match_pool_file = self.usr_input['input']
-
-        # overrides number of matches if there is one via command line
-        if self.usr_input['matches'] is not None:
-            self.config.num_matches = self.usr_input['matches']
+        # overrides output-spreadsheet
+        if self.usr_input['excel'] is not None:
+            self.config.output_spreadsheet = self.usr_input['excel']
 
         # overrides round-robin if there is one via command line
         if self.usr_input['tournament']:
             self.config.round_robin = self.usr_input['tournament']
 
-        # overrides output-spreadsheet
-        if self.usr_input['excel'] is not None:
-            self.config.output_spreadsheet = self.usr_input['excel']
-
         # overrides intermediates:
         if self.usr_input['output_results'] is not None:
             self.config.output_intermediate = self.usr_input['output_results']
+
+        # overrides enash-exploitation:
+        if self.usr_input['enash_exploitation'] is not None:
+            self.config.enash_exploitation = self.usr_input['enash_exploitation']
+
+        # overrides egreedy-exploration
+        if self.usr_input['egreedy_exploration'] is not None:
+            self.config.egreedy_exploration = self.usr_input['egreedy_exploration']
+
+        # overrides shuffle-match-list
+        if self.usr_input['shuffle_match_list'] is not None:
+            self.config.shuffle_match_list = self.usr_input['shuffle_match_list']
+
+        # forces verbose if user requested via command line
+        if self.usr_input['verbose'] is not None:
+            self.config.verbose = self.usr_input['verbose']
+
+        if self.usr_input['plot'] is not None:
+            self.config.plot = self.usr_input['plot']
 
         # sets random seed
         random_seed = None
         if self.config.random_seed is not None:
             random_seed = self.config.random_seed
-
-        # overrides file seed if there is one via command line
-        if self.usr_input['random_seed'] is not None:
-            random_seed = self.usr_input['random_seed']
 
         # finally sets random seed
         if random_seed is not None:
@@ -237,7 +251,7 @@ class Main:
         self.strategy_selector.set_unique_choices(self.result_parser.get_unique_opponents())
 
         if self.config.round_robin:
-            players = StrategySelector.strategies.keys()    # players are the strategy (bot) selectors
+            players = StrategySelector.strategies.keys()  # players are the strategy (bot) selectors
 
             if self.config.get_is_config_updated():
                 players += self.config.get_bots()
@@ -306,10 +320,10 @@ class Main:
                     if self.config.verbose:
                         print 'The bots are the same after several retries @ match', i
                     break
-                     #raise StopIteration('The bots are the same after several retries...')
+                    # raise StopIteration('The bots are the same after several retries...')
 
             if self.config.verbose:
-                print i+1, "Match", bot_a, 'vs', bot_b, '(match index:', self.match_index, ')'
+                print i + 1, "Match", bot_a, 'vs', bot_b, '(match index:', self.match_index, ')'
 
             # if bots are equal, do not search for a match in the pool 'coz it does not exist
             if bot_a == bot_b:
@@ -332,12 +346,12 @@ class Main:
             # writes some nice information about progress
             sys.stdout.write(
                 "\r%s -vs- %s -- Match #%d: %s - Winner: %s".ljust(60) %
-                 (player_a.get_name(), player_b.get_name(), i+1, match, winner)
+                (player_a.get_name(), player_b.get_name(), i + 1, match, winner)
             )
             self.res_history.append(winner)
             self.match_history.append(match)
             pass
-        print # adds newline because of previous sys.stdout
+        print  # adds newline because of previous sys.stdout
 
     def get_match(self, bot_a, bot_b):
         """
@@ -348,11 +362,11 @@ class Main:
         :return:
         """
         match = None
-        if self.match_index >= len(self.bot_match_list)-1:
+        if self.match_index >= len(self.bot_match_list) - 1:
             print >> sys.stderr, 'Match index (%d) >= number of matches (%d). Moving to pool beginning' % \
                                  (self.match_index, len(self.bot_match_list))
             self.match_index = 0
-            #raise StopIteration('Match index have passed the match number, please select a small -m value')
+            # raise StopIteration('Match index have passed the match number, please select a small -m value')
 
         for i in xrange(self.match_index, len(self.bot_match_list)):
             res = self.bot_match_list[i]
@@ -371,7 +385,7 @@ class Main:
                                      str(self.match_index) + ').\nWill resume from beginning'
 
             return self.get_match(bot_a, bot_b)
-            #raise StopIteration('Cannot find a match after the match index defined, please select a small -m value')
+            # raise StopIteration('Cannot find a match after the match index defined, please select a small -m value')
 
         return match
 
@@ -438,8 +452,21 @@ class Main:
         )
 
         parser.add_argument(
-            '-v', '--verbose', help='Prints lots of information.',
-            required=False, action='store_true'
+            '-v', '--verbose', help='Prints informations about the games', required=False, action='store_true'
+        )
+
+        parser.add_argument(
+            '-en', '--enash-exploitation', help='Parameter that defines the exploitation in an e-nash strategy',
+            required=False, type=float
+        )
+
+        parser.add_argument(
+            '-eg', '--egreedy-exploration', help='Defines the exploration in an e-greedy strategy',
+            required=False, type=float
+        )
+
+        parser.add_argument(
+            '-sh', '--shuffle-match-list', help='Shuffle the list of matches', required=False
         )
 
         args = vars(parser.parse_args())
@@ -469,9 +496,9 @@ class Main:
             data_b.append(counter['B'])
             d_range.append(i)
 
-        line_a,  = plt.plot(d_range, data_a, color='red', label=player_a.strategy_name)
+        line_a, = plt.plot(d_range, data_a, color='red', label=player_a.strategy_name)
         line_b, = plt.plot(d_range, data_b, color='blue', label=player_b.strategy_name)
-        #plt.legend(handles=[line_a, line_b], loc=2)
+        # plt.legend(handles=[line_a, line_b], loc=2)
         plt.legend(loc=2)
         plt.grid(True)
 
@@ -485,7 +512,7 @@ class Main:
     def generate_excel_results(self):
         import xlsxwriter
 
-        excel_filename = self.config.output_spreadsheet # usr_input['excel']
+        excel_filename = self.config.output_spreadsheet  # usr_input['excel']
 
         print 'Generating excel results to file:', excel_filename
 
@@ -505,11 +532,11 @@ class Main:
             j = 0
             for id2 in strategy_list_srt:
 
-                worksheet.write(0, 1+i, id1)
-                worksheet.write(1+i, 0, id1)
+                worksheet.write(0, 1 + i, id1)
+                worksheet.write(1 + i, 0, id1)
 
                 if id1 == id2:
-                    worksheet.write(1 + i, 1+j, '', format1)
+                    worksheet.write(1 + i, 1 + j, '', format1)
 
                 elif id2 in self.result_dict[id1]:
                     total = self.result_dict[id1][id2]  # str(self.result_dict[id1][id2]) + '%'
@@ -517,7 +544,7 @@ class Main:
                     if self.config.verbose:
                         print id1, ":", id2, total
 
-                    worksheet.write(1 + i, 1+j, total)
+                    worksheet.write(1 + i, 1 + j, total)
                 j += 1
                 pass
 
@@ -529,6 +556,7 @@ class Main:
 
         workbook.close()
         print 'DONE.'
+
 
 if __name__ == '__main__':
     Main()

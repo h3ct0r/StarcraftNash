@@ -55,5 +55,7 @@
         <match-pool-file value="results_demo/fortress1000.txt" />
         <num-matches value="1000" />
         <round-robin value="true" />
+        <verbose value="true" />
+        <plot value="false" />
     </parameters>
 </config>
