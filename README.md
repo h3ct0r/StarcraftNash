@@ -7,6 +7,7 @@ We call this strategy-selection metagame for playing the real-time strategy (RTS
 The experiments are performed with participant bots of AIIDE 2015 StarCraft AI tournament. Bots usually act differently from each other so that different bots can be considered distinct strategies within this given concept. Thus, in our strategy-selection metagame, to choose a strategy means to play a StarCraft match following the policy dictated by the chosen bot.
 
 In order to test insights from computer rock-paper-scissors tournaments, we evaluate the following strategy selection techniques in StarCraft:
+
 1. Frequentist: attempts to exploit opponent by selecting the best-response of its most frequent strategy;
 2. Reply-last: attempts to exploit opponent by selecting the best-response of its last strategy;
 3. a-greedy: selects a random strategy (exploration) with probability a, and the most victorious strategy with probability 1 - a (exploitation);
@@ -16,10 +17,12 @@ In order to test insights from computer rock-paper-scissors tournaments, we eval
 
 ###Example
 The next lines shows an example of the command to execute our experiments:
+
     python main.py -i results_demo/results.txt -a nash -b random_uniform -m 100
 	python main.py -c config/config_fortress.xml
 
 The following parameters can be used to choose the options for the execution:
+
     -i: File with the results
     -a: Strategy for the opponent a
     -b: Strategy for the opponent b
