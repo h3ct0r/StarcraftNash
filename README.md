@@ -36,3 +36,19 @@ The following parameters can be used to choose the options for the execution:
     -en: Parameter that defines the exploitation in an e-nash strategy
     -eg: Defines the exploration in an e-greedy strategy
     -sh: Shuffle the list of matches
+
+The file containing the experiment configuration is a xml file in which the parameters are equivalent to the ones passed in the command line interface. Next we show an example of such a xml configuration file and what should go in each tag:
+
+	<enash-exploitation value="0.4" />                          <!-- Value of the exploitation in an e-nash strategy -->
+    <egreedy-exploration value="0.2" />                         <!-- Value of the exploration in an e-greedy strategy -->
+    <shuffle-match-list value="true" />                         <!-- Boolean indicating if the list of matches will be shuffled -->
+    <scorechart-file value="config/scorechart_fortress.csv" />  <!-- Output file in CSV format with the results of every repetition of matches -->
+    <output-spreadsheet value="score-chart.xls" />              <!-- .xml file with outputs results -->
+    <output-intermediate value="intermediate" />                <!-- .xml file with intermediate results  -->
+    <random-seed value="1" />                                   <!-- Integer number of random seed for experiments -->
+    <repetitions value="30" />                                  <!-- Number of repetitions for the tournament/matches -->
+    <match-pool-file value="results_demo/fortress1000.txt" />   <!-- .txt file with the results -->
+    <num-matches value="1000" />                                <!-- Number of matches between a and b -->
+    <round-robin value="true" />                                <!-- Boolean to indicate whether to create a tournament with all strategies or not -->
+    <verbose value="true" />                                    <!-- Boolean that allows to prints informations about the games -->
+    <plot value="false" />                                      <!-- Boolean that allows to plot the results -->
