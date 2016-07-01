@@ -4,7 +4,7 @@ Repository with code for strategy selection in Real-Time Strategy games.
 
 StarCraft is a complex game and players often resort to strategies (policies that map game states to actions). Here, we abstract game details and deal with strategy selection. 
 
-To check the list of strategy selection methods and how to implement one yourself, check out the [wiki page](wiki/Strategy-selection-techniques).
+To check the list of strategy selection methods and how to implement one yourself, check out the [wiki page](https://github.com/h3ct0r/StarcraftNash/wiki/Strategy-selection-techniques).
 
 ###Example
 Run with experiment parameters given by command line:
@@ -32,4 +32,4 @@ Run with experiment parameters given by a `.xml` configuration file:
 
     python main.py -c config/config_fortress.xml
     
-Where `-c` specifies the path to the configuration file. Check this [wiki page](wiki/Configuration-files) for instructions on how to specify parameters via the experiments configuration file.
+Where `-c` specifies the path to the configuration file. Check this [wiki page](https://github.com/h3ct0r/StarcraftNash/wiki/Configuration-files) for instructions on how to specify parameters via the experiments configuration file.
