@@ -214,9 +214,13 @@ class Main:
         if self.usr_input['tournament']:
             self.config.round_robin = self.usr_input['tournament']
 
-        # overrides intermediates:
+        # overrides intermediates
+        if self.usr_input['output_intermediate'] is not None:
+            self.config.output_intermediate = self.usr_input['output_intermediate']
+
+        # overrides results
         if self.usr_input['output_results'] is not None:
-            self.config.output_intermediate = self.usr_input['output_results']
+            self.config.SCORECHART_FILE = self.usr_input['output_results']
 
         # overrides enash-exploitation:
         if self.usr_input['enash_exploitation'] is not None:
@@ -449,6 +453,11 @@ class Main:
         parser.add_argument(
             '-or', '--output_results',
             help='Output folder with the results in CSV format of every repetition of matches', required=False
+        )
+
+        parser.add_argument(
+            '-oi', '--output_intermediate',
+            help='Output folder with intermediate results in CSV format of every tournament repetition ', required=False
         )
 
         parser.add_argument(

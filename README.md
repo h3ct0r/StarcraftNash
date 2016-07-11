@@ -25,7 +25,8 @@ Accepted parameters are:
     -s: Random seed for experiments
     -r: Number of tournament repetitions
     -e: Outputs tournament score chart to a .xls file given by this parameter
-    -or: Output folder with intermediate results in CSV format of every tournament repetition 
+    -oi: Output folder with intermediate results in CSV format of every tournament repetition
+    -or:'Output folder with the results in CSV format of every repetition of matches
     -v: Verbose - prints informations about the games
     -en: Parameter that defines the exploitation in an e-nash strategy
     -eg: Defines the exploration in an e-greedy strategy
