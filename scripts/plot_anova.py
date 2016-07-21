@@ -52,7 +52,9 @@ def anova(data_dict):
     statistic = res[0]
     pvalue = res[1]
 
-    print 'ANOVA Analysis: F value:', statistic, 'P value:', pvalue
+    alpha = 0.05
+
+    print 'ANOVA Analysis: F value:', statistic, 'P value:', pvalue, 'a:', alpha
 
     join_vals = np.asarray(join_vals)
     join_group = np.asarray(join_group)
@@ -74,7 +76,7 @@ def anova(data_dict):
     #mc = MultiComparison(np.asarray(s_values), np.asarray(s_keys))
     #result = mc.tukeyhsd()
 
-    tukey = pairwise_tukeyhsd(endog=join_vals, groups=join_group, alpha=0.1)
+    tukey = pairwise_tukeyhsd(endog=join_vals, groups=join_group, alpha=alpha)
 
     # #tukey.plot_simultaneous()    # Plot group confidence intervals
     # #plt.vlines(x=49.57,ymin=-0.5,ymax=4.5, color="red")
@@ -210,7 +212,8 @@ def plot_ci(strategies_ci):
     plt.xticks(x, n)
     ax.set_xticklabels(s_keys, rotation=35)
     plt.subplots_adjust(bottom=0.20)
-    plt.grid(True)
+    #plt.grid(True)
+    plt.gca().yaxis.grid(True)
     ax.set_axisbelow(True)
 
     autolabel(ax, rects1)
