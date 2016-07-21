@@ -6,7 +6,10 @@ import operator
 import numpy as np
 import scipy as sp
 import scipy.stats
+from scipy import stats
 import matplotlib.pyplot as plt
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
+from statsmodels.stats.multicomp import MultiComparison
 
 __author__ = 'Hector Azpurua'
 
@@ -23,6 +26,60 @@ def autolabel(ax, rects):
             va='bottom'
         )
 
+def anova(data_dict):
+
+    means_per_strat = {}
+    join_vals = []
+    join_group = []
+
+    for key, v in data_dict.items():
+        means_per_strat[key] = []
+        for key2, v2 in v.items():
+            mean = sum(v2)/float(len(v2))
+            print key, key2, mean
+            means_per_strat[key].append(mean)
+            join_vals.append(mean)
+            join_group.append(key)
+            #means_per_strat[key] = sum(v2)/float(len(v2))
+
+    sorted_ci = sorted(means_per_strat.items(), key=operator.itemgetter(1))
+    s_keys, s_values = zip(*sorted_ci)
+
+    print 's_keys:', s_keys
+    print 's_values:', s_values    
+
+    res = scipy.stats.f_oneway(*s_values)
+    statistic = res[0]
+    pvalue = res[1]
+
+    print 'ANOVA Analysis: F value:', statistic, 'P value:', pvalue
+
+    join_vals = np.asarray(join_vals)
+    join_group = np.asarray(join_group)
+
+    #print join_vals
+    #print join_group
+
+    for i in xrange(len(join_group)):
+        v = join_group[i]
+        if v == 'E-greedy':
+            join_group[i] = r'$\alpha$-greedy'
+        elif v == 'E-Nash':
+            join_group[i] = r'$\epsilon$-Nash'
+        elif v == 'Reply-score':
+            join_group[i] = 'Replay last'
+        elif v == 'Xelnaga':
+            join_group[i] = 'Single choice'
+
+    #mc = MultiComparison(np.asarray(s_values), np.asarray(s_keys))
+    #result = mc.tukeyhsd()
+
+    tukey = pairwise_tukeyhsd(endog=join_vals, groups=join_group, alpha=0.1)
+
+    # #tukey.plot_simultaneous()    # Plot group confidence intervals
+    # #plt.vlines(x=49.57,ymin=-0.5,ymax=4.5, color="red")
+
+    print tukey.summary()              # See test summary
 
 def mean_confidence_interval(data, confidence=0.95):
     a = 1.0 * np.array(data)
@@ -94,7 +151,8 @@ def get_ci(folder_path):
             strategies_mean[k].append(sum(v)/float(len(v)))
 
 
-    print 'strategies_per_strat:', strategies_per_strat
+    #print 'strategies_per_strat:', strategies_per_strat
+    anova(strategies_per_strat)
 
     strategies_mean_per_strat = {}
 
@@ -103,7 +161,7 @@ def get_ci(folder_path):
         for key2, v2 in v.items():
             strategies_mean_per_strat[key][key2] = sum(v2)/float(len(v2))
 
-    print 'strategies_mean_per_strat:', strategies_mean_per_strat
+    #print 'strategies_mean_per_strat:', strategies_mean_per_strat
 
     strategies_ci = {}
 
@@ -115,6 +173,7 @@ def get_ci(folder_path):
 
 
 def plot_ci(strategies_ci):
+
     n = []
     ci = []
 
@@ -141,8 +200,6 @@ def plot_ci(strategies_ci):
     x = np.arange(len(n))
     fig, ax = plt.subplots()
 
-    plt.grid(True)
-
     rects1 = plt.bar(x, n, color='#1D73AA', edgecolor='white', yerr=ci,
                      error_kw=dict(ecolor='crimson', lw=2, capsize=5, capthick=2))
 
@@ -153,6 +210,8 @@ def plot_ci(strategies_ci):
     plt.xticks(x, n)
     ax.set_xticklabels(s_keys, rotation=35)
     plt.subplots_adjust(bottom=0.20)
+    plt.grid(True)
+    ax.set_axisbelow(True)
 
     autolabel(ax, rects1)
 
