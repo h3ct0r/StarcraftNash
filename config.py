@@ -34,6 +34,7 @@ class Config(object):
     OUTPUT_SPREADSHEET = 'output-spreadsheet'
     OUTPUT_INTERMEDIATE = 'output-intermediate'
     VERBOSE = 'verbose'
+    PLOT = 'plot'
 
     # xml tag names
     CHOICES_FIELD = 'choices'
@@ -53,15 +54,13 @@ class Config(object):
         # dir of config file needed coz' path to server is relative
         # self.cfgdir = os.path.dirname(os.path.realpath(cfgpath))
 
-        self.verbose = False
-
         # stores values of parameters (initialized with defaults)
         self.data = {
             self.BOTS: self.default_bots,       # dict of choices (and their nash probabilities)
             self.PLAYERS: [],                   # list of players
             self.E_GREEDY_EXPLORATION: .1,
             self.E_NASH_EXPLOITATION: .1,
-            self.VERBOSE: False,
+            self.VERBOSE: True,
             self.SHUFFLE_MATCH_LIST: False,
             self.RANDOM_SEED: None,
             self.REPETITIONS: 1,
@@ -71,6 +70,7 @@ class Config(object):
             self.MATCH_POOL_FILE: 'results_demo/fortress1000.txt',
             self.OUTPUT_SPREADSHEET: None,
             self.OUTPUT_INTERMEDIATE: 'intermediate',
+            self.PLOT: False,
         }
 
         # stores type conversions for parameters
@@ -87,6 +87,7 @@ class Config(object):
             self.MATCH_POOL_FILE: str,
             self.OUTPUT_SPREADSHEET: str,
             self.OUTPUT_INTERMEDIATE: str,
+            self.PLOT: str_to_bool
         }
 
     def get_bots(self):
