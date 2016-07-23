@@ -21,7 +21,8 @@ def autolabel(ax, rects):
         ax.text(
             rect.get_x()+rect.get_width()/2.,
             height + 2,
-            '%d%%' % int(height),
+            #'%d%%' % int(height),
+            '%.1f%%' % height,
             ha='center',
             va='bottom'
         )
@@ -36,7 +37,7 @@ def anova(data_dict):
         means_per_strat[key] = []
         for key2, v2 in v.items():
             mean = sum(v2)/float(len(v2))
-            print key, key2, mean
+            #print key, key2, mean
             means_per_strat[key].append(mean)
             join_vals.append(mean)
             join_group.append(key)
@@ -69,16 +70,19 @@ def anova(data_dict):
         elif v == 'E-Nash':
             join_group[i] = r'$\epsilon$-Nash'
         elif v == 'Reply-score':
-            join_group[i] = 'Replay last'
+            join_group[i] = 'Reply-last'
         elif v == 'Xelnaga':
             join_group[i] = 'Single choice'
 
     #mc = MultiComparison(np.asarray(s_values), np.asarray(s_keys))
     #result = mc.tukeyhsd()
 
+    #print ' endog (len=%d): %s' % (len(join_vals), join_vals)
+    #print 'groups (len=%d): %s' % (len(join_group), join_group)
+
     tukey = pairwise_tukeyhsd(endog=join_vals, groups=join_group, alpha=alpha)
 
-    # #tukey.plot_simultaneous()    # Plot group confidence intervals
+    tukey.plot_simultaneous()    # Plot group confidence intervals
     # #plt.vlines(x=49.57,ymin=-0.5,ymax=4.5, color="red")
 
     print tukey.summary()              # See test summary
@@ -185,13 +189,16 @@ def plot_ci(strategies_ci):
     s_keys = list(s_keys)
 
     # Clean keys
+    # additional spaces improve alignment with its respective bar
     for i, v in enumerate(s_keys):
         if v == 'E-greedy':
-            s_keys[i] = r'$\alpha$-greedy'
+            s_keys[i] = r'        $\alpha$-greedy'
+        elif v == 'Nash':
+            s_keys[i] = '        Nash'
         elif v == 'E-Nash':
-            s_keys[i] = r'$\epsilon$-Nash'
+            s_keys[i] = r'        $\epsilon$-Nash'
         elif v == 'Reply-score':
-            s_keys[i] = 'Replay last'
+            s_keys[i] = 'Reply-last'
         elif v == 'Xelnaga':
             s_keys[i] = 'Single choice'
 
@@ -202,24 +209,28 @@ def plot_ci(strategies_ci):
     x = np.arange(len(n))
     fig, ax = plt.subplots()
 
-    rects1 = plt.bar(x, n, color='#1D73AA', edgecolor='white', yerr=ci,
-                     error_kw=dict(ecolor='crimson', lw=2, capsize=5, capthick=2))
+    #rects1 = plt.bar(x, n, color='#1D73AA', edgecolor='white', yerr=ci,
+    #                 error_kw=dict(ecolor='crimson', lw=2, capsize=5, capthick=2))
 
-    for bar in rects1:
-        bar.set_hatch('//')
+    rects1 = plt.bar(x, n, color='white', edgecolor='black', yerr=ci,
+                     error_kw=dict(ecolor='black', lw=2, capsize=5, capthick=2))
+
+    #for bar in rects1:
+    #    bar.set_hatch('//')
 
     #plt.yticks(range(0, 101, 10))
     plt.xticks(x, n)
     ax.set_xticklabels(s_keys, rotation=35)
     plt.subplots_adjust(bottom=0.20)
     #plt.grid(True)
-    plt.gca().yaxis.grid(True)
+    #plt.gca().yaxis.grid(True)
     ax.set_axisbelow(True)
 
     autolabel(ax, rects1)
 
     #plt.xlabel('Hexagon quantity')
-    plt.ylabel('Mean win percent')
+    #plt.ylabel('Mean win percent')
+    plt.ylabel('Average win percent', fontsize=16)
     #plt.title('Hexagons vs percentage of trajectory saved')
 
 
