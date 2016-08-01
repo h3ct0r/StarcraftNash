@@ -7,11 +7,22 @@ import numpy as np
 import scipy as sp
 import scipy.stats
 from scipy import stats
+import matplotlib
 import matplotlib.pyplot as plt
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 from statsmodels.stats.multicomp import MultiComparison
 
 __author__ = 'Hector Azpurua'
+
+# matplotlib.rcParams['pdf.fonttype'] = 42
+# matplotlib.rcParams['ps.fonttype'] = 42
+# matplotlib.rcParams['text.usetex'] = True
+
+plt.rcParams['text.usetex'] = True #Let TeX do the typsetting
+plt.rcParams['text.latex.preamble'] = [r'\usepackage{sansmath}', r'\sansmath'] #Force sans-serif math mode (for axes labels)
+plt.rcParams['font.family'] = 'sans-serif' # ... for regular text
+plt.rcParams['font.sans-serif'] = 'Helvetica, Avant Garde, Computer Modern Sans serif' # Choose a nice font here
+
 
 
 def autolabel(ax, rects):
@@ -22,9 +33,10 @@ def autolabel(ax, rects):
             rect.get_x()+rect.get_width()/2.,
             height + 2,
             #'%d%%' % int(height),
-            '%.1f%%' % height,
+            '%.1f%% %s' % (height, '\\%'),  # attempt to print % symbol again, failed
             ha='center',
-            va='bottom'
+            va='bottom',
+            fontsize=14
         )
 
 def anova(data_dict):
@@ -228,16 +240,21 @@ def plot_ci(strategies_ci):
 
     autolabel(ax, rects1)
 
+    # sets font size in axis' ticks
+    for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+        #label.set_fontname('Arial')
+        label.set_fontsize(16)
+
     #plt.xlabel('Hexagon quantity')
     #plt.ylabel('Mean win percent')
-    plt.ylabel('Average win percent', fontsize=16)
+    plt.ylabel('Average win percent', fontsize=18)
     #plt.title('Hexagons vs percentage of trajectory saved')
 
 
     x0, x1, y0, y1 = plt.axis()
     plt.axis((x0 - 0.2,
               x1 ,
-              y0 ,
+              20,
               y1 ))
     plt.show()
     pass
