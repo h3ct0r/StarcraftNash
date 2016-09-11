@@ -25,7 +25,7 @@ class ReplyLast(StrategyBase):
         win_count = self.calculate_score_table()
 
         # finds opponent's last choice
-        opponent_choice = self.find_opponent_choice(-1)
+        opponent_choice = self.opponent_choice(-1)
 
         # no history present or could not count victories, chooses randomly
         if opponent_choice is None:

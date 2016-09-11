@@ -6,6 +6,11 @@ __author__ = 'Hector Azpurua'
 class StrategyBase(object):
     __metaclass__ = ABCMeta
 
+    # codes for possible match results
+    DRAW = 0
+    VICTORY = 1
+    DEFEAT = 2
+
     # static list so that every strategy can use the same bots
     bot_list = ["Skynet", "Xelnaga", "NUSBot"]
 
@@ -64,11 +69,18 @@ class StrategyBase(object):
 
         return table
 
-    def find_opponent_choice(self, match_index):
+    def history_length(self):
+        """
+        Returns the number of matches played (and recorded) so far
+        :return: int
+        """
+        return len(self.match_list)
+
+    def opponent_choice(self, match_index):
         """
         Returns the name of opponent choice in the required match
         :param match_index: index (zero-based) of match,
-        can be negative: -1 for previous match, -2 for second-last and so on
+        can be negative: -1 for previous (most recent) match, -2 for second-last and so on
         :return:str
         """
         if len(self.match_list) == 0:
@@ -87,3 +99,57 @@ class StrategyBase(object):
 
         # opponent choice is B if I am A and vice-versa
         return bot_b if self.s_id == 'A' else bot_a
+
+    def my_choice(self, match_index):
+        """
+        Returns the name of my choice in the required match
+        :param match_index: index (zero-based) of match,
+        can be negative: -1 for previous (most recent) match, -2 for second-last and so on
+        :return:str
+        """
+        if len(self.match_list) == 0:
+            return None
+
+        res = self.result_list[match_index]
+
+        winner_choice, loser_choice = self.match_list[match_index]
+
+        if res.upper() == 'A':
+            bot_a = winner_choice
+            bot_b = loser_choice
+        else:
+            bot_a = loser_choice
+            bot_b = winner_choice
+
+        # opponent choice is B if I am A and vice-versa
+        return bot_a if self.s_id == 'A' else bot_b
+
+    def winner_choice(self, match_index):
+        """
+        Returns the name of the choice that won the required match
+        or None if it was a draw
+        :param match_index: index (zero-based) of match,
+        can be negative: -1 for previous (most recent) match, -2 for second-last and so on
+        :return:str
+        """
+
+        winner_choice, loser_choice = self.match_list[match_index]
+        return winner_choice
+
+    def match_result(self, match_index):
+        """
+        Returns a code for the result of the required match (DRAW, VICTORY or DEFEAT)
+        :param match_index: index (zero-based) of match,
+        can be negative: -1 for previous (most recent) match, -2 for second-last and so on
+        :return:int
+        """
+
+        if self.winner_choice(match_index) is None:
+            return self.DRAW
+
+        elif self.my_choice(match_index) == self.winner_choice(match_index):
+            return self.VICTORY
+
+        else:
+            return self.DEFEAT
+
