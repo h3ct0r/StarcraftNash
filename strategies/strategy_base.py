@@ -7,11 +7,12 @@ class StrategyBase(object):
     __metaclass__ = ABCMeta
 
     # codes for possible match results
+    DEFEAT = -1
     DRAW = 0
     VICTORY = 1
-    DEFEAT = 2
 
     # static list so that every strategy can use the same bots
+    # (the list is initialized here but can be changed at will with set_bot_list)
     bot_list = ["Skynet", "Xelnaga", "NUSBot"]
 
     def __init__(self):
