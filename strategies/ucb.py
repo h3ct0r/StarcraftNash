@@ -21,12 +21,24 @@ class UCB1(StrategyBase):
 
         StrategyBase.__init__(self)
         self.strategy_name = 'UCB1'
-        #self.explor_bias = 0.7071067811865475  # = 1 / sqrt(2)
+        self.formula = self.ucb1
 
+    def build_stats(self):
+        """
+        Creates a dict {choice: {'trials': 0, 'sum': 0, 'sum_of_squares': 0}
+        for each available choice
+        :return: dict
+        """
+        data = {choice: {'trials': 0, 'sum': 0, 'sum_of_squares': 0} for choice in self.bot_list}
 
-        #self.result_list = []
-        #self.match_list = []
-        #self.s_id = None
+        # count scores and selects greedily
+        for match in range(self.history_length()):
+            my_choice = self.my_choice(match)
+            data[my_choice]['sum'] += self.match_result(match)
+            data[my_choice]['sum_of_squares'] += self.match_result(match) ** 2
+            data[my_choice]['trials'] += 1
+
+        return data
 
     def get_next_bot(self):
         """
@@ -35,20 +47,12 @@ class UCB1(StrategyBase):
         :return: str
         """
 
-        data = {choice: {'trials': 0, 'score': 0} for choice in self.bot_list}
+        data = self.build_stats()
 
-        # count scores and selects greedily
-        for match in range(self.history_length()):
-            my_choice = self.my_choice(match)
-            data[my_choice]['score'] += self.match_result(match)
-            data[my_choice]['trials'] += 1
-
-        #print data
-        best_strategy = max(data, key=lambda x: self.ucb1(data[x]['score'], data[x]['trials']))
-        #print best_strategy, scores
+        best_strategy = max(data, key=lambda x: self.formula(data[x]))
         return best_strategy
 
-    def ucb1(self, score, num_trials):
+    def ucb1(self, choice):
         """
         Returns the Upper Confidence Bound of an option using the UCB1 formula
         UCB1 formula is: average_reward + sqrt(2 * ln(total_num_of_trials) / num_trials)
@@ -57,10 +61,10 @@ class UCB1(StrategyBase):
         :param num_trials: number of times the option was chosen
         :return:float
         """
-        if num_trials == 0:
+        if choice['trials'] == 0:
             return maxint
 
-        return float(score)/num_trials + sqrt(2*log(self.history_length()) / num_trials)
+        return float(choice['sum'])/choice['trials'] + sqrt(2*log(self.history_length()) / choice['trials'])
 
 
 class UCB1Tuned(UCB1):
@@ -78,26 +82,6 @@ class UCB1Tuned(UCB1):
         UCB1.__init__(self)
         self.strategy_name = 'UCB1-Tuned'
         self.formula = self.ucb1_tuned
-
-    def get_next_bot(self):
-        """
-        Chooses the option with highest average value + upper confidence bound of
-        estimation uncertainty
-        :return: str
-        """
-
-        data = {choice: {'trials': 0, 'sum': 0, 'sum_of_squares': 0} for choice in self.bot_list}
-
-        # count scores and selects greedily
-        for match in range(self.history_length()):
-            my_choice = self.my_choice(match)
-            data[my_choice]['sum'] += self.match_result(match)
-            data[my_choice]['sum_of_squares'] += self.match_result(match) ** 2
-            data[my_choice]['trials'] += 1
-
-        best_strategy = max(data, key=lambda x: self.ucb1_tuned(data[x]))
-        #print best_strategy, scores
-        return best_strategy
 
     def ucb1_tuned(self, choice):
         """
