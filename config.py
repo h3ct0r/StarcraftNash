@@ -15,7 +15,7 @@ class Config(object):
     """
 
     instance = None
-    default_bots = {"Skynet": .33, "Xelnaga": .33, "NUSBot": .33}
+    default_bots = {"Skynet": .33, "Xelnaga": .33, "CruzBot": .33}
 
     # parameter names (also tag names in .xml)
     BOTS = 'bots'

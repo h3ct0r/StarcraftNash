@@ -13,7 +13,7 @@ class StrategyBase(object):
 
     # static list so that every strategy can use the same bots
     # (the list is initialized here but can be changed at will with set_bot_list)
-    bot_list = ["Skynet", "Xelnaga", "NUSBot"]
+    bot_list = ["Skynet", "Xelnaga", "CruzBot"]
 
     def __init__(self):
         self.strategy_name = 'StrategyBase'
@@ -148,7 +148,10 @@ class StrategyBase(object):
         if self.winner_choice(match_index) is None:
             return self.DRAW
 
-        elif self.my_choice(match_index) == self.winner_choice(match_index):
+        #elif self.my_choice(match_index) == self.winner_choice(match_index):
+        #    return self.VICTORY
+
+        elif self.get_id() == self.result_list[match_index]:
             return self.VICTORY
 
         else:

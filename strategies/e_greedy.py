@@ -42,5 +42,7 @@ class EGreedy(StrategyBase):
             my_choice = self.my_choice(match)
             scores[my_choice] += self.match_result(match)
 
-        return max(scores, key=scores.get)
+        best_strategy = max(scores, key=scores.get)
+        #print best_strategy, scores
+        return best_strategy
 
