@@ -139,7 +139,7 @@ class StrategyBase(object):
 
     def match_result(self, match_index):
         """
-        Returns a code for the result of the required match (DRAW, VICTORY or DEFEAT)
+        Returns a code for the result of the required match: DRAW = 0, VICTORY = 1 or DEFEAT = -1
         :param match_index: index (zero-based) of match,
         can be negative: -1 for previous (most recent) match, -2 for second-last and so on
         :return:int
