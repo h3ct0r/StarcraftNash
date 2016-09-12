@@ -7,6 +7,7 @@ import e_greedy
 import e_nash
 import rotate
 import unique
+import exp3
 import ucb
 
 __author__ = 'Hector Azpurua'
@@ -25,6 +26,7 @@ class StrategySelector:
         'egreedyavg': e_greedy.EGreedyAverage,              # greedy (regarding average score) w/ prob 1-e; explores w/ prob e
         'ucb1': ucb.UCB1,                                   # uses UCB1 formula from Auer et. al. 2002
         'ucb1tuned': ucb.UCB1Tuned,                         # uses UCB1-Tuned formula from Auer et. al. 2002
+        'exp3': exp3.Exp3,                                  # uses Exp3 algorithm from Auer et. al. 1995
         'enash': e_nash.EpsilonNash,                        # nash w/ prob 1-e; frequentist w/ prob e
         'rotate': rotate.Rotate                             # selects sequentially
     }
