@@ -4,19 +4,19 @@ from config import Config
 import scorechart
 import random
 
-__author__ = 'Hector Azpurua'
+__author__ = 'Hector Azpurua'   # refactor by Anderson
 
 
 class Frequentist(StrategyBase):
     """
     Tries to beat opponent by selecting the strategy that
     counters its most frequent choice.
-    Queries a score chart to determine best response to opponent
+    Queries a previously built score chart to determine best response to opponent
     """
 
     def __init__(self):
         StrategyBase.__init__(self)
-        self.strategy_name = 'Frequentist'
+        self.strategy_name = 'Frequentist_refactor'
 
         # uses score chart to determine best response
         self.score_chart = scorechart.from_file(
@@ -29,34 +29,14 @@ class Frequentist(StrategyBase):
     def get_next_bot(self):
         """
         Returns the strategy that counters opponent's most
-        frequent choice
+        frequent choice.
+        Uses previous knowledge to find best response to opponent
         :return:
         """
         opponent_counter = {choice: 0 for choice in self.bot_list}
 
-        for i in xrange(len(self.result_list)):
-            res = self.result_list[i]
-            winner_bot, loser_bot = self.match_list[i]
-
-            is_winner = False
-            if res.upper() == self.s_id.upper():
-                is_winner = True
-
-            if res.upper() == 'A':
-                a_bot = winner_bot
-                b_bot = loser_bot
-            else:
-                a_bot = loser_bot
-                b_bot = winner_bot
-
-            if self.s_id == 'A':
-                opponent = b_bot
-                self_bot = a_bot
-            else:
-                opponent = a_bot
-                self_bot = b_bot
-
-            opponent_counter[opponent] += 1
+        for match_index in range(self.history_length()):
+            opponent_counter[self.opponent_choice(match_index)] += 1
 
         most_common_opponent = max(opponent_counter, key=opponent_counter.get)
 
