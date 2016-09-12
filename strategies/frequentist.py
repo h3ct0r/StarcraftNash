@@ -16,7 +16,7 @@ class Frequentist(StrategyBase):
 
     def __init__(self):
         StrategyBase.__init__(self)
-        self.strategy_name = 'Frequentist_refactor'
+        self.strategy_name = 'Frequentist'
 
         # uses score chart to determine best response
         self.score_chart = scorechart.from_file(
@@ -65,7 +65,7 @@ class HistoryFrequentist(Frequentist):
 
     def __init__(self):
         Frequentist.__init__(self)
-        self.strategy_name = 'Freq-hist'
+        self.strategy_name = 'HistoryFreq'
 
     def get_next_bot(self):
         """
