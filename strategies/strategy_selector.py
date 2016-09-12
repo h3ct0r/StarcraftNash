@@ -21,7 +21,8 @@ class StrategySelector:
         'freqhist': frequentist.HistoryFrequentist,         # responds to most frequent choice (uses history)
         'replyscore': reply_last.PriorKnowledgeReplyLast,   # responds to last opponent choice (uses score chart)
         'replyhist': reply_last.NoPriorReplyLast,           # responds to last opponent choice (uses history)
-        'egreedy': e_greedy.EGreedy,                        # greedy w/ prob 1-e; explores w/ prob e
+        'egreedy': e_greedy.EGreedy,                        # greedy (regarding total score) w/ prob 1-e; explores w/ prob e
+        'egreedyavg': e_greedy.EGreedyAverage,              # greedy (regarding average score) w/ prob 1-e; explores w/ prob e
         'ucb1': ucb.UCB1,                                   # uses UCB1 formula from Auer et. al. 2002
         'ucb1tuned': ucb.UCB1Tuned,                         # uses UCB1-Tuned formula from Auer et. al. 2002
         'enash': e_nash.EpsilonNash,                        # nash w/ prob 1-e; frequentist w/ prob e
