@@ -1,7 +1,6 @@
 import sys
 import nash
 import random_uniform
-import frequentist_history
 import frequentist
 import reply_history
 import reply_score
@@ -20,7 +19,7 @@ class StrategySelector:
         'nash': nash.Nash,                                  # plays nash equilibrium
         'random_uniform': random_uniform.RandomUniform,     # plays uniformly random
         'frequentist': frequentist.Frequentist,             # responds to most frequent choice (uses score chart)
-        'freqhist': frequentist_history.Frequentist,        # responds to most frequent choice (uses history)
+        'freqhist': frequentist.HistoryFrequentist,         # responds to most frequent choice (uses history)
         'winprev': win_prev.WinPrev,                        # responds to last opponent choice (uses score chart)
         'replyscore': reply_score.ReplyLast,                # same as winprev, but faster
         'replyhist': reply_history.ReplyLast,               # responds to last opponent choice (uses history)
