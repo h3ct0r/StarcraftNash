@@ -254,7 +254,8 @@ class Main:
         self.result_parser = result_parser.ResultParser(self.config.match_pool_file)
         self.strategy_selector.set_unique_choices(self.result_parser.get_unique_opponents())
 
-        if self.config.round_robin:
+        # plays round-robin if configured for that and players were not explicitly passed via command line
+        if self.config.round_robin and (self.usr_input['player_a'] is None and self.usr_input['player_b'] is None):
             players = StrategySelector.strategies.keys()  # players are the strategy (bot) selectors
 
             if self.config.get_is_config_updated():
