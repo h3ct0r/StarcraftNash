@@ -1,4 +1,5 @@
 from strategy_base import StrategyBase
+from config import Config
 from math import log, sqrt
 from sys import maxint
 
@@ -22,6 +23,9 @@ class UCB1(StrategyBase):
         StrategyBase.__init__(self)
         self.strategy_name = 'UCB1'
         self.formula = self.ucb1
+
+        # overrides bot_list with bandit choices
+        self.bot_list = Config.get_instance().get_bandit_choices()
 
     def build_stats(self):
         """

@@ -74,6 +74,9 @@ class EGreedyAverage(EGreedy):
         self.strategy_name = 'E-greedy-avg'
         self.epsilon = Config.get_instance().egreedy_exploration
 
+        # overrides bot_list with bandit choices
+        self.bot_list = Config.get_instance().get_bandit_choices()
+
     def get_next_bot(self):
         """
         Chooses a random strategy (exploration) with probability epsilon
