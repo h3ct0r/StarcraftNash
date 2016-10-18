@@ -48,14 +48,20 @@ class Exp3(StrategyBase):
         self.gamma = Config.get_instance().exp3_gamma
         self.weights = {choice: 1.0 for choice in self.bot_list}
 
+    def prepare(self):
+        """
+        Erases statistics
+        :return:
+        """
+        self.weights = {choice: 1.0 for choice in self.bot_list}
+
     def get_next_bot(self):
         """
         Selects a bot according to the Exp3 algorithm
         :return:
         """
         # updates weights with result from previous match
-        if self.my_choice(-1) is not None:  # skips on first match
-            self.update(self.my_choice(-1), self.match_result(-1))
+        self.update()
 
         # performs selection
         n_arms = len(self.weights)
@@ -69,13 +75,17 @@ class Exp3(StrategyBase):
 
         return categorical_draw(probs)
 
-    def update(self, chosen_arm, reward):
+    def update(self):
         """
         Updates the weight of the chosen arm according to the received reward
-        :param chosen_arm:
-        :param reward:
         :return:
         """
+        if self.my_choice(-1) is None:  # skips on first match
+            return
+
+        chosen_arm = self.my_choice(-1)
+        reward = self.match_result(-1)
+
         n_arms = len(self.weights)
         total_weight = sum(self.weights.values())
 

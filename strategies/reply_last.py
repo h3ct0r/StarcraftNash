@@ -49,7 +49,7 @@ class NoPriorReplyLast(StrategyBase):
 
     def get_next_bot(self):
         # usage: win_count[strategy1][strategy2]
-        win_count = self.calculate_score_table()
+        win_count = self.calculate_score_table() #TODO do this incrementally!
 
         # finds opponent's last choice
         opponent_choice = self.opponent_choice(-1)

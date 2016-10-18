@@ -30,6 +30,7 @@ class EGreedy(StrategyBase):
         by each choice
         :return:
         """
+        #TODO: do this incrementally
         scores = {choice: 0 for choice in self.bot_list}
 
         for match in range(self.history_length()):

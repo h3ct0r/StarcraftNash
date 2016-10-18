@@ -21,6 +21,13 @@ class StrategyBase(object):
         self.match_list = []
         self.s_id = None
 
+    def prepare(self):
+        """
+        Prepare data structures for a new contest against an adversary
+        :return:
+        """
+        pass
+
     def set_bot_list(self, b_list):
         self.bot_list = b_list
 
