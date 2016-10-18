@@ -55,6 +55,7 @@
     <parameters>
         <enash-exploitation value="0.4" />
         <egreedy-exploration value="0.2" />
+        <exp3-gamma value="0.2" />
         <shuffle-match-list value="true" />
         <scorechart-file value="config/scorechart_fortress.csv" />
         <output-spreadsheet value="score-chart.xls" />

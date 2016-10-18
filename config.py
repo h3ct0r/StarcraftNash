@@ -23,10 +23,10 @@ class Config(object):
     BANDIT_CHOICES = 'bandit-choices'
     PLAYERS = 'players'
     SCORECHART_FILE = 'scorechart-file'
-    # IS_TOURNAMENT = 'tournament'
 
     E_GREEDY_EXPLORATION = 'egreedy-exploration'
     E_NASH_EXPLOITATION = 'enash-exploitation'
+    EXP3_GAMMA = 'exp3-gamma'
     SHUFFLE_MATCH_LIST = 'shuffle-match-list'
     RANDOM_SEED = 'random-seed'
     REPETITIONS = 'repetitions'
@@ -63,6 +63,7 @@ class Config(object):
             self.PLAYERS: [],                               # list of players
             self.E_GREEDY_EXPLORATION: .1,
             self.E_NASH_EXPLOITATION: .1,
+            self.EXP3_GAMMA: .1,
             self.VERBOSE: True,
             self.SHUFFLE_MATCH_LIST: False,
             self.RANDOM_SEED: None,
@@ -80,6 +81,7 @@ class Config(object):
         self.parser = {
             self.E_GREEDY_EXPLORATION: float,
             self.E_NASH_EXPLOITATION: float,
+            self.EXP3_GAMMA: float,
             self.VERBOSE: str_to_bool,
             self.SHUFFLE_MATCH_LIST: str_to_bool,
             self.RANDOM_SEED: int,
@@ -142,7 +144,7 @@ class Config(object):
 
             elif element.tag == self.BANDIT_CHOICES:
                 self.data[self.BANDIT_CHOICES] = [x.get('name') for x in element]
-                print 'bandit-choices are:', self.data[self.BANDIT_CHOICES]
+                # print 'bandit-choices are:', self.data[self.BANDIT_CHOICES]
 
             elif element.tag == self.PLAYERS:
                 self.data[self.ROUND_ROBIN] = True

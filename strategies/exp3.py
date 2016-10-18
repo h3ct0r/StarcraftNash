@@ -20,6 +20,7 @@ def categorical_draw(probabilities):
         if cum_prob > z:
             return choice
 
+    print 'Warning: categorical_draw reached its end'
     return probabilities.keys()[-1]  # I think code should not reach here
 
 
@@ -44,7 +45,7 @@ class Exp3(StrategyBase):
         # overrides bot_list with bandit choices
         self.bot_list = Config.get_instance().get_bandit_choices()
 
-        self.gamma = 0.1
+        self.gamma = Config.get_instance().exp3_gamma
         self.weights = {choice: 1.0 for choice in self.bot_list}
 
     def get_next_bot(self):
