@@ -35,11 +35,15 @@ class Exp3(StrategyBase):
 
     def __init__(self):
         """
-        Initializes strategy selection method
+        Initializes Exp3
         """
 
         StrategyBase.__init__(self)
         self.strategy_name = 'Exp3'
+
+        # overrides bot_list with bandit choices
+        self.bot_list = Config.get_instance().get_bandit_choices()
+
         self.gamma = 0.1
         self.weights = {choice: 1.0 for choice in self.bot_list}
 
