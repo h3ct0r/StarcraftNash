@@ -9,6 +9,7 @@ import rotate
 import unique
 import exp3
 import ucb
+import fictitious_play
 
 __author__ = 'Hector Azpurua'
 
@@ -28,7 +29,8 @@ class StrategySelector:
         'ucb1tuned': ucb.UCB1Tuned,                         # uses UCB1-Tuned formula from Auer et. al. 2002
         'exp3': exp3.Exp3,                                  # uses Exp3 algorithm from Auer et. al. 1995
         'enash': e_nash.EpsilonNash,                        # nash w/ prob 1-e; frequentist w/ prob e
-        'rotate': rotate.Rotate                             # selects sequentially
+        'rotate': rotate.Rotate,                            # selects sequentially
+        'fictitious': fictitious_play.FictitiousPlay        # fictitious play
     }
 
     def __init__(self):
