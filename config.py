@@ -13,7 +13,7 @@ def str_to_bool(element):
     return element.get('value').lower() == 'true'
 
 
-def fictitious_options_parser(element):
+def options_parser(element):
     ops = {x.get('name'): float(x.get('value')) for x in element}
     return ops
 
@@ -32,9 +32,9 @@ class Config(object):
     BANDIT_CHOICES = 'bandit-choices'
     PLAYERS = 'players'
     SCORECHART_FILE = 'scorechart-file'
-
     FICTITIOUS_INITIAL_WEIGHTS = 'fictitious-initial-weights'
     FICTITIOUS_RUNNING_WEIGHTS = 'fictitious-running-weights'
+    INITIAL_REGRETS = 'noregret-initial-regrets',
     E_GREEDY_EXPLORATION = 'egreedy-exploration'
     E_NASH_EXPLOITATION = 'enash-exploitation'
     EXP3_GAMMA = 'exp3-gamma'
@@ -74,6 +74,7 @@ class Config(object):
             self.PLAYERS: [],                               # list of players
             self.FICTITIOUS_INITIAL_WEIGHTS: {bot: 1.0 / len(self.default_bots) for bot in self.default_bots},
             self.FICTITIOUS_RUNNING_WEIGHTS: {bot: 1.0 for bot in self.default_bots},
+            self.INITIAL_REGRETS: {bot: 1.0 for bot in self.default_bots},
             self.E_GREEDY_EXPLORATION: .1,
             self.E_NASH_EXPLOITATION: .1,
             self.EXP3_GAMMA: .1,
@@ -92,8 +93,9 @@ class Config(object):
 
         # stores type conversions for parameters
         self.parser = {
-            self.FICTITIOUS_INITIAL_WEIGHTS: fictitious_options_parser,
-            self.FICTITIOUS_RUNNING_WEIGHTS: fictitious_options_parser,
+            self.FICTITIOUS_INITIAL_WEIGHTS: options_parser,
+            self.FICTITIOUS_RUNNING_WEIGHTS: options_parser,
+            self.INITIAL_REGRETS: options_parser,
             self.E_GREEDY_EXPLORATION: default_parser(float),
             self.E_NASH_EXPLOITATION: default_parser(float),
             self.EXP3_GAMMA: default_parser(float),
