@@ -43,6 +43,10 @@ class Main:
 
         for rep in xrange(self.config.repetitions):
             print 'Repetition', rep + 1, 'of', self.config.repetitions, '...'
+
+            # recreate objects of the strategies to make the repetitions independent
+            self.recreate_strategies()
+
             # shuffles match list if required
             if self.config.shuffle_match_list == True:
                 print 'Shuffling match list...'
@@ -95,6 +99,14 @@ class Main:
 
         if self.config.output_spreadsheet is not None:
             self.generate_excel_results()
+
+    def recreate_strategies(self):
+        for i, match in enumerate(self.game_matches):
+            aa, bb = match
+
+            new_aa = StrategySelector.recreate_strategy(aa)
+            new_bb = StrategySelector.recreate_strategy(bb)
+            self.game_matches[i] = (new_aa, new_bb)
 
     @staticmethod
     def output_csv_results(output, win_list):

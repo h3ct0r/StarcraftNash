@@ -60,3 +60,15 @@ class StrategySelector:
             return None
 
         return self.strategies[strategy]()
+
+    @staticmethod
+    def recreate_strategy(s):
+        s_type = type(s)
+        if s_type == unique.Unique:
+            new_s = unique.Unique(s.strategy_name)
+        else:
+            new_s = s_type()
+
+        new_s.set_id(s.get_id())
+
+        return new_s
