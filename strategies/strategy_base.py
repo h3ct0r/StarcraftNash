@@ -164,3 +164,5 @@ class StrategyBase(object):
         else:
             return self.DEFEAT
 
+    def __str__(self):
+        return self.get_name()

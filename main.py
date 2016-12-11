@@ -48,9 +48,15 @@ class Main:
             self.recreate_strategies()
 
             # shuffles match list if required
-            if self.config.shuffle_match_list == True:
+            if self.config.shuffle_match_list:
                 print 'Shuffling match list...'
                 random.shuffle(self.bot_match_list)
+
+            out_choices_file_name = None
+            if self.config.output_match_choices is not None:
+                out_choices_file_name = self.config.output_match_choices.replace('#', str(rep))
+                if os.path.exists(out_choices_file_name):
+                    raise Exception(out_choices_file_name + ' already exists')
 
             single_result_dict = {}  # stores players' percent of victories
             for i in xrange(len(self.game_matches)):
@@ -59,7 +65,12 @@ class Main:
                 self.match_index = 0
                 self.match_history = []
                 self.res_history = []
+
                 self.run(player_a, player_b)
+
+                if self.config.output_match_choices is not None:
+                    self.output_match_result(out_choices_file_name, player_a, player_b,
+                                             self.match_history, self.res_history)
 
                 a_win_percentage = (self.res_history.count('A') * 100) / float(len(self.res_history))
                 b_win_percentage = (self.res_history.count('B') * 100) / float(len(self.res_history))
@@ -107,6 +118,74 @@ class Main:
             new_aa = StrategySelector.recreate_strategy(aa)
             new_bb = StrategySelector.recreate_strategy(bb)
             self.game_matches[i] = (new_aa, new_bb)
+
+    @staticmethod
+    def output_match_result(out_file, player_a, player_b, match_hist, winner_hist):
+        """
+        Writes the history of choices made by the players
+        :param out_file:
+        :param player_a:
+        :param player_b:
+        :param match_hist:
+        :param winner_hist:
+        """
+        out_dir = os.path.dirname(out_file)
+        if not os.path.exists(out_dir):
+            os.makedirs(out_dir)
+
+        count_a_choices = {}
+        count_b_choices = {}
+        possible_choices = set()
+
+        with open(out_file, 'a') as f:
+            f.write('player_A,player_B,choice_A,choice_B,winner\n')
+            for (choice_w, choice_l), winner in itertools.izip(match_hist, winner_hist):
+                if winner == 'A':
+                    choice_a = choice_w
+                    choice_b = choice_l
+                else:
+                    choice_a = choice_l
+                    choice_b = choice_w
+                f.write(str(player_a) + ',' +
+                        str(player_b) + ',' +
+                        str(choice_a) + ',' +
+                        str(choice_b) + ',' +
+                        str(winner) + '\n')
+
+                if choice_a not in count_a_choices:
+                    count_a_choices[choice_a] = 0
+                    possible_choices.add(choice_a)
+                count_a_choices[choice_a] += 1
+                if choice_b not in count_b_choices:
+                    count_b_choices[choice_b] = 0
+                    possible_choices.add(choice_b)
+                count_b_choices[choice_b] += 1
+
+            n_choices = len(match_hist)
+            ordered_possible_choices = list(possible_choices)
+
+            f.write('\nplayer')
+            for choice in ordered_possible_choices:
+                f.write(',' + str(choice))
+            f.write('\n')
+            f.write(str(player_a))
+            for choice in ordered_possible_choices:
+                try:
+                    percent_choice = float(count_a_choices[choice]) / float(n_choices) * 100
+                    f.write(',' + str(percent_choice) + '%')
+                except KeyError:
+                    f.write(',0%')
+            f.write('\n')
+            f.write(str(player_b))
+            for choice in ordered_possible_choices:
+                try:
+                    percent_choice = float(count_b_choices[choice]) / float(n_choices) * 100
+                    f.write(',' + str(percent_choice) + '%')
+                except KeyError:
+                    f.write(',0%')
+            f.write('\n')
+
+            f.write('\n\n')
 
     @staticmethod
     def output_csv_results(output, win_list):
@@ -378,7 +457,8 @@ class Main:
 
         :param bot_a:
         :param bot_b:
-        :return:
+        :return: a tuple of two bots with the first bot being the winner
+        (and, consequently, the second being the looser)
         """
         match = None
         if self.match_index >= len(self.bot_match_list) - 1:

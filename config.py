@@ -45,6 +45,7 @@ class Config(object):
     MATCH_POOL_FILE = 'match-pool-file'
     ROUND_ROBIN = 'round-robin'
     OUTPUT_SPREADSHEET = 'output-spreadsheet'
+    OUTPUT_MATCH_CHOICES = 'output-match-choices'
     OUTPUT_INTERMEDIATE = 'output-intermediate'
     VERBOSE = 'verbose'
     PLOT = 'plot'
@@ -87,6 +88,7 @@ class Config(object):
             self.SCORECHART_FILE: 'config/scorechart_fortress.csv',
             self.MATCH_POOL_FILE: 'results_demo/fortress1000.txt',
             self.OUTPUT_SPREADSHEET: None,
+            self.OUTPUT_MATCH_CHOICES: None,
             self.OUTPUT_INTERMEDIATE: 'intermediate',
             self.PLOT: False,
         }
@@ -108,6 +110,7 @@ class Config(object):
             self.SCORECHART_FILE: default_parser(str),
             self.MATCH_POOL_FILE: default_parser(str),
             self.OUTPUT_SPREADSHEET: default_parser(str),
+            self.OUTPUT_MATCH_CHOICES: default_parser(str),
             self.OUTPUT_INTERMEDIATE: default_parser(str),
             self.PLOT: str_to_bool
         }

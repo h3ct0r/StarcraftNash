@@ -31,7 +31,8 @@
         <player name="egreedy" />
         <player name="Xelnaga" />
         <player name="fictitious" />
-        <player name="noregret" />
+        <!--player name="noregret" /-->
+        <!-- player type="agent" name="Agent 1" config="configs/Agent_1.xml" -->
         <!--
         <player name="Aiur" />
         <player name="Skynet" />
@@ -52,6 +53,7 @@
         <shuffle-match-list value="true" />
         <scorechart-file value="config/scorechart_fortress.csv" />
         <output-spreadsheet value="score-chart.xls" />
+        <output-match-choices value="choices/match-choices-rep_#.csv" />
         <output-intermediate value="intermediate" />
         <random-seed value="1" />
         <repetitions value="30" />
