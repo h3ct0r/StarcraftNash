@@ -7,11 +7,15 @@ __author__ = 'Daniel Kneipp'
 
 class FictitiousPlay(StrategyBase):
 
-    def __init__(self):
-        super(FictitiousPlay, self).__init__()
-        self.strategy_name = 'Fictitious play'
+    def __init__(self, strategy_name, config_name):
+        super(FictitiousPlay, self).__init__(strategy_name)
 
         config = Config.get_instance()
+
+        if config_name is None:
+            raise Exception('Fictitious Play must have a configuration specified at the initialization time')
+
+        self.set_config_name(config_name)
 
         # read score chart from a file
         self.score_chart = scorechart.from_file(
@@ -19,8 +23,8 @@ class FictitiousPlay(StrategyBase):
         )
 
         # get weights
-        self.initial_weights = config.get(Config.FICTITIOUS_INITIAL_WEIGHTS)
-        self.running_weights = config.get(Config.FICTITIOUS_RUNNING_WEIGHTS)
+        self.initial_weights = config.get(self.config_name)[Config.FICTITIOUS_INITIAL_WEIGHTS]
+        self.running_weights = config.get(self.config_name)[Config.FICTITIOUS_RUNNING_WEIGHTS]
 
         # set counters
         # Note: self.bot_list can't be used here because it isn't initialized from the config file yet

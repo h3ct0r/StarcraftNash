@@ -24,14 +24,15 @@
     </choices>
 
     <players>
-        <player name="nash" />
-        <player name="enash" />
-        <player name="frequentist" />
-        <player name="replyscore" />
-        <player name="egreedy" />
-        <player name="Xelnaga" />
-        <player name="fictitious" />
-        <!--player name="noregret" /-->
+        <player type="nash" name="Nash"/>
+        <player type="enash" name="e-Nash" />
+        <player type="frequentist" name="Frequentist" />
+        <player type="replyscore" name="Reply Last" />
+        <player type="egreedy" name="e-Greedy" />
+        <player type='unique' name="Xelnaga" />
+        <player type="fictitious" name="Fictitious 1" config="fictitious_1"/>
+        <player type="fictitious" name="Fictitious 2" config="fictitious_2"/>
+        <player type="noregret" name="No Regret"/>
         <!-- player type="agent" name="Agent 1" config="configs/Agent_1.xml" -->
         <!--
         <player name="Aiur" />
@@ -46,6 +47,40 @@
         <player name="NUSBot" />
         -->
     </players>
+
+    <fictitious_1>
+        <fictitious-initial-weights parser="options_parser">
+            <choice name="Xelnaga" value=".41975" />
+            <choice name="CruzBot" value=".28395" />
+            <choice name="NUSBot" value="0" />
+            <choice name="Aiur" value="0" />
+            <choice name="Skynet" value=".2936" />
+        </fictitious-initial-weights>
+        <fictitious-running-weights parser="options_parser">
+           <choice name="Xelnaga" value="1" />
+            <choice name="CruzBot" value="1" />
+            <choice name="NUSBot" value="1" />
+            <choice name="Aiur" value="1" />
+            <choice name="Skynet" value="1" />
+        </fictitious-running-weights>
+    </fictitious_1>
+
+    <fictitious_2>
+        <fictitious-initial-weights parser="options_parser">
+            <choice name="Xelnaga" value="1" />
+            <choice name="CruzBot" value="1" />
+            <choice name="NUSBot" value="1" />
+            <choice name="Aiur" value="1" />
+            <choice name="Skynet" value="1" />
+        </fictitious-initial-weights>
+        <fictitious-running-weights parser="options_parser">
+           <choice name="Xelnaga" value="1" />
+            <choice name="CruzBot" value="1" />
+            <choice name="NUSBot" value="1" />
+            <choice name="Aiur" value="1" />
+            <choice name="Skynet" value="1" />
+        </fictitious-running-weights>
+    </fictitious_2>
 
     <parameters>
         <enash-exploitation value="0.4" />
@@ -62,19 +97,5 @@
         <round-robin value="true" />
         <verbose value="true" />
         <plot value="false" />
-        <fictitious-initial-weights>
-            <choice name="Xelnaga" value=".41975" />
-            <choice name="CruzBot" value=".28395" />
-            <choice name="NUSBot" value="0" />
-            <choice name="Aiur" value="0" />
-            <choice name="Skynet" value=".2936" />
-        </fictitious-initial-weights>
-        <fictitious-running-weights>
-           <choice name="Xelnaga" value="1" />
-            <choice name="CruzBot" value="1" />
-            <choice name="NUSBot" value="1" />
-            <choice name="Aiur" value="1" />
-            <choice name="Skynet" value="1" />
-        </fictitious-running-weights>
     </parameters>
 </config>

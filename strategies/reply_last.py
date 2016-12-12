@@ -12,9 +12,8 @@ class PriorKnowledgeReplyLast(StrategyBase):
     previously computed
     """
 
-    def __init__(self):
-        StrategyBase.__init__(self)
-        self.strategy_name = 'Reply-prior'
+    def __init__(self, strategy_name):
+        StrategyBase.__init__(self, strategy_name)
 
         # loads score chart from file
         self.score_chart = scorechart.from_file(
@@ -39,9 +38,8 @@ class NoPriorReplyLast(StrategyBase):
     Selects the bot that won most matches against last opponent choice
     """
 
-    def __init__(self):
-        StrategyBase.__init__(self)
-        self.strategy_name = 'Reply-hist'
+    def __init__(self, strategy_name):
+        StrategyBase.__init__(self, strategy_name)
         self.result_list = []
         self.match_list = []
         self.s_id = None

@@ -16,13 +16,12 @@ class UCB1(StrategyBase):
     Multiarmed Bandit Problem. Machine Learning (2002).
     """
 
-    def __init__(self):
+    def __init__(self, strategy_name):
         """
         Initializes UCB1 strategy selection method
         """
 
-        StrategyBase.__init__(self)
-        self.strategy_name = 'UCB1'
+        StrategyBase.__init__(self, strategy_name)
         self.formula = self.ucb1
 
         # overrides bot_list with bandit choices
@@ -97,13 +96,12 @@ class UCB1Tuned(UCB1):
     Multiarmed Bandit Problem. Machine Learning (2002).
     """
 
-    def __init__(self):
+    def __init__(self, strategy_name):
         """
         Initializes UCB1 strategy selection method
         """
 
-        UCB1.__init__(self)
-        self.strategy_name = 'UCB1-Tuned'
+        UCB1.__init__(self, strategy_name)
         self.formula = self.ucb1_tuned
 
     def ucb1_tuned(self, choice):

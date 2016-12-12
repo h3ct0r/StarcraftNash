@@ -1,8 +1,20 @@
 import os
 import xml.etree.ElementTree as ET
 import math
+import sys
 
 __author__ = 'Anderson Tavares'
+
+
+class PlayerSpec(object):
+
+    def __init__(self, p_type, p_name):
+        self.player_type = p_type
+        self.player_name = p_name
+        self.config_tag_name = None
+
+    def __str__(self):
+        return str(self.player_name) + ' (' + str(self.player_type) + ')'
 
 
 def default_parser(type_parser):
@@ -16,6 +28,11 @@ def str_to_bool(element):
 def options_parser(element):
     ops = {x.get('name'): float(x.get('value')) for x in element}
     return ops
+
+element_parsers = {
+    'str_to_bool': str_to_bool,
+    'options_parser': options_parser
+}
 
 
 class Config(object):
@@ -168,7 +185,9 @@ class Config(object):
 
             elif element.tag == self.PLAYERS:
                 self.data[self.ROUND_ROBIN] = True
-                self.data[self.PLAYERS] = [x.get('name') for x in element]
+                self.data[self.PLAYERS] = []
+                for player in element:
+                    self.read_config_player(player, cfgtree.getroot())
 
             elif element.tag == self.PARAMETERS_FIELD:
                 for param in element:
@@ -177,10 +196,34 @@ class Config(object):
             # default is to assign 'value' (using the default_parser)
             # attribute to data indexed by tag
             else:
-                self.data[element.tag] = self.parser[element.tag](element)
+                try:
+                    self.data[element.tag] = self.parser[element.tag](element)
+                except KeyError:
+                    print >> sys.stderr, 'Parser for the tag ' + element.tag + ' not found'
 
         #if self.bots != self.default_bots:
         #    self.is_config_updated = True
 
         #print 'Bot definition updated by config file:', self.bots
+
+    def read_config_player(self, player_element, root_element):
+        p_spec = PlayerSpec(player_element.get('type'), player_element.get('name'))
+        if 'config' in player_element.attrib:
+            p_spec.config_tag_name = player_element.get('config')
+            p_conf_element = root_element.find(p_spec.config_tag_name)
+            if p_conf_element is None:
+                raise Exception('The configuration tag (' + p_spec.config_tag_name + ') of ' +
+                                p_spec.player_name + 'couldn\'t be found')
+            elif p_spec.config_tag_name in self.data:
+                raise Exception('The attribute ' + p_spec.config_tag_name + ' already exists in the ' +
+                                'configuration data. ' + 'Please, try another name')
+            else:
+                self.data[p_spec.config_tag_name] = {}
+                for e_attr in p_conf_element:
+                    attr_name = e_attr.tag
+                    attr_parser = e_attr.get('parser')
+                    parsed_element = element_parsers[attr_parser](e_attr)
+                    self.data[p_spec.config_tag_name][attr_name] = parsed_element
+
+        self.data[self.PLAYERS].append(p_spec)
 

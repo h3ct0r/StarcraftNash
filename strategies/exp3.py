@@ -34,13 +34,12 @@ class Exp3(StrategyBase):
     https://github.com/johnmyleswhite/BanditsBook/blob/master/python/algorithms/exp3/exp3.py
     """
 
-    def __init__(self):
+    def __init__(self, strategy_name):
         """
         Initializes Exp3
         """
 
-        StrategyBase.__init__(self)
-        self.strategy_name = 'Exp3'
+        StrategyBase.__init__(self, strategy_name)
 
         # overrides bot_list with bandit choices
         self.bot_list = Config.get_instance().get_bandit_choices()

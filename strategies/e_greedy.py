@@ -12,13 +12,12 @@ class EGreedy(StrategyBase):
     and chooses the best known strategy with probability 1-epsilon
     """
 
-    def __init__(self):
+    def __init__(self, strategy_name):
         """
         Initializes epsilon-greedy strategy selection method
         """
 
-        StrategyBase.__init__(self)
-        self.strategy_name = 'E-greedy'
+        StrategyBase.__init__(self, strategy_name)
         self.result_list = []
         self.match_list = []
         self.s_id = None

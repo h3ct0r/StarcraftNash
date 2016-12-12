@@ -8,9 +8,8 @@ class Rotate(StrategyBase):
     Selects the next bot in the list each time
     """
 
-    def __init__(self):
-        StrategyBase.__init__(self)
-        self.strategy_name = 'Rotate'
+    def __init__(self, strategy_name):
+        StrategyBase.__init__(self, strategy_name)
         # self.result_list = []
         # self.match_list = []
         # self.s_id = None

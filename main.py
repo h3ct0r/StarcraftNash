@@ -360,7 +360,7 @@ class Main:
 
             players = list(set(players))
 
-            print 'Tournament participants: %s' % ', '.join(players)
+            print 'Tournament participants: %s' % ', '.join(str(p) for p in players)
 
             matches = list(itertools.combinations(players, 2))  # generates match list given the list of players
             for match in matches:
