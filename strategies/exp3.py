@@ -45,15 +45,25 @@ class Exp3(StrategyBase):
         self.bot_list = Config.get_instance().get_bandit_choices()
 
         self.gamma = Config.get_instance().exp3_gamma
-        self.weights = {choice: 1.0 for choice in self.bot_list}
+        self.alpha = 1
+        #self.weights = {choice: 1.0 for choice in self.bot_list}
+        self.weights = {choice: 0.0 for choice in self.bot_list}
 
     def prepare(self):
         """
         Erases statistics
         :return:
         """
-        self.weights = {choice: 1.0 for choice in self.bot_list}
+        #self.weights = {choice: 1.0 for choice in self.bot_list}
+        self.weights = {choice: 0.0 for choice in self.bot_list}
 
+    def prob_factor(self, weight):
+        """
+        Uses the probability factor formula of Exp3
+        :param weight:
+        :return:
+        """
+        return (1 + self.alpha) ** weight
     def get_next_bot(self):
         """
         Selects a bot according to the Exp3 algorithm
@@ -64,13 +74,19 @@ class Exp3(StrategyBase):
 
         # performs selection
         n_arms = len(self.weights)
-        total_weight = sum(self.weights.values())
+        #total_weight = sum(self.weights.values())
+        total_prob_factor = sum(self.prob_factor(w) for w in self.weights.values())
 
         probs = {choice: 0.0 for choice in self.bot_list}
 
         for arm in self.bot_list:
-            probs[arm] = (1 - self.gamma) * (self.weights[arm] / total_weight)
-            probs[arm] += self.gamma * (1.0 / float(n_arms))
+            #probs[arm] = (1 - self.gamma) * (self.weights[arm] / total_weight)
+            #probs[arm] += self.gamma * (1.0 / float(n_arms))
+            pre_prob = self.prob_factor(self.weights[arm]) / total_prob_factor
+
+            # mixes pre_prob with an uniform distribution
+            # gamma is the 'fraction' of uniform that gets mixed in
+            probs[arm] = (1 - self.gamma) * pre_prob + self.gamma / float(n_arms)
 
         return categorical_draw(probs)
 
@@ -86,21 +102,23 @@ class Exp3(StrategyBase):
         reward = self.match_result(-1)
 
         n_arms = len(self.weights)
-        total_weight = sum(self.weights.values())
+        #total_weight = sum(self.weights.values())
+        total_prob_factor = sum(self.prob_factor(w) for w in self.weights.values())
 
-        #probs = {choice: 0.0 for choice in self.bot_list}
+        # rescales reward to [0,1], the original is either -1 or 1
+        scaled_rwd = (reward + 1) / 2
 
-        #for arm in self.bot_list:
-        #    probs[arm] = (1 - self.gamma) * (self.weights[arm] / total_weight)
-        #    probs[arm] += self.gamma * (1.0 / float(n_arms))
+        pre_prob = self.prob_factor(self.weights[chosen_arm]) / total_prob_factor
 
-        prob_of_chosen_arm = (1 - self.gamma) * (self.weights[chosen_arm] / total_weight) \
-                             + self.gamma * (1.0 / float(n_arms))
+        prob_of_chosen_arm = (1 - self.gamma) * pre_prob + self.gamma / n_arms
+        #prob_of_chosen_arm = (1 - self.gamma) * (self.weights[chosen_arm] / total_weight) \
+        #                     + self.gamma * (1.0 / float(n_arms))
 
-        x = reward / prob_of_chosen_arm  # probs[chosen_arm]
+        #x = reward / prob_of_chosen_arm  # probs[chosen_arm]
+        mixed_rwd = (self.gamma / n_arms) * (reward / prob_of_chosen_arm)   # probs[chosen_arm]
 
-        growth_factor = math.exp((self.gamma / n_arms) * x)
-
-        self.weights[chosen_arm] *= growth_factor
+        #growth_factor = math.exp((self.gamma / n_arms) * x)
+        #self.weights[chosen_arm] *= growth_factor
+        self.weights[chosen_arm] += mixed_rwd
 
 
