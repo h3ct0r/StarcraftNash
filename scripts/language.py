@@ -27,9 +27,9 @@ portuguese = {
     ENASH: r'$\varepsilon$-Nash',
     FREQUENTIST: 'Frequentista',
     NASH: 'Nash',
-    REPLY_SCORE: 'Rebater ultima', #.decode('utf-8'),
-    XELNAGA: 'Escolha unica', #.decode('utf-8'),
-    MEAN_WIN_PERCENT: 'Percentual medio de vitorias', #.decode('utf-8'),
+    REPLY_SCORE: r'Rebater \'ultima', #.decode('utf-8'),
+    XELNAGA: r'Escolha \'unica', #.decode('utf-8'),
+    MEAN_WIN_PERCENT: r'Percentual m\'edio de vit\'orias', #2.decode('utf-8'),
 }
 
 def get_vocabulary(language='en'):

@@ -246,7 +246,7 @@ def plot_ci(strategies_ci, language='en'):
 
     #plt.xlabel('Hexagon quantity')
     #plt.ylabel('Mean win percent')
-    plt.ylabel('Average win percent', fontsize=18)
+    plt.ylabel(words[lang.MEAN_WIN_PERCENT], fontsize=18)
     #plt.title('Hexagons vs percentage of trajectory saved')
 
 
