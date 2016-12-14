@@ -306,6 +306,8 @@ class Main:
         :param player_b:
         :return:
         """
+        player_a.prepare()
+        player_b.prepare()
 
         for i in xrange(self.config.num_matches):
             player_a.set_result_list(self.res_history)

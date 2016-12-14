@@ -16,15 +16,17 @@ class Config(object):
 
     instance = None
     default_bots = {"Skynet": .33, "Xelnaga": .33, "CruzBot": .33}
+    bandit_choices = []
 
     # parameter names (also tag names in .xml)
     BOTS = 'bots'
+    BANDIT_CHOICES = 'bandit-choices'
     PLAYERS = 'players'
     SCORECHART_FILE = 'scorechart-file'
-    # IS_TOURNAMENT = 'tournament'
 
     E_GREEDY_EXPLORATION = 'egreedy-exploration'
     E_NASH_EXPLOITATION = 'enash-exploitation'
+    EXP3_GAMMA = 'exp3-gamma'
     SHUFFLE_MATCH_LIST = 'shuffle-match-list'
     RANDOM_SEED = 'random-seed'
     REPETITIONS = 'repetitions'
@@ -56,10 +58,12 @@ class Config(object):
 
         # stores values of parameters (initialized with defaults)
         self.data = {
-            self.BOTS: self.default_bots,       # dict of choices (and their nash probabilities)
-            self.PLAYERS: [],                   # list of players
+            self.BOTS: self.default_bots,                   # dict of choices (and their nash probabilities)
+            self.BANDIT_CHOICES: self.default_bots.keys(),  # list of choices for bandit-based methods
+            self.PLAYERS: [],                               # list of players
             self.E_GREEDY_EXPLORATION: .1,
             self.E_NASH_EXPLOITATION: .1,
+            self.EXP3_GAMMA: .1,
             self.VERBOSE: True,
             self.SHUFFLE_MATCH_LIST: False,
             self.RANDOM_SEED: None,
@@ -77,6 +81,7 @@ class Config(object):
         self.parser = {
             self.E_GREEDY_EXPLORATION: float,
             self.E_NASH_EXPLOITATION: float,
+            self.EXP3_GAMMA: float,
             self.VERBOSE: str_to_bool,
             self.SHUFFLE_MATCH_LIST: str_to_bool,
             self.RANDOM_SEED: int,
@@ -91,7 +96,18 @@ class Config(object):
         }
 
     def get_bots(self):
+        """
+        Return all available choices
+        :return:
+        """
         return self.data[self.BOTS]
+
+    def get_bandit_choices(self):
+        """
+        Returns the available choices for multi-armed bandit methods
+        :return:
+        """
+        return self.data[self.BANDIT_CHOICES]
 
     def __getitem__(self, item):
         return self.get(item)
@@ -124,6 +140,11 @@ class Config(object):
         for element in cfgtree.getroot():
             if element.tag == self.CHOICES_FIELD:
                 self.data[self.BOTS] = {x.get('name'): float(x.get('nashprob')) for x in element}
+                self.data[self.BANDIT_CHOICES] = self.data[self.BOTS].keys()
+
+            elif element.tag == self.BANDIT_CHOICES:
+                self.data[self.BANDIT_CHOICES] = [x.get('name') for x in element]
+                # print 'bandit-choices are:', self.data[self.BANDIT_CHOICES]
 
             elif element.tag == self.PLAYERS:
                 self.data[self.ROUND_ROBIN] = True

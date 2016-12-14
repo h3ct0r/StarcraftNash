@@ -30,6 +30,7 @@ class EGreedy(StrategyBase):
         by each choice
         :return:
         """
+        #TODO: do this incrementally
         scores = {choice: 0 for choice in self.bot_list}
 
         for match in range(self.history_length()):
@@ -73,6 +74,9 @@ class EGreedyAverage(EGreedy):
         EGreedy.__init__(self)
         self.strategy_name = 'E-greedy-avg'
         self.epsilon = Config.get_instance().egreedy_exploration
+
+        # overrides bot_list with bandit choices
+        self.bot_list = Config.get_instance().get_bandit_choices()
 
     def get_next_bot(self):
         """

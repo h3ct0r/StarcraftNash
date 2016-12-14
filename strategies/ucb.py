@@ -1,6 +1,8 @@
 from strategy_base import StrategyBase
+from config import Config
 from math import log, sqrt
 from sys import maxint
+from sys import stdout
 
 __author__ = 'Anderson'
 
@@ -23,12 +25,29 @@ class UCB1(StrategyBase):
         self.strategy_name = 'UCB1'
         self.formula = self.ucb1
 
-    def build_stats(self):
+        # overrides bot_list with bandit choices
+        self.bot_list = Config.get_instance().get_bandit_choices()
+
+        self.data = {choice: {'trials': 0, 'sum': 0, 'sum_of_squares': 0} for choice in self.bot_list}
+
+    def prepare(self):
         """
-        Creates a dict {choice: {'trials': 0, 'sum': 0, 'sum_of_squares': 0}
-        for each available choice
+        Erases statistics
+        :return:
+        """
+        self.data = {choice: {'trials': 0, 'sum': 0, 'sum_of_squares': 0} for choice in self.bot_list}
+
+    def update(self):
+        """
+        Updates statistics based on previous match result
         :return: dict
         """
+        '''if self.my_choice(-1) is not None:  # skips in 1st match
+            my_choice = self.my_choice(-1)
+            self.data[my_choice]['sum'] += self.match_result(-1)
+            self.data[my_choice]['sum_of_squares'] += self.match_result(-1) ** 2
+            self.data[my_choice]['trials'] += 1'''
+
         data = {choice: {'trials': 0, 'sum': 0, 'sum_of_squares': 0} for choice in self.bot_list}
 
         # count scores and selects greedily
@@ -47,7 +66,9 @@ class UCB1(StrategyBase):
         :return: str
         """
 
-        data = self.build_stats()
+        data = self.update()  # TODO: do this incrementally
+
+        #self.update()  # updates stats from last match result
 
         best_strategy = max(data, key=lambda x: self.formula(data[x]))
         return best_strategy
@@ -63,6 +84,8 @@ class UCB1(StrategyBase):
         """
         if choice['trials'] == 0:
             return maxint
+
+        stdout.write('\rhistory: %d, trials: %d    ' % (self.history_length(), choice['trials']))
 
         return float(choice['sum'])/choice['trials'] + sqrt(2*log(self.history_length()) / choice['trials'])
 
