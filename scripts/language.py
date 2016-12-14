@@ -1,9 +1,13 @@
+# This Python file uses the following encoding: utf-8
+
 """
 Defines languages and vocabulary
 """
 #class vocabulary:
 EGREEDY = 'E-greedy'
 ENASH = 'E-Nash'
+NASH = 'Nash'
+FREQUENTIST = 'Frequentist'
 REPLY_SCORE = 'Reply-score'
 XELNAGA = 'Xelnaga'
 MEAN_WIN_PERCENT = 'mean_win_percent'
@@ -11,6 +15,8 @@ MEAN_WIN_PERCENT = 'mean_win_percent'
 english = {
     EGREEDY: r'$\epsilon$-greedy',
     ENASH: r'$\varepsilon$-Nash',
+    FREQUENTIST: 'Frequentist',
+    NASH: 'Nash',
     REPLY_SCORE: 'Reply last',
     XELNAGA: 'Single choice',
     MEAN_WIN_PERCENT: 'Mean win percent'
@@ -19,9 +25,11 @@ english = {
 portuguese = {
     EGREEDY: r'$\epsilon$-guloso',
     ENASH: r'$\varepsilon$-Nash',
-    REPLY_SCORE: 'Rebater última',
-    XELNAGA: 'Escolha única',
-    MEAN_WIN_PERCENT: 'Percentual médio de vitórias'
+    FREQUENTIST: 'Frequentista',
+    NASH: 'Nash',
+    REPLY_SCORE: 'Rebater ultima', #.decode('utf-8'),
+    XELNAGA: 'Escolha unica', #.decode('utf-8'),
+    MEAN_WIN_PERCENT: 'Percentual medio de vitorias', #.decode('utf-8'),
 }
 
 def get_vocabulary(language='en'):
