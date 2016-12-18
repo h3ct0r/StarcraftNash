@@ -3,26 +3,19 @@ import os
 import re
 import csv
 import operator
+import language as lang
 import numpy as np
 import scipy as sp
 import scipy.stats
-from scipy import stats
-import matplotlib
 import matplotlib.pyplot as plt
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
-from statsmodels.stats.multicomp import MultiComparison
 
 __author__ = 'Hector Azpurua'
-
-# matplotlib.rcParams['pdf.fonttype'] = 42
-# matplotlib.rcParams['ps.fonttype'] = 42
-# matplotlib.rcParams['text.usetex'] = True
 
 plt.rcParams['text.usetex'] = True #Let TeX do the typsetting
 plt.rcParams['text.latex.preamble'] = [r'\usepackage{sansmath}', r'\sansmath'] #Force sans-serif math mode (for axes labels)
 plt.rcParams['font.family'] = 'sans-serif' # ... for regular text
 plt.rcParams['font.sans-serif'] = 'Helvetica, Avant Garde, Computer Modern Sans serif' # Choose a nice font here
-
 
 
 def autolabel(ax, rects):
@@ -39,7 +32,7 @@ def autolabel(ax, rects):
             fontsize=14
         )
 
-def anova(data_dict):
+def anova(data_dict, language='en'):
 
     means_per_strat = {}
     join_vals = []
@@ -72,12 +65,13 @@ def anova(data_dict):
     join_vals = np.asarray(join_vals)
     join_group = np.asarray(join_group)
 
-    #print join_vals
-    #print join_group
+    words = lang.get_vocabulary(language)
 
     for i in xrange(len(join_group)):
         v = join_group[i]
-        if v == 'E-greedy':
+
+        join_group[i] = words[v]
+        '''if v == 'E-greedy':
             join_group[i] = r'$\alpha$-greedy'
         elif v == 'E-Nash':
             join_group[i] = r'$\epsilon$-Nash'
@@ -85,6 +79,7 @@ def anova(data_dict):
             join_group[i] = 'Reply-last'
         elif v == 'Xelnaga':
             join_group[i] = 'Single choice'
+        '''
 
     #mc = MultiComparison(np.asarray(s_values), np.asarray(s_keys))
     #result = mc.tukeyhsd()
@@ -190,7 +185,7 @@ def get_ci(folder_path):
     return strategies_ci
 
 
-def plot_ci(strategies_ci):
+def plot_ci(strategies_ci, language='en'):
 
     n = []
     ci = []
@@ -200,10 +195,13 @@ def plot_ci(strategies_ci):
 
     s_keys = list(s_keys)
 
+    words = lang.get_vocabulary(language)
+
     # Clean keys
     # additional spaces improve alignment with its respective bar
     for i, v in enumerate(s_keys):
-        if v == 'E-greedy':
+        s_keys[i] = words[v]
+        '''if v == 'E-greedy':
             s_keys[i] = r'        $\alpha$-greedy'
         elif v == 'Nash':
             s_keys[i] = '        Nash'
@@ -213,6 +211,7 @@ def plot_ci(strategies_ci):
             s_keys[i] = 'Reply-last'
         elif v == 'Xelnaga':
             s_keys[i] = 'Single choice'
+            '''
 
     for v in s_values:
         n.append(v[0])
@@ -247,7 +246,7 @@ def plot_ci(strategies_ci):
 
     #plt.xlabel('Hexagon quantity')
     #plt.ylabel('Mean win percent')
-    plt.ylabel('Average win percent', fontsize=18)
+    plt.ylabel(words[lang.MEAN_WIN_PERCENT], fontsize=18)
     #plt.title('Hexagons vs percentage of trajectory saved')
 
 
@@ -268,9 +267,13 @@ if __name__ == '__main__':
         '-i', '--input', help='Folder to search the CSV files', required=True
     )
 
+    parser.add_argument(
+        '-l', '--language', help='Language to generate plots in', default='en', choices=['en', 'pt']
+    )
+
     args = parser.parse_args()
 
     ci_dict = get_ci(args.input)
-    plot_ci(ci_dict)
+    plot_ci(ci_dict, args.language)
 
 

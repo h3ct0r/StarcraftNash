@@ -3,6 +3,7 @@ import os
 import re
 import csv
 import operator
+import language as lang
 import numpy as np
 import scipy as sp
 import scipy.stats
@@ -114,7 +115,10 @@ def get_ci(folder_path):
     return strategies_ci
 
 
-def plot_ci(strategies_ci):
+def plot_ci(strategies_ci, language='en'):
+
+    words = lang.get_vocabulary(language)
+
     n = []
     ci = []
 
@@ -125,14 +129,18 @@ def plot_ci(strategies_ci):
 
     # Clean keys
     for i, v in enumerate(s_keys):
+        s_keys[i] = words[v]
+
+        '''
         if v == 'E-greedy':
-            s_keys[i] = r'$\alpha$-greedy'
+            s_keys[i] = r'$\epsilon$-greedy'
         elif v == 'E-Nash':
-            s_keys[i] = r'$\epsilon$-Nash'
+            s_keys[i] = r'$\varepsilon$-Nash'
         elif v == 'Reply-score':
             s_keys[i] = 'Replay last'
         elif v == 'Xelnaga':
             s_keys[i] = 'Single choice'
+        '''
 
     for v in s_values:
         n.append(v[0])
@@ -157,7 +165,7 @@ def plot_ci(strategies_ci):
     autolabel(ax, rects1)
 
     #plt.xlabel('Hexagon quantity')
-    plt.ylabel('Mean win percent')
+    plt.ylabel(words[lang.MEAN_WIN_PERCENT])
     #plt.title('Hexagons vs percentage of trajectory saved')
 
 
@@ -178,9 +186,13 @@ if __name__ == '__main__':
         '-i', '--input', help='Folder to search the CSV files', required=True
     )
 
+    parser.add_argument(
+        '-l', '--language', help='Language to generate plots in', default='en', choices=['en', 'pt']
+    )
+
     args = parser.parse_args()
 
     ci_dict = get_ci(args.input)
-    plot_ci(ci_dict)
+    plot_ci(ci_dict, args.language)
 
 
