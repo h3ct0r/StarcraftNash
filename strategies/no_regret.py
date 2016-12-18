@@ -45,7 +45,7 @@ class NoRegret(StrategyBase):
         payoffs[my_choice] = 0.0    
         
         for bot in self.regrets:
-            self.regrets[bot] += payoffs[bot]/100 - (actual_payoff)
+            self.regrets[bot] += payoffs[bot] - (actual_payoff)
 
         response = self.get_weighted_choice(self.regrets)
         
