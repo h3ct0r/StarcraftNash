@@ -55,6 +55,7 @@ class NoRegret(StrategyBase):
         total = sum(choices[choice] for choice in choices)
         r = random.uniform(0, total)
         upto = 0
+        
         for choice in choices:
             probability = choices[choice]
             if upto + probability >= r:
