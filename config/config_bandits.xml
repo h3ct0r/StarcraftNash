@@ -31,14 +31,14 @@
 
 
     <players>
-        <player name="nash" />
-        <player name="enash" />
-        <player name="egreedy" />
-        <player name="frequentist" />
-        <player name="ucb1" />
-        <player name="replyhist" />
-        <player name="exp3" />
-        <player name="Xelnaga" />
+        <player type="nash" name="Nash"/>
+        <player type="enash" name="e-Nash" />
+        <player type="egreedy" name="e-Greedy" />
+        <player type="frequentist" name="Frequentist" />
+        <player type="ucb1" name="Ucb1" />
+        <player type="replyhist" name="Reply Hist" />
+        <player type="exp3" name="Exp3" />
+        <player type="unique" name="Xelnaga" />
     </players>
 
     <parameters>
@@ -50,7 +50,7 @@
         <output-spreadsheet value="score-chart.xls" />
         <output-intermediate value="intermediate" />
         <random-seed value="50" />
-        <repetitions value="10" />
+        <repetitions value="2" />
         <match-pool-file value="results_demo/fortress1000.txt" />
         <num-matches value="1000" />
         <round-robin value="true" />

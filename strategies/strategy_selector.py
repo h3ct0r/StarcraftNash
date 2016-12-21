@@ -60,6 +60,9 @@ class StrategySelector:
         #    print >> sys.stderr, 'Strategy not in player list or in bot list:', strategy
         #    return None
 
+        if strategy.player_type not in self.strategies:
+            raise Exception('Strategy not in player list or in bot list: ' + str(strategy))
+
         if strategy.config_tag_name is not None:
             try:
                 s = self.strategies[strategy.player_type](strategy.player_name, strategy.config_tag_name)

@@ -25,13 +25,12 @@
 
 
     <players>
-        <player name="nash" />
-        <player name="enash" />
-        <player name="frequentist" />
-        <player name="winprev" />
-        <player name="egreedy" />
-        <player name="rotate" />
-        <player name="Xelnaga" />
+        <player type="nash" name="Nash"/>
+        <player type="enash" name="e-Nash" />
+        <player type="frequentist" name="Frequentist" />
+        <player type="egreedy" name="e-Greedy" />
+        <player type="rotate" name="Rotate" />
+        <player type="unique" name="Xelnaga" />
         <!--
         <player name="Skynet" />
         <player name="CruzBot" />
