@@ -15,22 +15,21 @@ class EpsilonNash(StrategyBase):
     This is an epsilon-safe strategy
     """
 
-    def __init__(self):
+    def __init__(self, strategy_name):
         """
         Initializes Epsilon-Nash strategy
         :param epsilon: probability of EXPLOITATION
         :return:
         """
-        StrategyBase.__init__(self)
-        self.strategy_name = 'E-Nash'
+        StrategyBase.__init__(self, strategy_name)
         # probability of exploitation (different of e-greedy which is exploration)
         self.epsilon = Config.get_instance().enash_exploitation
 
         # Nash equilibrium strategy
-        self.nash = nash.Nash()
+        self.nash = nash.Nash('Nash inside e-Nash')
 
         # exploitation strategy
-        self.exploitation = frequentist.Frequentist()
+        self.exploitation = frequentist.Frequentist('Frequentist inside e-Nash')
 
     def set_match_list(self, match_list):
         self.match_list = match_list

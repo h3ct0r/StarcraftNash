@@ -14,9 +14,8 @@ class Frequentist(StrategyBase):
     Queries a previously built score chart to determine best response to opponent
     """
 
-    def __init__(self):
-        StrategyBase.__init__(self)
-        self.strategy_name = 'Frequentist'
+    def __init__(self, strategy_name):
+        StrategyBase.__init__(self, strategy_name)
 
         # uses score chart to determine best response
         self.score_chart = scorechart.from_file(

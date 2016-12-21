@@ -8,8 +8,8 @@ __author__ = 'Hector Azpurua'
 
 class Nash(StrategyBase):
 
-    def __init__(self):
-        self.strategy_name = 'Nash'
+    def __init__(self, strategy_name):
+        self.strategy_name = strategy_name
         self.probabilities = None
 
         #self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]

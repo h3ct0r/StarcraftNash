@@ -25,12 +25,12 @@
 
 
     <players>
-        <player name="nash" />
-        <player name="enash" />
-        <player name="frequentist" />
-        <player name="replyscore" />
-        <player name="egreedy" />
-        <player name="Xelnaga" />
+        <player type="nash" name="Nash"/>
+        <player type="enash" name="e-Nash" />
+        <player type="frequentist" name="Frequentist" />
+        <player type="replyscore" name="Reply Last" />
+        <player type="egreedy" name="e-Greedy" />
+        <player type='unique' name="Xelnaga" />
         <!--
         <player name="Aiur" />
         <player name="Skynet" />

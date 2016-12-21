@@ -9,8 +9,8 @@ class RandomUniform(StrategyBase):
     Select a random strategy
     """
 
-    def __init__(self):
-        self.strategy_name = 'Random uniform'
+    def __init__(self, strategy_name):
+        self.strategy_name = strategy_name
         #self.bot_list = ["Skynet", "Xelnaga", "NUSBot"]
         self.result_list = []
         self.match_list = []

@@ -15,10 +15,11 @@ class StrategyBase(object):
     # (the list is initialized here but can be changed at will with set_bot_list)
     bot_list = ["Skynet", "Xelnaga", "CruzBot"]
 
-    def __init__(self):
-        self.strategy_name = 'StrategyBase'
+    def __init__(self, strategy_name, config_name=None):
+        self.strategy_name = strategy_name
         self.result_list = []
         self.match_list = []
+        self.config_name = config_name
         self.s_id = None
 
     def prepare(self):
@@ -36,6 +37,15 @@ class StrategyBase(object):
 
     def get_id(self):
         return self.s_id
+
+    def set_config_name(self, config_name):
+        self.config_name = config_name
+
+    def get_config_name(self):
+        return self.config_name
+
+    def set_name(self, name):
+        self.strategy_name = name
 
     def get_name(self):
         return self.strategy_name
@@ -164,3 +174,5 @@ class StrategyBase(object):
         else:
             return self.DEFEAT
 
+    def __str__(self):
+        return self.get_name()

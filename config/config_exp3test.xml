@@ -36,8 +36,8 @@
         <player name="egreedy" />
         <player name="frequentist" />
         -->
-        <player name="exp3" />
-        <player name="nash" />
+        <player type="exp3" name="Exp3" />
+        <player type="nash" name="Nash" />
         <!--
         <player name="Aiur" />
         <player name="Skynet" />
