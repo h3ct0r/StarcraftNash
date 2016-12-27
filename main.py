@@ -409,16 +409,16 @@ class Main:
             bot_a = player_a.get_next_bot()
             bot_b = player_b.get_next_bot()
 
-            repeat_counter = 0
-            while bot_a == bot_b:
-                bot_a = player_a.get_next_bot()
-                bot_b = player_b.get_next_bot()
-                repeat_counter += 1
-                if repeat_counter > 10:
-                    if self.config.verbose:
-                        print 'The bots are the same after several retries @ match', i
-                    break
-                    # raise StopIteration('The bots are the same after several retries...')
+ #           repeat_counter = 0
+ #           while bot_a == bot_b:
+ #               bot_a = player_a.get_next_bot()
+ #               bot_b = player_b.get_next_bot()
+ #               repeat_counter += 1
+ #               if repeat_counter > 10:
+ #                   if self.config.verbose:
+ #                       print 'The bots are the same after several retries @ match', i
+ #                   break
+ #                   # raise StopIteration('The bots are the same after several retries...')
 
             if self.config.verbose:
                 print i + 1, "Match", bot_a, 'vs', bot_b, '(match index:', self.match_index, ')'
