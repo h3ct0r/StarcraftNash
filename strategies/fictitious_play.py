@@ -1,6 +1,7 @@
 from strategy_base import StrategyBase
 from config import Config
 import scorechart
+import random
 
 __author__ = 'Daniel Kneipp'
 
@@ -46,7 +47,9 @@ class FictitiousPlay(StrategyBase):
         opponent_choice_beliefs = [(k, v/self.count_sum) for k, v in self.opponent_choice_counter.items()]
 
         # retrieve the most chosen bot
-        likely_opponent_bot = max(opponent_choice_beliefs, key=lambda belief: belief[1])[0]
+        likely_opponent_bot_with_prob = max(opponent_choice_beliefs, key=lambda belief: belief[1])
+        likely_opponent_bot_list = [b[0] for b in opponent_choice_beliefs if b[1] == likely_opponent_bot_with_prob[1]]
+        likely_opponent_bot = random.choice(likely_opponent_bot_list)
 
         # get the best response
         response = min(self.score_chart[likely_opponent_bot], key=self.score_chart[likely_opponent_bot].get)
