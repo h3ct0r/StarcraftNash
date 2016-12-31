@@ -50,6 +50,7 @@
     </players>
 
     <fictitious_nash>
+        <be-stochastic parser="str_to_bool" value="true" />
         <fictitious-initial-weights parser="options_parser">
             <choice name="Xelnaga" value=".41975" />
             <choice name="CruzBot" value=".28395" />
@@ -67,6 +68,7 @@
     </fictitious_nash>
 
     <fictitious>
+        <be-stochastic parser="str_to_bool" value="true" />
         <fictitious-initial-weights parser="options_parser">
             <choice name="Xelnaga" value="1" />
             <choice name="CruzBot" value="1" />
@@ -84,6 +86,7 @@
     </fictitious>
 
     <fictitious_clone>
+        <be-stochastic parser="str_to_bool" value="true" />
         <fictitious-initial-weights parser="options_parser">
             <choice name="Xelnaga" value="1" />
             <choice name="CruzBot" value="1" />
