@@ -41,6 +41,15 @@ class Main:
 
         self.result_list = []
 
+        hash_suffix = str(int(round(time.time() * 1000)))
+
+        if self.config.output_match_choices is not None:
+            overall_players_choices = {(str(m[0]), str(m[1])): {str(m[0]): {c: 0 for c in self.config.get_bots()},
+                                                                str(m[1]): {c: 0 for c in self.config.get_bots()}}
+                                       for m in self.game_matches}
+            overall_players_choices_file = self.config.output_match_choices.replace('#', hash_suffix)
+
+
         for rep in xrange(self.config.repetitions):
             print 'Repetition', rep + 1, 'of', self.config.repetitions, '...'
 
@@ -56,7 +65,12 @@ class Main:
             if self.config.output_match_choices is not None:
                 out_choices_file_name = self.config.output_match_choices.replace('#', str(rep))
                 if os.path.exists(out_choices_file_name):
-                    raise Exception(out_choices_file_name + ' already exists')
+                    print >> sys.stderr, 'Previous file found with name:', out_choices_file_name, \
+                        'using suffix:', hash_suffix
+                    point_pos = out_choices_file_name.rfind('.')
+                    out_choices_file_name = out_choices_file_name[:point_pos] + \
+                                            "_" + hash_suffix + \
+                                            out_choices_file_name[point_pos:]
 
             single_result_dict = {}  # stores players' percent of victories
             for i in xrange(len(self.game_matches)):
@@ -71,6 +85,15 @@ class Main:
                 if self.config.output_match_choices is not None:
                     self.output_match_result(out_choices_file_name, player_a, player_b,
                                              self.match_history, self.res_history)
+                    for (choice_w, choice_l), winner in itertools.izip(self.match_history, self.res_history):
+                        if winner == 'A':
+                            choice_a = choice_w
+                            choice_b = choice_l
+                        else:
+                            choice_a = choice_l
+                            choice_b = choice_w
+                        overall_players_choices[(str(player_a), str(player_b))][str(player_a)][str(choice_a)] += 1
+                        overall_players_choices[(str(player_a), str(player_b))][str(player_b)][str(choice_b)] += 1
 
                 a_win_percentage = (self.res_history.count('A') * 100) / float(len(self.res_history))
                 b_win_percentage = (self.res_history.count('B') * 100) / float(len(self.res_history))
@@ -91,7 +114,12 @@ class Main:
                 single_result_dict[player_b.get_name()][player_a.get_name()] = b_win_percentage
             print  # adds newline
             self.result_list.append(single_result_dict)
-        pass
+
+        if self.config.output_match_choices is not None:
+            Main.output_overall_match_result(overall_players_choices_file,
+                                             overall_players_choices,
+                                             self.config.num_matches,
+                                             self.config.repetitions)
 
         print 'Getting the mean win percentages of %d repetitions...' % self.config.repetitions
         self.result_dict = Main.get_mean_percentages(self.result_list)
@@ -118,6 +146,28 @@ class Main:
             new_aa = StrategySelector.recreate_strategy(aa)
             new_bb = StrategySelector.recreate_strategy(bb)
             self.game_matches[i] = (new_aa, new_bb)
+
+    @staticmethod
+    def output_overall_match_result(out_file, overall_players_choices, num_matches, num_repetitions):
+        ratio = 100 / float(num_matches * num_repetitions)
+        conv_percent = lambda x: x * ratio
+
+        ordered_possible_choices = overall_players_choices.values()[0].values()[0].keys()
+
+        with open(out_file, 'w') as f:
+            for _, match in overall_players_choices.iteritems():
+
+                f.write('\nplayer')
+                for choice in ordered_possible_choices:
+                    f.write(',' + str(choice))
+
+                for player, count_choices in match.iteritems():
+                    f.write('\n' + player)
+                    for choice in ordered_possible_choices:
+                        percent = conv_percent(count_choices[choice])
+                        f.write(',' + str(percent) + '%')
+
+                f.write('\n')
 
     @staticmethod
     def output_match_result(out_file, player_a, player_b, match_hist, winner_hist):
