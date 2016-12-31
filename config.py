@@ -92,7 +92,7 @@ class Config(object):
             self.PLAYERS: [],                               # list of players
             self.FICTITIOUS_INITIAL_WEIGHTS: {bot: 1.0 / len(self.default_bots) for bot in self.default_bots},
             self.FICTITIOUS_RUNNING_WEIGHTS: {bot: 1.0 for bot in self.default_bots},
-            self.INITIAL_REGRETS: {bot: 1.0 for bot in self.default_bots},
+            self.INITIAL_REGRETS: {bot: 12.0 for bot in self.default_bots},
             self.E_GREEDY_EXPLORATION: .1,
             self.E_NASH_EXPLOITATION: .1,
             self.EXP3_GAMMA: .1,
