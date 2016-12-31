@@ -47,7 +47,11 @@ class Main:
             overall_players_choices = {(str(m[0]), str(m[1])): {str(m[0]): {c: 0 for c in self.config.get_bots()},
                                                                 str(m[1]): {c: 0 for c in self.config.get_bots()}}
                                        for m in self.game_matches}
-            overall_players_choices_file = self.config.output_match_choices.replace('#', hash_suffix)
+            overall_players_choices_file = self.config.output_match_choices.replace('#', '')
+            if os.path.exists(overall_players_choices_file):
+                print >> sys.stderr, 'Previous file found with name:', overall_players_choices_file, \
+                    'using suffix:', hash_suffix
+                overall_players_choices_file = self.config.output_match_choices.replace('#', hash_suffix)
 
 
         for rep in xrange(self.config.repetitions):
@@ -63,7 +67,7 @@ class Main:
 
             out_choices_file_name = None
             if self.config.output_match_choices is not None:
-                out_choices_file_name = self.config.output_match_choices.replace('#', str(rep))
+                out_choices_file_name = self.config.output_match_choices.replace('#', str(rep + 1))
                 if os.path.exists(out_choices_file_name):
                     print >> sys.stderr, 'Previous file found with name:', out_choices_file_name, \
                         'using suffix:', hash_suffix
