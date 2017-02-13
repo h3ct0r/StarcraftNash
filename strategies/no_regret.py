@@ -40,24 +40,31 @@ class NoRegret(StrategyBase):
         scores = self.score_chart[opponent_choice]
         
         for bot in self.bot_list:
-            payoffs[bot] = scores[bot]
+            payoffs[bot] = scores[bot]/100.0
          
         payoffs[my_choice] = 0.0    
         
         for bot in self.regrets:
             self.regrets[bot] += payoffs[bot] - (actual_payoff)
 
-        response = self.get_weighted_choice(self.regrets)
+        response = self.get_weighted_choice(self.regrets.copy())
         
         return response        
-        
+    
     def get_weighted_choice(self, choices):     
         total = sum(choices[choice] for choice in choices)
         r = random.uniform(0, total)
         upto = 0
         
+        weights = {choices[bot] for bot in choices}
+        min_weight = min(weights)
+
         for choice in choices:
-            probability = choices[choice]
+            
+            probability = choices[choice] # to get only positive weights
+            if min_weight < 0:
+                probability += abs(min_weight)
+                
             if upto + probability >= r:
                 return choice
             upto += probability

@@ -1,11 +1,14 @@
 from strategy_base import StrategyBase
 from config import Config
 import scorechart
+import random
 
 __author__ = 'Daniel Kneipp'
 
 
 class FictitiousPlay(StrategyBase):
+
+    STOCHASTIC_TAG = "be-stochastic"
 
     def __init__(self, strategy_name, config_name):
         super(FictitiousPlay, self).__init__(strategy_name)
@@ -32,6 +35,12 @@ class FictitiousPlay(StrategyBase):
                                         config.get_bots()}
         self.count_sum = sum([x for _, x in self.opponent_choice_counter.items()])
 
+        # set config og stochastic feature. Default value is True
+        if self.STOCHASTIC_TAG in config.get(self.config_name):
+            self.be_stochastic = config.get(self.config_name)[self.STOCHASTIC_TAG]
+        else:
+            self.be_stochastic = True
+
     def get_next_bot(self):
         # finds opponent's last choice
         opponent_choice = self.opponent_choice(-1)
@@ -46,7 +55,12 @@ class FictitiousPlay(StrategyBase):
         opponent_choice_beliefs = [(k, v/self.count_sum) for k, v in self.opponent_choice_counter.items()]
 
         # retrieve the most chosen bot
-        likely_opponent_bot = max(opponent_choice_beliefs, key=lambda belief: belief[1])[0]
+        if self.be_stochastic:
+            likely_opponent_bot_with_prob = max(opponent_choice_beliefs, key=lambda belief: belief[1])
+            likely_opponent_bot_list = [b[0] for b in opponent_choice_beliefs if b[1] == likely_opponent_bot_with_prob[1]]
+            likely_opponent_bot = random.choice(likely_opponent_bot_list)
+        else:
+            likely_opponent_bot = max(opponent_choice_beliefs, key=lambda belief: belief[1])[0]
 
         # get the best response
         response = min(self.score_chart[likely_opponent_bot], key=self.score_chart[likely_opponent_bot].get)
