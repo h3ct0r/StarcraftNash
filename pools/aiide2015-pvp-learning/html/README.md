@@ -1,0 +1,1 @@
+This directory contains the index.html related to each pool of matches in the parent directory.

@@ -1,0 +1,332 @@
+<html>
+<head>
+<title>StarCraft AI Competition Results</title>
+<script type="text/javascript" src="javascript/jquery-1.10.2.min.js"></script>	<script type="text/javascript" src="javascript/jquery.tablesorter.js"></script>
+<link rel="stylesheet" href="javascript/themes/blue/style.css" type="text/css" media="print, projection, screen" />
+<script type="text/javascript"> $(function() { $("#resultsTable").tablesorter({widgets: ['zebra']}); });</script>
+<script type="text/javascript"> $(function() { $("#resultsPairTable").tablesorter({widgets: ['zebra']}); });</script>
+<script type="text/javascript"> $(function() { $("#resultsMapTable").tablesorter({widgets: ['zebra']}); });</script>
+</head>
+<body alink="#0000FF" vlink="#0000FF" link="#0000FF">
+<table cellpadding=2 rules=all style="font: 12px/1.5em Verdana">
+  <tr>
+    <td colspan=11 bgcolor=#CCCCCC align=center style="font: 16px/1.5em Verdana">Current Real-Time Client Scheduler / Status</td>
+  </tr>
+  <tr>
+    <td bgcolor=#cccccc width=67><center>Client    </center></td>
+    <td bgcolor=#cccccc width=67><center>Status    </center></td>
+    <td bgcolor=#cccccc width=67><center>Game #    </center></td>
+    <td bgcolor=#cccccc width=67><center>Self    </center></td>
+    <td bgcolor=#cccccc width=67><center>Enemy    </center></td>
+    <td bgcolor=#cccccc width=67><center>Map    </center></td>
+    <td bgcolor=#cccccc width=67><center>Duration    </center></td>
+    <td bgcolor=#cccccc width=67><center>Win    </center></td>
+  </tr>
+  <tr bgcolor=#00FF00>
+    <td><center>192.168.    </center></td>
+    <td><center>RUNNING    </center></td>
+    <td><center>27998 /     </center></td>
+    <td><center>Skynet    </center></td>
+    <td><center>Xelnaga    </center></td>
+    <td><center>The For    </center></td>
+    <td><center>1:45    </center></td>
+    <td><center>    </center></td>
+  </tr>
+  <tr bgcolor=#00FF00>
+    <td><center>192.168.    </center></td>
+    <td><center>RUNNING    </center></td>
+    <td><center>27998 /     </center></td>
+    <td><center>Xelnaga    </center></td>
+    <td><center>Skynet    </center></td>
+    <td><center>The For    </center></td>
+    <td><center>2:00    </center></td>
+    <td><center>    </center></td>
+  </tr>
+  <tr bgcolor=#FFFF00>
+    <td><center>192.168.    </center></td>
+    <td><center>STARTING    </center></td>
+    <td><center>27998 /     </center></td>
+    <td><center>    </center></td>
+    <td><center>    </center></td>
+    <td><center>    </center></td>
+    <td><center>    </center></td>
+    <td><center>    </center></td>
+  </tr>
+  <tr bgcolor=#FFFF00>
+    <td><center>192.168.    </center></td>
+    <td><center>STARTING    </center></td>
+    <td><center>27998 /     </center></td>
+    <td><center>    </center></td>
+    <td><center>    </center></td>
+    <td><center>    </center></td>
+    <td><center>    </center></td>
+    <td><center>    </center></td>
+  </tr>
+</table><br>
+<p style="font: 16px/1.5em Verdana">Detailed Game Results: <a href="results.html">html table</a> (14516 kB) or <a href="detailed_results.txt">plaintext</a> (6915 kB)</p>
+<table cellpadding=2 rules=all style="font: 14px/1.5em Verdana" id="resultsTable" class="tablesorter">
+  <thead><tr>
+    <th bgcolor=#CCCCCC align=center width=80>Bot</td>
+    <th bgcolor=#CCCCCC align=center width=80>Games</td>
+    <th bgcolor=#CCCCCC align=center width=80>Win</td>
+    <th bgcolor=#CCCCCC align=center width=80>Loss</td>
+    <th bgcolor=#CCCCCC align=center width=80>Win %</td>
+    <th bgcolor=#CCCCCC align=center width=80>AvgTime</td>
+    <th bgcolor=#CCCCCC align=center width=80>Hour</td>
+    <th bgcolor=#CCCCCC align=center width=80>Crash</td>
+    <th bgcolor=#CCCCCC align=center width=80>Timeout</td>
+  </tr></thead>
+  <tr>
+    <td bgcolor=#f1c232>UAlbertaBot</td>
+    <td >7000</td>
+    <td>6397</td>
+    <td>603</td>
+    <td>91.39</td>
+    <td>9:16</td>
+    <td>58</td>
+    <td>7</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td bgcolor=#f1c232>Ximp</td>
+    <td >7000</td>
+    <td>5180</td>
+    <td>1820</td>
+    <td>74</td>
+    <td>17:45</td>
+    <td>40</td>
+    <td>278</td>
+    <td>64</td>
+  </tr>
+  <tr>
+    <td bgcolor=#f1c232>Aiur</td>
+    <td >7000</td>
+    <td>4587</td>
+    <td>2413</td>
+    <td>65.53</td>
+    <td>14:28</td>
+    <td>200</td>
+    <td>9</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td bgcolor=#f1c232>Xelnaga</td>
+    <td >6999</td>
+    <td>4123</td>
+    <td>2876</td>
+    <td>58.91</td>
+    <td>18:06</td>
+    <td>793</td>
+    <td>141</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td bgcolor=#f1c232>Skynet</td>
+    <td >7000</td>
+    <td>3820</td>
+    <td>3180</td>
+    <td>54.57</td>
+    <td>11:03</td>
+    <td>107</td>
+    <td>7</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td bgcolor=#f1c232>NUSBot</td>
+    <td >7000</td>
+    <td>1922</td>
+    <td>5078</td>
+    <td>27.46</td>
+    <td>14:26</td>
+    <td>293</td>
+    <td>523</td>
+    <td>386</td>
+  </tr>
+  <tr>
+    <td bgcolor=#f1c232>CruzBot</td>
+    <td >7000</td>
+    <td>1797</td>
+    <td>5203</td>
+    <td>25.67</td>
+    <td>14:45</td>
+    <td>280</td>
+    <td>4</td>
+    <td>320</td>
+  </tr>
+  <tr>
+    <td bgcolor=#f1c232>SusanooTricks</td>
+    <td >6999</td>
+    <td>173</td>
+    <td>6826</td>
+    <td>2.47</td>
+    <td>15:37</td>
+    <td>429</td>
+    <td>134</td>
+    <td>58</td>
+  </tr>
+  <tfoot><tr>
+    <td align=center bgcolor=#CCCCCC><b>Total</b></td>
+    <td align=center bgcolor=#CCCCCC>27999</td>
+    <td align=center bgcolor=#CCCCCC>27999</td>
+    <td align=center bgcolor=#CCCCCC>27999</td>
+    <td align=center bgcolor=#CCCCCC>N/A</td>
+    <td align=center bgcolor=#CCCCCC>14:26</td>
+    <td align=center bgcolor=#CCCCCC>1100</td>
+    <td align=center bgcolor=#CCCCCC>1103</td>
+    <td align=center bgcolor=#CCCCCC>829</td>
+  </tr></tfoot>
+</table>
+<br>
+<table cellpadding=2 rules=all style="font: 14px/1.5em Verdana"  id="resultsPairTable" class="tablesorter">
+  <thead><tr>
+    <th width=100 align=center bgcolor=#CCCCCC>Bot</td>
+    <th width=71 align=center bgcolor=#CCCCCC>Win %</td>
+    <th width=50 align=left bgcolor=#f1c232>UAlb</td>
+    <th width=50 align=left bgcolor=#f1c232>Ximp</td>
+    <th width=50 align=left bgcolor=#f1c232>Aiur</td>
+    <th width=50 align=left bgcolor=#f1c232>Xeln</td>
+    <th width=50 align=left bgcolor=#f1c232>Skyn</td>
+    <th width=50 align=left bgcolor=#f1c232>NUSB</td>
+    <th width=50 align=left bgcolor=#f1c232>Cruz</td>
+    <th width=50 align=left bgcolor=#f1c232>Susa</td>
+  </tr></thead>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>UAlbertaBot</td>
+    <td width=50 align=center bgcolor=#E8E8E8>91.39</td>
+    <td align=center bgcolor=#ffffff>-</td>
+    <td align=center style="background-color:rgb(35,255,35)">921/1000</td>
+    <td align=center style="background-color:rgb(64,255,64)">854/1000</td>
+    <td align=center style="background-color:rgb(57,255,57)">867/1000</td>
+    <td align=center style="background-color:rgb(57,255,57)">869/1000</td>
+    <td align=center style="background-color:rgb(17,255,17)">964/1000</td>
+    <td align=center style="background-color:rgb(15,255,15)">966/1000</td>
+    <td align=center style="background-color:rgb(20,255,20)">956/1000</td>
+  </tr>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>Ximp</td>
+    <td width=50 align=center bgcolor=#ffffff>74</td>
+    <td align=center style="background-color:rgb(255,34,34)">79/1000</td>
+    <td align=center bgcolor=#ffffff>-</td>
+    <td align=center style="background-color:rgb(37,255,37)">915/1000</td>
+    <td align=center style="background-color:rgb(255,102,102)">237/1000</td>
+    <td align=center style="background-color:rgb(5,255,5)">991/1000</td>
+    <td align=center style="background-color:rgb(17,255,17)">963/1000</td>
+    <td align=center style="background-color:rgb(3,255,3)">996/1000</td>
+    <td align=center style="background-color:rgb(1,255,1)">999/1000</td>
+  </tr>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>Aiur</td>
+    <td width=50 align=center bgcolor=#E8E8E8>65.53</td>
+    <td align=center style="background-color:rgb(255,62,62)">146/1000</td>
+    <td align=center style="background-color:rgb(255,35,35)">85/1000</td>
+    <td align=center bgcolor=#ffffff>-</td>
+    <td align=center style="background-color:rgb(64,255,64)">854/1000</td>
+    <td align=center style="background-color:rgb(110,255,110)">746/1000</td>
+    <td align=center style="background-color:rgb(86,255,86)">801/1000</td>
+    <td align=center style="background-color:rgb(20,255,20)">955/1000</td>
+    <td align=center style="background-color:rgb(0,255,0)">1000/1000</td>
+  </tr>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>Xelnaga</td>
+    <td width=50 align=center bgcolor=#ffffff>58.91</td>
+    <td align=center style="background-color:rgb(255,56,56)">133/1000</td>
+    <td align=center style="background-color:rgb(103,255,103)">763/1000</td>
+    <td align=center style="background-color:rgb(255,62,62)">146/1000</td>
+    <td align=center bgcolor=#ffffff>-</td>
+    <td align=center style="background-color:rgb(255,96,96)">224/1000</td>
+    <td align=center style="background-color:rgb(10,255,10)">977/1000</td>
+    <td align=center style="background-color:rgb(42,255,42)">902/1000</td>
+    <td align=center style="background-color:rgb(10,255,10)">978/999</td>
+  </tr>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>Skynet</td>
+    <td width=50 align=center bgcolor=#E8E8E8>54.57</td>
+    <td align=center style="background-color:rgb(255,56,56)">131/1000</td>
+    <td align=center style="background-color:rgb(255,3,3)">09/1000</td>
+    <td align=center style="background-color:rgb(255,108,108)">254/1000</td>
+    <td align=center style="background-color:rgb(98,255,98)">776/1000</td>
+    <td align=center bgcolor=#ffffff>-</td>
+    <td align=center style="background-color:rgb(149,255,149)">655/1000</td>
+    <td align=center style="background-color:rgb(3,255,3)">996/1000</td>
+    <td align=center style="background-color:rgb(1,255,1)">999/1000</td>
+  </tr>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>NUSBot</td>
+    <td width=50 align=center bgcolor=#ffffff>27.46</td>
+    <td align=center style="background-color:rgb(255,15,15)">36/1000</td>
+    <td align=center style="background-color:rgb(255,15,15)">37/1000</td>
+    <td align=center style="background-color:rgb(255,85,85)">199/1000</td>
+    <td align=center style="background-color:rgb(255,8,8)">23/1000</td>
+    <td align=center style="background-color:rgb(255,147,147)">345/1000</td>
+    <td align=center bgcolor=#ffffff>-</td>
+    <td align=center style="background-color:rgb(255,164,164)">383/1000</td>
+    <td align=center style="background-color:rgb(44,255,44)">899/1000</td>
+  </tr>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>CruzBot</td>
+    <td width=50 align=center bgcolor=#E8E8E8>25.67</td>
+    <td align=center style="background-color:rgb(255,13,13)">34/1000</td>
+    <td align=center style="background-color:rgb(255,1,1)">04/1000</td>
+    <td align=center style="background-color:rgb(255,18,18)">45/1000</td>
+    <td align=center style="background-color:rgb(255,40,40)">98/1000</td>
+    <td align=center style="background-color:rgb(255,1,1)">04/1000</td>
+    <td align=center style="background-color:rgb(166,255,166)">617/1000</td>
+    <td align=center bgcolor=#ffffff>-</td>
+    <td align=center style="background-color:rgb(3,255,3)">995/1000</td>
+  </tr>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>SusanooTricks</td>
+    <td width=50 align=center bgcolor=#ffffff>2.47</td>
+    <td align=center style="background-color:rgb(255,18,18)">44/1000</td>
+    <td align=center style="background-color:rgb(255,0,0)">01/1000</td>
+    <td align=center style="background-color:rgb(255,0,0)">00/1000</td>
+    <td align=center style="background-color:rgb(255,8,8)">21/999</td>
+    <td align=center style="background-color:rgb(255,0,0)">01/1000</td>
+    <td align=center style="background-color:rgb(255,42,42)">101/1000</td>
+    <td align=center style="background-color:rgb(255,1,1)">05/1000</td>
+    <td align=center bgcolor=#ffffff>-</td>
+  </tr>
+</table>
+<br>
+<table cellpadding=2 rules=all style="font: 12px/1.5em Verdana" id="resultsMapTable" class="tablesorter">
+  <thead><tr>
+    <th width=63 align=center bgcolor=#CCCCCC style="font: 11px/1.5em Verdana">Bot</td>
+    <th width=63 align=center bgcolor=#CCCCCC style="font: 11px/1.5em Verdana">Fortres</td>
+  </tr></thead>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>UAlbertaBot</td>
+    <td align=center style="background-color:rgb(37,255,37)">6397/7000</td>
+  </tr>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>Ximp</td>
+    <td align=center style="background-color:rgb(113,255,113)">5180/7000</td>
+  </tr>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>Aiur</td>
+    <td align=center style="background-color:rgb(149,255,149)">4587/7000</td>
+  </tr>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>Xelnaga</td>
+    <td align=center style="background-color:rgb(178,255,178)">4123/6999</td>
+  </tr>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>Skynet</td>
+    <td align=center style="background-color:rgb(197,255,197)">3820/7000</td>
+  </tr>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>NUSBot</td>
+    <td align=center style="background-color:rgb(255,119,119)">1922/7000</td>
+  </tr>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>CruzBot</td>
+    <td align=center style="background-color:rgb(255,110,110)">1797/7000</td>
+  </tr>
+  <tr>
+    <td width=100 align=center  bgcolor=#f1c232>SusanooTricks</td>
+    <td align=center style="background-color:rgb(255,10,10)">173/6999</td>
+  </tr>
+</table>
+<br>
+<p style="font: 10px/1.5em Verdana">Last Updated: 2017-03-09 [20:56:15]</p>
+</body>
+</html>
