@@ -1,5 +1,7 @@
 # StarcraftNash
 
+The code in this repository is deprecated. Development is continuing in https://github.com/DanielKneipp/StarcraftNash.
+
 Repository with code for strategy selection in StarCraft. 
 
 StarCraft is a complex game and players often resort to strategies (policies that map game states to actions). Here, we abstract game details and deal with strategy selection. 
